@@ -1,0 +1,43 @@
+<br>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="20" fxFlex.lt-sm="100">
+        <mat-card>
+          <common-list [headerTable]="'customer-care.search-information-customer.vehicle'"
+            [dataSource]="dataModel.dataSource" [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord"
+            [columns]="columns" (page)="onPageChange($event)" [pageIndex]="pageIndex" [stickyHeader]="true"
+            [selectionMode]="'single'" (rowSelect)="onRowSelected($event)"
+            [stickyHeight]="getHeightTable(dataModel.dataSource)" [startRecord]="searchModel.startrecord">
+          </common-list>
+        </mat-card>
+      </div>
+
+      <div fxFlex="80" fxFlex.lt-sm="100">
+        <mat-card>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-information-customer.type_update' |
+                  translate}} <span class="required">*</span>
+                </mat-label>
+                <mat-select [(ngModel)]="dataModel.optionVehicle">
+                  <ng-container *ngFor="let item of listOptionChangeVehicle">
+                    <mat-option [value]="item.code">{{item.value}}</mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <app-change-card *ngIf="dataModel.optionVehicle==1"></app-change-card>
+              <app-change-plate *ngIf="dataModel.optionVehicle==2"></app-change-plate>
+              <app-change-info *ngIf="dataModel.optionVehicle==3"></app-change-info>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

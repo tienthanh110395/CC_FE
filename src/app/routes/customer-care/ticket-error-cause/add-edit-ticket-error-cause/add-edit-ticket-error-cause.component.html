@@ -1,0 +1,78 @@
+<a class="close" (click)="onClosePopup()">
+  <mat-icon class="close-icon" color="warn" #enter_close autoFocus="enter_close">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{header}}
+</h2>
+
+<form [formGroup]="formAddEdit">
+  <div class="form-field-full">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-error-cause.ticketErrorCauseName' | translate }} </mat-label>
+          <input matInput placeholder="{{ 'ticket-error-cause.enter-ticketErrorCauseName' | translate }}"
+            formControlName="name" #name autoFocus="name" required />
+          <button mat-button *ngIf="formAddEdit.controls.name.value" class="showclear" matSuffix mat-icon-button
+            (click)="formAddEdit.controls.name.setValue(null); $event.stopPropagation()" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formAddEdit.get('name').errors?.required">
+            {{'ticket-error-cause.valid-name-error-cause' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-error-cause.ticketErrorCauseId' | translate }} </mat-label>
+          <input matInput placeholder="{{ 'ticket-error-cause.enter-ticketErrorCauseId' | translate }}"
+            formControlName="code" required />
+          <button mat-button *ngIf="formAddEdit.controls.code.value" class="showclear" matSuffix mat-icon-button
+            (click)="formAddEdit.controls.code.setValue(null); $event.stopPropagation()" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formAddEdit.get('code').errors?.required">
+            {{'ticket-error-cause.valid-code-error-cause' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <app-dropdown-tree [rawData]="dataTicketErrorCause" *ngIf="dataTicketErrorCause"
+          (onSelected)="onSelected($event)">
+        </app-dropdown-tree>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100" style="margin-bottom:20px">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>{{'ticket-error-cause.status-error-cause' | translate}}</mat-label>
+          <input matInput readonly />
+          <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl">
+            <mat-radio-group class="font-register-service" formControlName="status">
+              <mat-radio-button value="1">
+                {{'pricelist.validity' | translate}}</mat-radio-button>
+              <mat-radio-button class="ml-102" value="0">
+                {{'pricelist.unValidity' | translate}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100" style="margin-bottom:20px">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticket-error-cause.description' | translate}}</mat-label>
+          <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="50" matInput formControlName="description" autocomplete="off"
+            maxlength="4000"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</form>
+<div div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+  style="margin-right: 8px;">
+  <button mat-raised-button color="secondary" (click)="onClosePopup()">{{'common.button.close' | translate}}</button>
+  <button mat-raised-button color="primary" style="margin-right: 8px;" (click)="onSave()"
+    [disabled]="formAddEdit.invalid">{{'common.button.save' | translate}}</button>
+</div>

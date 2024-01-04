@@ -1,0 +1,201 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class="view-detail">
+  <form [formGroup]="form" class="form-field-full">
+    <!--    Row 1-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <!-- Cấp loại thống kê -->
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticketReflectiveStatistics.DialogCreate.statisticsLevel' | translate}}<span
+              class="required">*</span>
+          </mat-label>
+          <mat-select (selectionChange)="onChangeLevelStatistic($event)" formControlName="levelStatistic">
+            <mat-option>{{'ticketReflectiveStatistics.DialogCreate.selectStatisticsLevel' | translate}}</mat-option>
+            <ng-container *ngFor="let item of lstLevelStatistics">
+              <mat-option [value]="item.value">
+                {{ item.label }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="form.get('levelStatistic').errors?.required">
+            {{'ticketReflectiveStatistics.DialogCreate.requiredSelect' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf="form.controls.levelStatistic.value && isEdit==true"
+            (click)="form.controls.levelStatistic.setValue(null); $event.stopPropagation(); btnClear();"
+            class="showclear" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <!-- Mã thống kê -->
+      <!--      <div fxFlex="33.33" fxFlex.lt-sm="100">-->
+      <!--        <mat-form-field appearance="outline">-->
+      <!--          <mat-label>Mã loại thống kê <span class="required">*</span>-->
+      <!--          </mat-label>-->
+      <!--          <input maxlength="32" matInput-->
+      <!--                 placeholder="{{'ticketReflectiveStatistics.DialogCreate.statisticsCode' | translate}}"-->
+      <!--                 formControlName="ticketCateStatisticsCode"-->
+      <!--                 autocomplete="off" />-->
+      <!--          <mat-error *ngIf="form.get('ticketCateStatisticsCode').errors?.required">-->
+      <!--            {{'cateConfig.validators.requiredInput' | translate}}-->
+      <!--          </mat-error>-->
+      <!--          <mat-error *ngIf="form.get('ticketCateStatisticsCode').errors?.maxlength">-->
+      <!--            {{'cateConfig.validators.maxLength-32' | translate}}-->
+      <!--          </mat-error>-->
+      <!--          <button mat-button-->
+      <!--                  matSuffix mat-icon-button-->
+      <!--                  *ngIf="form.controls.ticketCateStatisticsCode.value"-->
+      <!--                  (click)="form.controls.ticketCateStatisticsCode.setValue(null); $event.stopPropagation()"-->
+      <!--                  class="showclear" type="button">-->
+      <!--            <mat-icon>close</mat-icon>-->
+      <!--          </button>-->
+      <!--        </mat-form-field>-->
+      <!--      </div>-->
+      <!--tên Thống kê -->
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticketReflectiveStatistics.DialogCreate.statisticsName' | translate}}<span
+              class="required">*</span>
+          </mat-label>
+          <input [readonly]="!isEdit" maxlength="255" matInput
+            placeholder="{{'ticketReflectiveStatistics.DialogCreate.statisticsName' | translate}}"
+            formControlName="ticketCateStatisticsName" autocomplete="off" />
+          <mat-error *ngIf="form.get('ticketCateStatisticsName').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketCateStatisticsName').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button
+            *ngIf="form.controls.ticketCateStatisticsName.value && isEdit == true"
+            (click)="form.controls.ticketCateStatisticsName.setValue(null); $event.stopPropagation()" class="showclear"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <!--    Row 2-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <!-- Thống kê cấp 1 -->
+      <div
+        *ngIf="selectedStatisticsLv==5 || selectedStatisticsLv==4|| selectedStatisticsLv==3 || selectedStatisticsLv==2"
+        fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticketReflectiveStatistics.DialogCreate.statisticsLv1' | translate}}<span
+              class="required">*</span>
+          </mat-label>
+          <mtx-select formControlName="ticketStatisticsLevelOne" [items]="lstTicketStatisticNameLv1" bindLabel="label"
+            bindValue="value" [multiple]="false" (change)="onChangLevelOne($event)" appendTo="body"
+            [notFoundText]="'common.notFound' | translate" [clearable]="isClearLv1">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketStatisticsLevelOne').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Thống kê cấp 2 -->
+      <div *ngIf="selectedStatisticsLv==5 || selectedStatisticsLv==4|| selectedStatisticsLv==3" fxFlex="50"
+        fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticketReflectiveStatistics.DialogCreate.statisticsLv2' | translate}}<span
+              class="required">*</span>
+          </mat-label>
+          <mtx-select formControlName="ticketStatisticsLevelTwo" (change)="onChangLevelTwo($event)"
+            [clearable]="isClearLv2" [items]="lstTicketStatisticNameLv2" bindLabel="label" bindValue="value"
+            [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketStatisticsLevelTwo').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    row 3-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <!-- Thống kê cấp 3 -->
+      <div *ngIf="selectedStatisticsLv==5 || selectedStatisticsLv==4" fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticketReflectiveStatistics.DialogCreate.statisticsLv3' | translate}}
+            <span class="required">*</span>
+          </mat-label>
+          <mtx-select formControlName="ticketStatisticsLevelThree" (change)="onChangLevelThree($event)"
+            [clearable]="isClearLv3" [items]="lstTicketStatisticNameLv3" bindLabel="label" bindValue="value"
+            [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketStatisticsLevelThree').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Thống kê cấp 4 -->
+      <div *ngIf="selectedStatisticsLv==5 " fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticketReflectiveStatistics.DialogCreate.statisticsLv4' | translate}}
+            <span class="required">*</span>
+          </mat-label>
+          <mtx-select formControlName="ticketStatisticsLevelFour" [items]="lstTicketStatisticNameLv4" bindLabel="label"
+            bindValue="value" [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+            (change)="onChangLevelFour()">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketStatisticsLevelFour').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    Row 4-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid" class="row3">
+      <!--      form nhap-->
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cateConfig.ticketType.ticketTemplate' | translate }}
+          </mat-label>
+          <textarea maxlength="1024" formControlName="template" type="text" trim="blur" matInput
+            placeholder="{{ 'cateConfig.ticketType.ticketTemplate' | translate }}"></textarea>
+          <mat-error *ngIf="form.get('template').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('template').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-1024' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf="form.controls.template.value"
+            (click)="form.controls.template.setValue(null); $event.stopPropagation()" class="showclear" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticketReflectiveStatistics.DialogCreate.description' | translate}}</mat-label>
+          <textarea maxlength="1024" formControlName="description" type="text" trim="blur" matInput
+            placeholder="Mô tả"></textarea>
+          <mat-error *ngIf="form.get('description').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-1024' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf="form.controls.description.value"
+            (click)="form.controls.description.setValue(null); $event.stopPropagation()" class="showclear"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+    </div>
+  </form>
+  <!-- Form Action -->
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+    style="margin-right: 8px;">
+    <!-- Button Lưu -->
+    <button [disabled]="isLoading" type="submit" class="float-right ml-20" mat-button mat-raised-button color="primary"
+      (click)="doSaveOrUpdate()">Lưu
+    </button>
+    <!-- Button Đóng -->
+    <button  class="float-right ml-20" mat-button mat-raised-button color="secondary" mat-dialog-close>Đóng
+    </button>
+  </div>
+</mat-dialog-content>

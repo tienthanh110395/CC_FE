@@ -1,0 +1,156 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{ 'special-vehicle.detailTitleVehile' | translate}}
+  {{this.data.data.plateNumber}}
+</h2>
+<mat-dialog-content class="view-detail">
+  <form [formGroup]="formDetail" class="form-field-full readonly">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.exceptionType' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.exceptionType'
+            |
+            translate}}" readonly formControlName="exceptionType" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.groupVehicle' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.groupVehicle'
+            |
+            translate}}" readonly formControlName="groupVehicle" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="34" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.exemptionType' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.exemptionType'
+            |
+            translate}}" readonly formControlName="ticketType" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.plateNumber' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.plateNumber'
+            |
+            translate}}" readonly formControlName="plateNumber" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.plateType' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.plateType'
+            |
+            translate}}" readonly formControlName="plateType" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="34" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.vehicleType' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.groupVehicle'
+            |
+            translate}}" readonly formControlName="vehicleType" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.epc' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.seriNumber'
+            |
+            translate}}" readonly formControlName="seriNumber" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.vehicleOwner' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.vehicleOwner'
+            |
+            translate}}" readonly formControlName="vehicleOwner" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="34" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.contractNo' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.contractNo'
+            |
+            translate}}" readonly formControlName="contractNo" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.stationOrStage' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.stationOrStage'
+            |
+            translate}}" readonly formControlName="stationOrStage" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.effectiveDateStart' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.effectiveDateStart'
+            |
+            translate}}" readonly formControlName="effectiveDateFrom" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="34" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.effectiveDateTo' | translate}}</mat-label>
+          <input matInput placeholder="{{'special-vehicle.effectiveDateTo'
+            |
+            translate}}" readonly formControlName="effectiveDateTo" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid" *ngIf="status == 4">
+      <div fxFlex="34" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.date_time_expect' | translate}}</mat-label>
+          <input matInput placeholder="dd/mm/yyyy hh:ss" readonly formControlName="expDateEdit" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100" class="comment">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.comment'| translate}}</mat-label>
+          <textarea readonly matInput rows="3" style="resize: none;" formControlName="comment" placeholder="{{'special-vehicle.comment' |
+            translate}}"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+    <!-- <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <label class="documentation">{{'special-vehicle.documentation'|
+          translate}}</label>
+      </div>
+    </div> -->
+    <!-- <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'special-vehicle.documentName'| translate}}</mat-label>
+          <input matInput readonly placeholder="{{'special-vehicle.documentName' |
+            translate}}" formControlName="documentName" />
+        </mat-form-field>
+      </div>
+      <div fxFlex="67" fxFlex.lt-sm="100">
+        <ng-container *ngFor="let item of listAttachFile">
+          <div class="lblFile" (click)="onDownloadFile(item)">{{item.fileName}}</div>
+        </ng-container>
+      </div>
+    </div> -->
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="ml-20" mat-dialog-close mat-button mat-raised-button color="secondary">{{'common.button.close' |
+    translate}}</button>
+</mat-dialog-actions>

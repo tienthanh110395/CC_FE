@@ -1,0 +1,32 @@
+.description {
+  float: left;
+  width: 100%;
+  white-space: pre-line;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+  text-align: left;
+  padding: 10px 8px;
+  font-family: Roboto, sans-serif;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.mb-10 {
+  margin-bottom: 10px !important;
+}
+
+.mr-10 {
+  margin-right: 10px !important;
+}
+
+.ml-20 {
+  margin-left: 20px !important;
+}
+
+::ng-deep .mat-tooltip {
+  height: inherit;
+  font-size: 13px;
+  width: 95%;
+}

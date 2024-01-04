@@ -1,0 +1,79 @@
+<a class="close" (click)="onClosePopup()">
+  <mat-icon class="close-icon" color="warn" #enter_close autoFocus="enter_close">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{header}}
+</h2>
+
+<form [formGroup]="formExtendProcess">
+  <div class="form-field-full">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticket-extend.reason-extend' | translate}} <span class="required">*</span></mat-label>
+          <mtx-select formControlName="extentReasonId" [items]="extentReasonIdList" bindLabel="label" bindValue="value"
+            [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+            [searchable]="extentReasonIdList?.length>10">
+          </mtx-select>
+          <mat-error *ngIf="formExtendProcess.get('extentReasonId').errors?.required">
+            {{'ticket-extend.valid-reason-extend' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticket-extend.pendingExtendDate' | translate}} <span class="required">*</span></mat-label>
+          <input [ngxMatDatetimePicker]="pickerEffectiveDateFrom" placeholder="dd/MM/yyyy HH:mm:ss" matInput
+            formControlName="requestExtentDate" maskTime />
+          <button mat-icon-button matSuffix type="button"
+            (click)="pickerEffectiveDateFrom.open(); $event.stopPropagation();">
+            <mat-icon>today</mat-icon>
+          </button>
+          <ngx-mat-datetime-picker #pickerEffectiveDateFrom [showSpinners]="true" [touchUi]="false" [showSeconds]="true"
+            [enableMeridian]="false" [disableMinute]="false" [hideTime]="false">
+          </ngx-mat-datetime-picker>
+          <mat-error *ngIf="formExtendProcess.get('requestExtentDate').errors?.required">
+            {{'ticket-extend.valid-requestExtendDate' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticket-extend.managerUserName' | translate}} <span class="required">*</span></mat-label>
+          <mtx-select formControlName="managerUserName" [items]="managerUserNameList" bindLabel="label"
+            bindValue="value" [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+            [searchable]="managerUserNameList?.length>10">
+          </mtx-select>
+          <mat-error *ngIf="formExtendProcess.get('managerUserName').errors?.required">
+            {{'ticket-extend.valid-managerUserName' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'ticket-extend.managerPhone' | translate}} <span class="required">*</span></mat-label>
+          <input matInput formControlName="managerPhone" autocomplete="off" maxlength="11" />
+          <button mat-button *ngIf="formExtendProcess.controls.managerPhone.value" class="showclear" matSuffix
+            mat-icon-button (click)="formExtendProcess.controls.managerPhone.setValue(''); $event.stopPropagation()"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formExtendProcess.get('managerPhone').errors?.required">
+            {{'ticket-extend.valid-managerPhone' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formExtendProcess.get('managerPhone').errors?.pattern">
+            {{'common.numberPhoneRegex' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+  style="margin-right: 8px;">
+  <button mat-raised-button color="secondary" (click)="onClosePopup()">{{'common.button.close' | translate}}</button>
+  <button mat-raised-button color="primary" style="margin-right: 8px;" (click)="onSave()"
+    [disabled]="formExtendProcess.invalid">{{'common.button.save' | translate}}</button>
+</div>

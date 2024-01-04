@@ -1,0 +1,202 @@
+<br>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="20" fxFlex.lt-sm="100">
+        <mat-card>
+          <common-list [headerTable]="'customer-care.search-information-customer.vehicle'"
+            [dataSource]="dataModel.dataSource" [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord"
+            [columns]="columns" (page)="onPageChange($event)" [pageIndex]="pageIndex" [stickyHeader]="true"
+            [selectionMode]="'single'" (rowSelect)="onRowSelected($event)"
+            [stickyHeight]="getHeightTable(dataModel.dataSource)" [startRecord]="searchModel.startrecord">
+          </common-list>
+        </mat-card>
+      </div>
+
+      <div fxFlex="80" fxFlex.lt-sm="100">
+        <mat-card>
+          <mat-tab-group *ngIf="isActive" (selectedTabChange)="onTabVehicle($event)">
+            <mat-tab label="{{ 'customer-care.search-information-customer.media_information' | translate }}">
+              <br>
+              <div class="form-field-full readonly">
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'vehicle.plateNumber' | translate}}</mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.plateNumber" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-care.search-information-customer.vehicle_owner' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.owner" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-care.search-information-customer.transportation' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.nameType" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'customer-care.search-information-customer.mass_yourself' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.netWeight" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-care.search-information-customer.cargo' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.cargoWeight" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-care.search-information-customer.type_of_vehicle' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.nameGroup" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'customer-management.newVehicleForm.allWeight' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.grossWeight" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.newVehicleForm.followWeight' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.pullingWeight" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.newVehicleForm.seatsNumber' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.seatNumber" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'customer-management.newVehicleForm.vehicleNumber' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.engineNumber" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.newVehicleForm.framesNumber' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.chassicNumber" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.newVehicleForm.color' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.color" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'customer-management.newVehicleForm.label' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.mark" readonly />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.newVehicleForm.vehiclesSeri' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.brand" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.newVehicleForm.licensePlateType' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.plateTypeName" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'customer-care.search-information-customer.user_connector' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.createUser" />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.newVehicleForm.seriNumber' | translate}}
+                      </mat-label>
+                      <input matInput [(ngModel)]="dataVehicle.rfidSerial">
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline" class="common-field">
+                      <mat-label>{{'customer-management.vehiclesHaveRFIDTable.cardStatus' | translate}}</mat-label>
+                      <input matInput *ngIf="!dataVehicle.activeStatus" [value]="" readonly />
+                      <input matInput *ngIf="dataVehicle.activeStatus == activeStatus.CHUAKICHHOAT"
+                        [value]="'common.notActive' | translate" readonly />
+                      <input matInput *ngIf="dataVehicle.activeStatus == activeStatus.HOATDONG"
+                        [value]="'common.active' | translate" readonly />
+                      <input matInput *ngIf="dataVehicle.activeStatus == activeStatus.HUY"
+                        [value]="'common.cancel' | translate" readonly />
+                      <input matInput *ngIf="dataVehicle.activeStatus == activeStatus.DONG"
+                        [value]="'common.button.close' | translate" readonly />
+                      <input matInput *ngIf="dataVehicle.activeStatus == activeStatus.MO"
+                        [value]="'common.open' | translate" readonly />
+                      <input matInput *ngIf="dataVehicle.activeStatus == activeStatus.DACHUYENNHUONG"
+                        [value]="'common.transfered' | translate" readonly />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="{{ 'customer-care.search-information-customer.attached_file' | translate }}">
+              <app-tab-profile-attach [listFileAttach]="listFile" *ngIf="dataModel.currentIndex==1" [profileStatus]='dataModel.infoVehicle.profileStatus'>
+              </app-tab-profile-attach>
+            </mat-tab>
+            <mat-tab label="{{ 'customer-care.search-information-customer.impact_history' | translate }}">
+              <app-tab-history-impact-vehicle *ngIf="dataModel.currentIndex==2" [data]="data"
+                [vehicleId]="this.dataModel.infoVehicle.vehicleId">
+              </app-tab-history-impact-vehicle>
+            </mat-tab>
+            <mat-tab label="{{ 'customer-care.search-information-customer.history_card_rfid' | translate }}">
+              <app-tab-rfid-history *ngIf="dataModel.currentIndex==3"
+                [vehicleId]="this.dataModel.infoVehicle.vehicleId">
+              </app-tab-rfid-history>
+            </mat-tab>
+            <mat-tab label="{{ 'customer-care.search-information-customer.history_agree' | translate }}">
+              <app-tab-transaction-history-vehicle [vehicleId]="this.dataModel.infoVehicle.vehicleId"
+                [contractId]="contractId" *ngIf="dataModel.currentIndex==4"
+                [plateNumber]="this.dataModel.infoVehicle.plateNumber">
+              </app-tab-transaction-history-vehicle>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

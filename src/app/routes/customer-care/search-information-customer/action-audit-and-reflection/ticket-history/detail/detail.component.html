@@ -1,0 +1,28 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h1 mat-dialog-title>
+  {{'customer-care.ticket-history.ticketDetail' | translate}}
+</h1>
+<div mat-dialog-content>
+  <mat-tab-group animationDuration="0ms" class="heading left">
+    <mat-tab label="{{ 'customer-care.search-process.ticketInfo' | translate }}">
+      <app-ticket-info [data]="data"></app-ticket-info>
+    </mat-tab>
+    <mat-tab label="{{ 'customer-care.ticket-history.processing' | translate }}">
+      <app-processing #processingTab [data]="data"></app-processing>
+    </mat-tab>
+    <mat-tab label="{{ 'customer-care.ticket-history.processingDetail' | translate }}">
+      <app-process-detail #processDetailTab [data]="data"></app-process-detail>
+    </mat-tab>
+    <mat-tab label="{{ 'customer-care.ticket-history.addCoordinateProcessing' | translate }}">
+      <app-coordinate-process #coordinateProcessTab [data]="data"></app-coordinate-process>
+    </mat-tab>
+    <mat-tab label="{{ 'customer-care.search-information-customer.impact_history' | translate }}">
+      <app-impact-history-ticket #impactHistoryTicketTab [data]="data"></app-impact-history-ticket>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-raised-button color="secondary" (click)="onDismiss()">{{'common.button.close' | translate}}</button>
+</div>

@@ -1,0 +1,1002 @@
+<form [formGroup]="formGroup">
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header class="bg-white">
+        <mat-panel-title>
+          {{ 'customer-care.search-process.ticketInfo' | translate | uppercase }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="form-field-full readonly">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <!-- row 1 -->
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.plateNumber' | translate}}</mat-label>
+              <input matInput formControlName="plateNumber" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.custName' | translate}}</mat-label>
+              <input matInput formControlName="custName" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.custType' | translate}}</mat-label>
+              <mtx-select [items]="customerTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="custType" [disabled]="true"
+                [notFoundText]="'common.notFound' | translate" [searchable]="customerTypeList?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.phone-contract' | translate}}</mat-label>
+              <input matInput formControlName="contactNumber" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <!-- row 1 -->
+          <!-- row 2 -->
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.email' | translate}}</mat-label>
+              <input matInput formControlName="email" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketStatus' | translate}}</mat-label>
+              <mtx-select [items]="statusList" bindLabel="label" bindValue="value" [multiple]="false" appendTo="body"
+                formControlName="ticketStatus" [disabled]="true" [notFoundText]="'common.notFound' | translate"
+                [searchable]="statusList?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.receiveSource' | translate}}</mat-label>
+              <input matInput formControlName="receiveSource" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+          </div>
+          <!-- row 2 -->
+          <!-- row 3 -->
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.address' | translate}}</mat-label>
+              <input matInput formControlName="address" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketContent' | translate}}</mat-label>
+              <textarea matInput formControlName="ticketContent" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="2" cdkAutosizeMaxRows="50" autocomplete="off" maxlength="4000" readonly></textarea>
+            </mat-form-field>
+          </div>
+          <!-- row 3 -->
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header class="bg-white">
+      <mat-panel-title>
+        {{ 'customer-care.ticket-history.processing' | translate | uppercase }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-card>
+      <crm-table [headerTable]="'customer-care.ticket-history.processing'" [dataSource]="dataModel.dataSource"
+        [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord" [showHeader]="false"
+        [displayedColumns]="displayedColumns" [pageIndex]="pageIndex" (onPage)="onPageChange($event)">
+        <ng-container *ngFor="let item of columns " [ngSwitch]="item.field">
+          <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+            <th mat-header-cell *matHeaderCellDef>
+              {{item.i18n | translate}}</th>
+            <td mat-cell *matCellDef="let row;let i = dataIndex" class="ui-text-center">
+              {{i+1 + formSearch.value.startrecord}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'ticketStatus'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+              {{item.i18n | translate}}</th>
+            <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+              {{showStatusName(row[item.field])}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'assignStatus'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+              {{item.i18n | translate}}</th>
+            <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+              {{showAssignStatusName(row[item.field])}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+              {{item.i18n | translate}}</th>
+            <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+              {{row[item.field]}}
+            </td>
+          </ng-container>
+        </ng-container>
+      </crm-table>
+    </mat-card>
+  </mat-expansion-panel>
+</mat-accordion>
+<!-- CHI TIẾT XỬ LÝ -->
+<form [formGroup]="formGroupDetail">
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header class="bg-white">
+        <mat-panel-title>
+          {{ 'customer-care.ticket-history.processingDetail' | translate | uppercase }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="form-field-full">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.priority' | translate}}</mat-label>
+              <mtx-select [items]="priorityList" bindLabel="label" bindValue="value" [multiple]="false" appendTo="body"
+                formControlName="priorityId" [disabled]="true" [notFoundText]="'common.notFound' | translate"
+                [searchable]="priorityList?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketTypeLv1' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <mtx-select [items]="ticketTypeLv1List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="l1TicketTypeId" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketTypeLv1List?.length>10" (change)="onChangeTicketTypeLv1($event)">
+              </mtx-select>
+              <mat-error *ngIf="formGroupDetail.get('l1TicketTypeId').errors?.required">
+                {{'customer-care.search-cc.ticketTypeLv1' | translate}}
+                {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketTypeLv2' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <mtx-select [items]="ticketTypeLv2List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="l2TicketTypeId" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketTypeLv2List?.length>10" (change)="onChangeTicketTypeLv2($event)">
+              </mtx-select>
+              <mat-error *ngIf="formGroupDetail.get('l2TicketTypeId').errors?.required">
+                {{'customer-care.search-process.errorMessage.ticketTypeLv2' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv3' | translate }}
+                <span class="required">*</span>
+              </mat-label>
+              <mtx-select [items]="ticketTypeLv3List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="l3TicketTypeId" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketTypeLv3List?.length>10" (change)="onChangeTicketTypeLv3($event)">
+              </mtx-select>
+              <mat-error *ngIf="formGroupDetail.get('l3TicketTypeId').errors?.required">
+                {{'customer-care.search-process.errorMessage.ticketTypeLv3' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketStatus' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <mtx-select [items]="statusList" bindLabel="label" bindValue="value" [multiple]="false" appendTo="body"
+                formControlName="status" [notFoundText]="'common.notFound' | translate"
+                [searchable]="statusList?.length>10" (change)="onChangeStatus($event)">
+              </mtx-select>
+              <mat-error *ngIf="formGroupDetail.get('status').errors?.required">
+                {{'customer-care.search-process.errorMessage.ticketStatus' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.email' | translate}}</mat-label>
+              <input matInput formControlName="email" autocomplete="off" />
+              <mat-error *ngIf="formGroupDetail.get('email').errors?.pattern">
+                {{'common.emailRegex' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100" *ngIf="controlProperties.destroyReason.visible">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.reasonCancelTicket' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="destroyReason" autocomplete="off" maxlength="1024" />
+              <button mat-button *ngIf="formGroupDetail.controls.destroyReason.value" matSuffix mat-icon-button
+                (click)="formGroupDetail.controls.destroyReason.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupDetail.get('destroyReason').errors?.required">
+                {{'customer-care.ticket-history.reasonCancelTicket' | translate}}
+                {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.processResult' | translate}}
+              </mat-label>
+              <input matInput formControlName="processResult" autocomplete="off" maxlength="1024" />
+              <button mat-button *ngIf="formGroupDetail.controls.processResult.value" matSuffix mat-icon-button
+                (click)="formGroupDetail.controls.processResult.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.deadline' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="processTime" readonly>
+              <mat-error *ngIf="formGroupDetail.get('processTime').errors?.sla">
+                {{'SLA chưa được cấu hình' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.contactNumber' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="phoneNumber" autocomplete="off" maxlength="1024" />
+              <button mat-button *ngIf="formGroupDetail.controls.phoneNumber.value" matSuffix mat-icon-button
+                (click)="formGroupDetail.controls.phoneNumber.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupDetail.get('phoneNumber').errors?.required">
+                {{'customer-care.search-process.errorMessage.contactNumber' | translate}}
+              </mat-error>
+              <mat-error *ngIf="formGroupDetail.get('phoneNumber').errors?.pattern">
+                {{'common.numberPhoneRegex' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.reasonLevel1' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <mat-select formControlName="ticketErrorCauseIdL1" (selectionChange)="onChangeCauseError1()">
+                <mat-option [value]="null">{{
+                  'common.default-select' | translate
+                  }}</mat-option>
+                <mat-option *ngFor="let item of dataModel.listTicketErrorCauses" [value]="item.ticketErrorCauseId">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="formGroupDetail.value.ticketErrorCauseIdL1" matSuffix mat-icon-button type="button"
+                class="btn-clear-drop" (click)="formGroupDetail.controls.ticketErrorCauseIdL1.setValue(null);formGroupDetail.controls.ticketErrorCauseIdL2.setValue(null);
+                formGroupDetail.controls.ticketErrorCauseIdL3.setValue(null);$event.stopPropagation()">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupDetail.get('ticketErrorCauseIdL1').errors?.required">
+                {{'customer-care.search-process.errorMessage.reasonLevel1' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.reasonLevel2' | translate}}</mat-label>
+              <mat-select formControlName="ticketErrorCauseIdL2" (selectionChange)="onChangeCauseError2()">
+                <mat-option [value]="null">{{
+                  'common.default-select' | translate
+                  }}</mat-option>
+                <mat-option *ngFor="let item of dataModel.listTicketErrorCauses2" [value]="item.ticketErrorCauseId">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="formGroupDetail.value.ticketErrorCauseIdL2" matSuffix mat-icon-button type="button"
+                class="btn-clear-drop" (click)="formGroupDetail.controls.ticketErrorCauseIdL2.setValue(null);formGroupDetail.controls.ticketErrorCauseIdL3.setValue(null);
+              $event.stopPropagation()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.reasonLevel3' | translate}}</mat-label>
+              <mat-select formControlName="ticketErrorCauseIdL3">
+                <mat-option [value]="null">{{
+                  'common.default-select' | translate
+                  }}</mat-option>
+                <mat-option *ngFor="let item of dataModel.listTicketErrorCauses3" [value]="item.ticketErrorCauseId">
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="formGroupDetail.value.ticketErrorCauseIdL3" matSuffix mat-icon-button type="button"
+                class="btn-clear-drop" (click)="formGroupDetail.controls.ticketErrorCauseIdL3.setValue(null);
+              $event.stopPropagation()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketSite' | translate}}1</mat-label>
+              <mtx-select [items]="ticketSiteLv1List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="ticketSiteIdL1" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketSiteLv1List?.length>10" (change)="onChangeTicketSite($event)">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketSite' | translate}}2</mat-label>
+              <mtx-select [items]="ticketSiteLv2List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="ticketSiteIdL2" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketSiteLv2List?.length>10" (change)="onChangeTicketSite2($event)">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketSite' | translate}}3</mat-label>
+              <mtx-select [items]="ticketSiteLv3List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="ticketSiteIdL3" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketSiteLv3List?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <ng-container *ngIf="dataModel.expireStatus==2 && formGroupDetail.value.status ==5">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.ticketExpireCause' | translate}}1 <span class="required">*</span>
+                </mat-label>
+                <mat-select formControlName="ticketExpireCauseIdL1" (selectionChange)="onChangeExpireCause()">
+                  <mat-option [value]="null">{{
+                    'common.default-select' | translate
+                    }}</mat-option>
+                  <mat-option *ngFor="let item of dataModel.listTicketExpireCause" [value]="item.ticketExpireCauseId">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formGroupDetail.value.ticketExpireCauseIdL1" matSuffix mat-icon-button type="button"
+                  class="btn-clear-drop"
+                  (click)="formGroupDetail.controls.ticketExpireCauseIdL1.setValue(null);formGroupDetail.controls.ticketExpireCauseIdL2.setValue(null);formGroupDetail.controls.ticketExpireCauseIdL3.setValue(null); $event.stopPropagation()">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="formGroupDetail.get('ticketExpireCauseIdL1').errors?.required">
+                  {{'customer-care.search-process.errorMessage.expireCause' | translate:{level:1} }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.ticketExpireCause' | translate}}2 <span class="required">*</span>
+                </mat-label>
+                <mat-select formControlName="ticketExpireCauseIdL2" (selectionChange)="onChangeExpireCause2()">
+                  <mat-option [value]="null">{{
+                    'common.default-select' | translate
+                    }}</mat-option>
+                  <mat-option *ngFor="let item of dataModel.listTicketExpireCause2" [value]="item.ticketExpireCauseId">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formGroupDetail.value.ticketExpireCauseIdL2" matSuffix mat-icon-button type="button"
+                  class="btn-clear-drop"
+                  (click)="formGroupDetail.controls.ticketExpireCauseIdL2.setValue(null);formGroupDetail.controls.ticketExpireCauseIdL3.setValue(null); $event.stopPropagation()">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="formGroupDetail.get('ticketExpireCauseIdL2').errors?.required">
+                  {{'customer-care.search-process.errorMessage.expireCause' | translate:{level:2} }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.ticketExpireCause' | translate}}3 <span class="required">*</span>
+                </mat-label>
+                <mat-select formControlName="ticketExpireCauseIdL3">
+                  <mat-option [value]="null">{{
+                    'common.default-select' | translate
+                    }}</mat-option>
+                  <mat-option *ngFor="let item of dataModel.listTicketExpireCause3" [value]="item.ticketExpireCauseId">
+                    {{ item.name }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formGroupDetail.value.ticketExpireCauseIdL3" matSuffix mat-icon-button type="button"
+                  class="btn-clear-drop"
+                  (click)="formGroupDetail.controls.ticketExpireCauseIdL3.setValue(null); $event.stopPropagation()">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="formGroupDetail.get('ticketExpireCauseIdL3').errors?.required">
+                  {{'customer-care.search-process.errorMessage.expireCause' | translate:{level:3} }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.expireSiteUnit' | translate}} <span class="required">*</span>
+                </mat-label>
+                <mat-select formControlName="ticketExpireSiteId">
+                  <mat-option [value]="null">{{
+                    'common.default-select' | translate
+                    }}</mat-option>
+                  <mat-option *ngFor="let item of ticketSiteLv1List" [value]="item.value">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formGroupDetail.value.ticketExpireSiteId" matSuffix mat-icon-button type="button"
+                  class="btn-clear-drop"
+                  (click)="formGroupDetail.controls.ticketExpireSiteId.setValue(null); $event.stopPropagation()">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="formGroupDetail.get('ticketExpireSiteId').errors?.required">
+                  {{'customer-care.search-process.errorMessage.expireSiteUnit' | translate:{level:3} }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </ng-container>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.processContent' | translate}}</mat-label>
+              <input matInput formControlName="processContent" autocomplete="off" maxlength="1024" />
+              <button mat-button *ngIf="formGroupDetail.controls.processContent.value" matSuffix mat-icon-button
+                (click)="formGroupDetail.controls.processContent.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="display: contents;">
+            <label>{{ 'customer-care.search-process.file' | translate }}</label>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" floatLabel="always" style="margin-bottom: -10px;">
+              <input matInput style="height: 0px;" autocomplete="off" />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+                <input #chooseFileDetail hidden="true" type="file" multiple onclick="this.value=null"
+                  (change)="chooseFileChange($event, 'detail')"
+                  accept=".jpg, .png, .tiff, .bmp, .jpeg, .webp, .pdf, .doc, .docx, .xls, .xlsx" ngf-max-size="5MB" />
+                <button (click)="chooseFileDetail.click()" class="btn-file">{{'customer-care.search-process.chooseFile'
+                  |
+                  translate}}</button>
+              </div>
+            </mat-form-field>
+            <label class="lbl-style">{{'common.format-cc-notify' | translate}}</label>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="margin-top: -20px;"
+            [hidden]="!listFileDetail || listFileDetail?.data?.length === 0">
+            <div class="crm__table">
+              <table mat-table [dataSource]="listFileDetail">
+                <ng-container *ngFor="let item of columnsFile" [ngSwitch]="item.field">
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                    <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                      {{item.i18n | translate}}</th>
+                    <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 80px;">
+                      {{(i+1) + (paginatorDetail.pageIndex * paginatorDetail.pageSize)}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                    <th mat-header-cell *matHeaderCellDef style="width: 120px;">{{item.i18n |
+                      translate}}</th>
+                    <td mat-cell *matCellDef="let row;" class="ui-text-center" style="width: 120px;">
+                      <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                        (click)="onDownloadFile(row)" matTooltip="{{'common.downloadFile' | translate}}">
+                        download
+                      </mat-icon>
+                      <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                        (click)="onViewFile(row)" matTooltip="{{'common.viewFile' | translate}}">
+                        visibility
+                      </mat-icon>
+                      <mat-icon color="warn" class="delete-file btn-delete-file" style="margin-left: 5px;"
+                        (click)="onDeleteFile(row, 'detail')"
+                        matTooltip="{{'customer-care.search-process.deleteFile' | translate}}">
+                        close
+                      </mat-icon>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                      {{item.i18n | translate}}</th>
+                    <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                      {{row[item.field]}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsFile"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsFile;"></tr>
+              </table>
+              <span class="noRecored" *ngIf="!listFileDetail || listFileDetail?.data?.length === 0">
+                {{'common.noRecord' | translate}}
+              </span>
+            </div>
+            <div>
+              <mat-paginator #paginatorDetail [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons>
+              </mat-paginator>
+            </div>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: center;">
+            <button mat-button type="button" (click)="handleSendSms()"
+              matTooltip="{{'customer-care.ticket.sendSms' | translate}}">
+              <mat-icon>sms</mat-icon>
+            </button>
+            <button mat-button type="button" (click)="handleSendEmail()"
+              matTooltip="{{'customer-care.ticket.sendEmail' | translate}}">
+              <mat-icon>mail</mat-icon>
+            </button>
+            <button mat-button type="button" (click)="handleSendNotify()"
+              matTooltip="{{'customer-care.ticket.sendNotify' | translate}}">
+              <mat-icon>notifications</mat-icon>
+            </button>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: center;">
+            <button mat-raised-button type="button" color="primary" (click)="saveTicketProcess()"
+              [disabled]="formGroupDetail.invalid || formGroupDetail.get('status').value == 1">
+              {{ 'common.button.save' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>
+<!-- CHI TIẾT XỬ LÝ -->
+
+<!-- TẠO YÊU CẦU ĐIỀU CHỈNH CƯỚC -->
+<form [formGroup]="formGroupAdjustCharge">
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="false">
+      <mat-expansion-panel-header class="bg-white">
+        <mat-panel-title>
+          {{ 'customer-care.ticket-history.addAdjustCharge' | translate | uppercase }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="form-field-full">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <!-- row 1 -->
+          <div fxFlex="25" fxFlex.lt-sm="100" class="readonly">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketCode' | translate}}</mat-label>
+              <input matInput formControlName="ticketId" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100" class="readonly">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.plateNumber' | translate}}</mat-label>
+              <input matInput formControlName="plateNumber" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" floatLabel="always" [ngClass.xs]="'hack-height-radio'">
+              <mat-label>{{'customer-care.ticket-history.payment' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput style="height: 0px;" autocomplete="off" />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl" style="height: 10px;">
+                <mat-radio-group class="font-register-service" formControlName="payType">
+                  <mat-radio-button value="D" style="margin-right:30px; margin-left: -30px;">
+                    {{'customer-care.ticket-history.day' | translate}}
+                  </mat-radio-button>
+                  <mat-radio-button value="M" style="margin-right:30px;">
+                    {{'customer-care.ticket-history.month' | translate}}
+                  </mat-radio-button>
+                  <mat-radio-button value="Y">
+                    {{'customer-care.ticket-history.year' | translate}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+          <!-- row 1 -->
+          <!-- row 2 -->
+          <div fxFlex="25" fxFlex.lt-sm="100" class="readonly">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.contractNo' | translate}}</mat-label>
+              <input matInput formControlName="contractNo" autocomplete="off" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.accountType' | translate}}</mat-label>
+              <mtx-select [items]="accountTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="accountType" [notFoundText]="'common.notFound' | translate"
+                [disabled]="true" [searchable]="accountTypeList?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.adjustValue' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="adjustAmount" vndFormat OnlyNumber autocomplete="off" maxlength="12" />
+              <button mat-button *ngIf="formGroupAdjustCharge.controls.adjustAmount.value" matSuffix mat-icon-button
+                (click)="formGroupAdjustCharge.controls.adjustAmount.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupAdjustCharge.get('adjustAmount').errors?.required">
+                {{'customer-care.search-process.errorMessage.adjustValue' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- row 2 -->
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.reason' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="reason" autocomplete="off" maxlength="1024" />
+              <button mat-button *ngIf="formGroupAdjustCharge.controls.reason.value" matSuffix mat-icon-button
+                (click)="formGroupAdjustCharge.controls.reason.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupAdjustCharge.get('reason').errors?.required">
+                {{'customer-care.search-process.errorMessage.reason' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.recommendContent' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="adjustContent" autocomplete="off" maxlength="1024" />
+              <button mat-button *ngIf="formGroupAdjustCharge.controls.adjustContent.value" matSuffix mat-icon-button
+                (click)="formGroupAdjustCharge.controls.adjustContent.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupAdjustCharge.get('adjustContent').errors?.required">
+                {{'customer-care.search-process.errorMessage.recommendContent' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- row 5 -->
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.processUnit' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <mtx-select [items]="ticketSiteLv1List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="siteId" [notFoundText]="'common.notFound' | translate"
+                [disabled]="checkDisabledButton" [searchable]="ticketSiteLv1List?.length>10">
+              </mtx-select>
+              <mat-error *ngIf="formGroupAdjustCharge.get('siteId').errors?.required">
+                {{'customer-care.search-process.errorMessage.processUnit' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100"></div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="display: contents;">
+            <label>{{ 'customer-care.search-process.file' | translate }}</label>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" floatLabel="always" style="margin-bottom: -10px;">
+              <input matInput style="height: 0px;" autocomplete="off" />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+                <input #chooseFileAdjustCharge hidden="true" type="file" multiple onclick="this.value=null"
+                  (change)="chooseFileChange($event, 'adjustCharge')"
+                  accept=".jpg, .png, .tiff, .bmp, .jpeg, .webp, .pdf, .doc, .docx, .xls, .xlsx" ngf-max-size="5MB"
+                  [disabled]="checkDisabledButton" />
+                <button (click)="chooseFileAdjustCharge.click()" class="btn-file">{{'customer-care.search-process.chooseFile' |
+                  translate}}</button>
+              </div>
+            </mat-form-field>
+            <label class="lbl-style">{{'common.format-cc-notify' | translate}}</label>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="margin-top: -20px;"
+            [hidden]="!listFileAdjustCharge || listFileAdjustCharge?.data?.length === 0">
+            <div class="crm__table">
+              <table mat-table [dataSource]="listFileAdjustCharge">
+                <ng-container *ngFor="let item of columnsFile" [ngSwitch]="item.field">
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                    <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                      {{item.i18n | translate}}</th>
+                    <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 80px;">
+                      {{(i+1) + (paginatorAdjustCharge.pageIndex * paginatorAdjustCharge.pageSize)}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                    <th mat-header-cell *matHeaderCellDef style="width: 120px;">{{item.i18n |
+                      translate}}</th>
+                    <td mat-cell *matCellDef="let row;" class="ui-text-center" style="width: 120px;">
+                      <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                        (click)="onDownloadFile(row)" matTooltip="{{'common.downloadFile' | translate}}">
+                        download
+                      </mat-icon>
+                      <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                        (click)="onViewFile(row)" matTooltip="{{'common.viewFile' | translate}}">
+                        visibility
+                      </mat-icon>
+                      <mat-icon color="warn" class="delete-file btn-delete-file" style="margin-left: 5px;"
+                        (click)="onDeleteFile(row, 'adjustCharge')"
+                        matTooltip="{{'customer-care.search-process.deleteFile' | translate}}">
+                        close
+                      </mat-icon>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                      {{item.i18n | translate}}</th>
+                    <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                      {{row[item.field]}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsFile"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsFile;"></tr>
+              </table>
+              <span class="noRecored" *ngIf="!listFileAdjustCharge || listFileAdjustCharge?.data?.length === 0">
+                {{'common.noRecord' | translate}}
+              </span>
+            </div>
+            <div>
+              <mat-paginator #paginatorAdjustCharge [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons>
+              </mat-paginator>
+            </div>
+          </div>
+          <!-- row 5 -->
+          <!-- || formGroupAdjustCharge.controls.ticketAdjustChargeId.value !== '' -->
+          <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: center;">
+            <button mat-raised-button type="button" color="primary" (click)="onSubmitAdjustCharge()"
+              [disabled]="formGroupAdjustCharge.invalid || checkDisabledButton">
+              {{ 'common.button.save' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</form>
+<!-- TẠO YÊU CẦU ĐIỀU CHỈNH CƯỚC -->
+
+<!-- YÊU CẦU PHỐI HỢP XỬ LÝ -->
+<mat-accordion *ngIf="currentStatus != 1">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header class="bg-white">
+      <mat-panel-title>
+        {{ 'customer-care.ticket-history.coordinateProcessing' | translate | uppercase }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <form [formGroup]="formGroupCoordinate">
+      <div class="form-field-full">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <!-- row 1 -->
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.unitType' | translate}}
+                ({{'customer-care.ticket-history.assignUnitLv1' | translate}})
+                <span class="required">*</span>
+              </mat-label>
+              <mtx-select [items]="ticketSiteLv1List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="toSiteId" [disabled]="checkDisabledButton"
+                [notFoundText]="'common.notFound' | translate" (change)="onChangeTicketSiteLv1($event)"
+                [searchable]="ticketSiteLv1List?.length>10">
+              </mtx-select>
+              <mat-error *ngIf="formGroupCoordinate.get('toSiteId').errors?.required">
+                {{'customer-care.ticket-history.unitType' | translate}}
+                ({{'customer-care.ticket-history.assignUnitLv1' | translate}})
+                {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket.mailReceiveUser' | translate}}
+                ({{'customer-care.ticket-history.assignUnitLv1' | translate}})
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="toSiteEmail" autocomplete="off" maxlength="50" />
+              <button mat-button *ngIf="formGroupCoordinate.controls.toSiteEmail.value" matSuffix mat-icon-button
+                (click)="formGroupCoordinate.controls.toSiteEmail.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupCoordinate.get('toSiteEmail').errors?.required">
+                {{'customer-care.ticket.mailReceiveUser' | translate}}
+                ({{'customer-care.ticket-history.assignUnitLv1' | translate}})
+                {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+              </mat-error>
+              <mat-error *ngIf="formGroupCoordinate.get('toSiteEmail').errors?.pattern">
+                {{'common.emailRegex' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- row 1 -->
+          <!-- row 2 -->
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.assignUnit' | translate}}
+                ({{'customer-care.ticket-history.assignUnitLv2' | translate}})</mat-label>
+              <mtx-select [items]="ticketSiteLv2List" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="toSiteL2Id" [disabled]="checkDisabledButton"
+                [notFoundText]="'common.notFound' | translate" (change)="onChangeTicketSiteLv2($event)"
+                [searchable]="ticketSiteLv2List?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket.supportInfoStatus' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <mtx-select [items]="ticketAssignStatusList" bindLabel="label" bindValue="value" [multiple]="false"
+                appendTo="body" formControlName="ticketStatus" [notFoundText]="'common.notFound' | translate"
+                [disabled]="true" [searchable]="ticketAssignStatusList?.length>10">
+              </mtx-select>
+              <!-- <input matInput formControlName="ticketStatus" autocomplete="off" readonly /> -->
+              <mat-error *ngIf="formGroupCoordinate.get('ticketStatus').errors?.required">
+                {{'customer-care.ticket.supportInfoStatus' | translate}}
+                {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- row 2 -->
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.ticket-history.requestTime' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput [min]="minDate" placeholder="dd/mm/yyyy" maskDate [matDatepicker]="pickerRequestTime"
+                formControlName="slaDate" #requestTimeId (click)="pickerRequestTime.open()">
+              <mat-datepicker-toggle matSuffix *ngIf="requestTimeId.value" class="showclearDatePopup"
+                (click)="formGroupCoordinate.controls.slaDate.setValue(null); $event.stopPropagation()">
+                <mat-icon matDatepickerToggleIcon>close</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="pickerRequestTime"></mat-datepicker-toggle>
+              <mat-datepicker #pickerRequestTime></mat-datepicker>
+              <mat-error
+                *ngIf="!checkFormatDate(requestTimeId.value) && formGroupCoordinate.get('slaDate').errors?.required">
+                {{'customer-care.search-process.errorMessage.requestTime' | translate}}
+              </mat-error>
+              <mat-error *ngIf="checkFormatDate(requestTimeId.value)">
+                {{'customer-care.ticket-history.requestTime' | translate}}
+                {{'common.invalidFormat' | translate}}
+              </mat-error>
+              <mat-error *ngIf="formGroupCoordinate.get('slaDate').hasError('matDatepickerMin')">
+                {{ 'customer-care.search-process.errorMessage.minDate' | translate : { date:
+                'customer-care.ticket-history.requestTime' | translate } }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'customer-care.search-cc.staffName' | translate }}
+              </mat-label>
+              <input matInput formControlName="createUser" autocomplete="off" readonly />
+              <button mat-button *ngIf="formGroupCoordinate.controls.createUser.value" class="showclear" matSuffix
+                mat-icon-button
+                (click)="formGroupCoordinate.controls.createUser.setValue(null); $event.stopPropagation()"
+                type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.contentProgress' | translate}}</mat-label>
+              <input matInput formControlName="contentProgress" autocomplete="off" readonly />
+              <button mat-button *ngIf="formGroupCoordinate.controls.contentProgress.value" matSuffix mat-icon-button
+                (click)="formGroupCoordinate.controls.contentProgress.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.assignContent' | translate}}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput formControlName="assignContent" autocomplete="off" maxlength="1024" />
+              <button mat-button *ngIf="formGroupCoordinate.controls.assignContent.value" matSuffix mat-icon-button
+                (click)="formGroupCoordinate.controls.assignContent.setValue(null); $event.stopPropagation()"
+                class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formGroupCoordinate.get('assignContent').errors?.required">
+                {{'customer-care.search-process.errorMessage.assignContent' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="display: contents;">
+            <label>{{ 'customer-care.search-process.file' | translate }}</label>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" floatLabel="always" style="margin-bottom: -10px;">
+              <input matInput style="height: 0px;" autocomplete="off" />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+                <input #chooseFileCoordinate hidden="true" type="file" multiple onclick="this.value=null"
+                  (change)="chooseFileChange($event, 'coordinate')"
+                  accept=".jpg, .png, .tiff, .bmp, .jpeg, .webp, .pdf, .doc, .docx, .xls, .xlsx" ngf-max-size="5MB"
+                  [disabled]="checkDisabledButton" />
+                <button (click)="chooseFileCoordinate.click()" class="btn-file">{{'customer-care.search-process.chooseFile' |
+                  translate}}</button>
+              </div>
+            </mat-form-field>
+            <label class="lbl-style">{{'common.format-cc-notify' | translate}}</label>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" style="margin-top: -20px;"
+            [hidden]="!listFileCoordinate || listFileCoordinate?.data?.length === 0">
+            <div class="crm__table">
+              <table mat-table [dataSource]="listFileCoordinate">
+                <ng-container *ngFor="let item of columnsFile" [ngSwitch]="item.field">
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                    <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                      {{item.i18n | translate}}</th>
+                    <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 80px;">
+                      {{(i+1) + (paginatorCoordinate.pageIndex * paginatorCoordinate.pageSize)}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                    <th mat-header-cell *matHeaderCellDef style="width: 120px;">{{item.i18n |
+                      translate}}</th>
+                    <td mat-cell *matCellDef="let row;" class="ui-text-center" style="width: 120px;">
+                      <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                        (click)="onDownloadFile(row)" matTooltip="{{'common.downloadFile' | translate}}">
+                        download
+                      </mat-icon>
+                      <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                        (click)="onViewFile(row)" matTooltip="{{'common.viewFile' | translate}}">
+                        visibility
+                      </mat-icon>
+                      <mat-icon color="warn" class="delete-file btn-delete-file" style="margin-left: 5px;"
+                        (click)="onDeleteFile(row, 'coordinate')" *ngIf="disabledIconDelete"
+                        matTooltip="{{'customer-care.search-process.deleteFile' | translate}}">
+                        close
+                      </mat-icon>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                      {{item.i18n | translate}}</th>
+                    <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                      {{row[item.field]}}
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsFile"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsFile;"></tr>
+              </table>
+              <span class="noRecored" *ngIf="!listFileCoordinate || listFileCoordinate?.data?.length === 0">
+                {{'common.noRecord' | translate}}
+              </span>
+            </div>
+            <div>
+              <mat-paginator #paginatorCoordinate [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons>
+              </mat-paginator>
+            </div>
+          </div>
+          <div fxFlex="100" fxFlex.lt-sm="100" fxLayoutGap="10px" style="text-align: center;">
+            <button mat-raised-button type="button" color="primary" (click)="onSubmitCoordinate()"
+              [disabled]="formGroupCoordinate.invalid || checkDisabledButton || checkDisabledCoordinate">
+              {{ 'common.button.save' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>
+<!-- YÊU CẦU PHỐI HỢP XỬ LÝ -->
+<div fxFlex.lt-sm="100" fxLayoutGap="10px" style="text-align: right;">
+  <button mat-raised-button type="button" color="primary" (click)="onBack()" style="margin-right: 8px;">
+    {{ 'common.button.back' | translate }}
+  </button>
+</div>

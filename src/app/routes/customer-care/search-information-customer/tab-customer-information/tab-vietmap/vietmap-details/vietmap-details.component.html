@@ -1,0 +1,26 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 class="ui-text-center">{{'vietMap.alarmHistoryInformation' | translate}}</h2>
+<div>
+  <span>{{'vietMap.warnDateTime'|translate}}: {{data.targetDetail.warningDate}}</span>
+  <br>
+  <br>
+  <span>{{'vietMap.amountTicketPrice'|translate}}: {{data.targetDetail.totalPrice | formatCurrency}}
+    <span style="color: red" *ngIf="data.targetDetail.balanceState === 0">({{'vietMap.outOfMoney' | translate}})</span>
+  </span>
+  <br>
+  <br>
+  <common-list [startRecord]="searchModel.startrecord" [totalRecord]="totalRecord"
+               [dataSource]="dataModel.dataSource" [isLoading]="isLoading" [isPaging]="true"
+               (page)="onPageChange($event)" [showHeader]="false" stickyHeight="50vh"
+               [columns]="columns" [widthTable]="getWith()" [pageIndex]="pageIndex">
+    <ng-template let-item vtsTemplate="a">
+      <span *ngIf="item.stationType === 1">{{'vietMap.stationOpen' | translate}}</span>
+      <span *ngIf="item.stationType === 0">{{'vietMap.stationClose' | translate}}</span>
+    </ng-template>
+    <ng-template let-item vtsTemplate="b">
+      <span>{{item.fee |formatCurrency}}</span>
+    </ng-template>
+  </common-list>
+</div>

@@ -1,0 +1,27 @@
+<perfect-scrollbar [ngStyle]="{'height':heightScroll}">
+  <mat-tree #tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl" class="example-tree">
+    <mat-nested-tree-node *matTreeNodeDef="let data; when: hasNestedChild">
+      <li>
+        <div [ngStyle]="data.level ==2 ? {'margin-left':'12px'}: data.level ==3?{'margin-left':'25px'}:''">
+          <button mat-icon-button [attr.aria-label]="'toggle ' + data.name" (click)="changeState(data)"
+            *ngIf="data.children">
+            <mat-icon svgIcon="ic_minus" *ngIf="data.expanded"></mat-icon>
+            <mat-icon svgIcon="ic_plus" *ngIf="!data.expanded"></mat-icon>
+          </button>
+          <span style="vertical-align: middle;" class="label-tree" (click)="chooseNode(data)"
+            [ngStyle]="data.hasChildren?'': {'padding-left':'10px'}" [class.activated]="selectedData == data">
+            <mat-icon svgIcon="ic_user" *ngIf="data.level ==1"></mat-icon>
+            <mat-icon svgIcon="ic_file" *ngIf="data.level ==2"></mat-icon>
+            <span
+              [ngStyle]="data.hasChildren?{'display':'table-cell','vertical-align':'middle'}: {'line-height':'30px'}">
+              <span [ngStyle]="data.level ==1 ?{'font-weight':'700'}:''">{{data.name}}</span>
+            </span>
+          </span>
+        </div>
+        <ul [class.example-tree-invisible]="!data.expanded">
+          <ng-container matTreeNodeOutlet></ng-container>
+        </ul>
+      </li>
+    </mat-nested-tree-node>
+  </mat-tree>
+</perfect-scrollbar>

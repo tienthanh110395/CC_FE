@@ -1,0 +1,106 @@
+<div *ngIf="hasPermission(permissionApp.CC_CUSTOMER_01)">
+  <page-header></page-header>
+  <div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ 'common.title' | translate | uppercase }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="formSearch" class="form-field-full">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="100" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline" floatLabel="always">
+                  <mat-label> {{ 'customer-care.search-information-customer.condition_search' | translate }}
+                  </mat-label>
+                  <input matInput style="height: 0px;" />
+                  <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl" style="height: 10px;">
+                    <mat-radio-group (change)="changeRadio($event)" class="font-register-service">
+                      <mat-radio-button [checked]="selectedSearch === 1" value="1">{{ 'info.phoneNumber' |
+                        translate }}
+                      </mat-radio-button>
+                      <mat-radio-button [checked]="selectedSearch === 2" style=" padding-left: 2em" value="2">{{
+                        'contract.number' | translate }}
+                      </mat-radio-button>
+                      <mat-radio-button [checked]="selectedSearch === 3" style=" padding-left: 2em" value="3">{{
+                        'vehicle.plateNumber' | translate }}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </mat-form-field>
+              </div>
+              <div fxFlex="32" *ngIf="selectedSearch===1 || selectedSearch===2" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{titleSearch}} *</mat-label>
+                  <input formControlName="phoneAndcontractNo" matInput />
+                  <button mat-button *ngIf="formSearch.controls.phoneAndcontractNo.value" class="showclear" matSuffix
+                    mat-icon-button type="button" (keypress.enter)="searchInfo()"
+                    (click)="formSearch.controls.phoneAndcontractNo.setValue(''); $event.stopPropagation()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <mat-error *ngIf="this.formSearch.controls['phoneAndcontractNo'].hasError('required')">
+                    {{ 'customer-care.search-information-customer.requied' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex="32" *ngIf="selectedSearch===3" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'vehicle.plateNumber' | translate }} *</mat-label>
+                  <input formControlName="plateNumber" matInput />
+                  <button mat-button *ngIf="formSearch.controls.plateNumber.value" class="showclear" matSuffix
+                    mat-icon-button type="button" (keypress.enter)="searchInfo()"
+                    (click)="formSearch.controls.plateNumber.setValue(''); $event.stopPropagation()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                  <mat-error *ngIf="this.formSearch.controls['plateNumber'].hasError('required')">
+                    {{ 'customer-care.search-information-customer.requied' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div fxFlex="34" *ngIf="selectedSearch===3" fxFlex.lt-sm="100">
+              </div>
+              <div [fxFlex]="selectedSearch===1  ? '68' : selectedSearch===2  ? '68' :'34'" fxLayoutAlign="end"
+                fxLayoutGap="10px" style="margin-top: 30px;">
+                <button (click)="openReceiveReflect()" mat-raised-button color="primary" *ngIf="activeButton"
+                  [disabled]="formSearch.invalid">
+                  {{ 'reset-agency.receive_reflect' | translate }}
+                </button>
+                <button (click)="openStatistic()" mat-raised-button color="primary" *ngIf="activeButton"
+                  [disabled]="formSearch.invalid">
+                  {{ 'reset-agency.enter_statistic' | translate }}
+                </button>
+                <button (click)="searchInfo()" mat-raised-button color="primary" [disabled]="formSearch.invalid">
+                  {{ 'common.button.search' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-card *ngIf="activeForm">
+        <mat-tab-group (selectedTabChange)="onTabChanged($event)">
+          <mat-tab label="{{ 'customer-care.search-information-customer.contract_customer_information' | translate }}">
+            <app-tab-customer-information [data]="data" [balance]="balance"></app-tab-customer-information>
+          </mat-tab>
+          <mat-tab label="{{ 'customer-care.search-information-customer.media_information' | translate }}">
+            <app-tab-info-vehicle *ngIf="dataModel.currentIndexTab==1" [contractId]="data[0].listContract[0].contractId"
+              [data]="data" [listMedia]="listMedia">
+            </app-tab-info-vehicle>
+          </mat-tab>
+          <mat-tab label="{{ 'menu.customer-care.ticket-history' | translate }}">
+            <app-ticket-history *ngIf="dataModel.currentIndexTab==2" [data]="data"></app-ticket-history>
+          </mat-tab>
+          <mat-tab label="{{ 'menu.customer-care.ticket' | translate }}">
+            <app-ticket [data]="data" *ngIf="dataModel.currentIndexTab==3"></app-ticket>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card>
+    </div>
+  </div>
+</div>
+<div *ngIf="!hasPermission(permissionApp.CC_CUSTOMER_01)">
+  <error-code code="403" [title]="'common.invalid-permission-title'" [message]="'common.invalid-permission'">
+  </error-code>
+</div>

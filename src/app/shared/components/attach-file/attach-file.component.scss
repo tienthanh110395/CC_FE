@@ -1,0 +1,66 @@
+.btn-chooseFile{
+    position: relative;
+    bottom: 20px;
+}
+
+.icon-add {
+    font-size: 35px;
+    color: orange;
+    margin-top: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.btn-saveFile {
+    .mat-raised-button.mat-primary {
+        background-color: #ffe2cd;
+        color: #212121;
+        min-width: 90px;
+        min-height: 45px;
+        font-size: 18px;
+        border: 1px solid #ffc59b;
+        border-radius: 14px;
+        margin-bottom: 2px
+    }
+    .mat-raised-button.mat-secondary {
+        background-color: white;
+        color: #212121;
+        min-width: 90px !important;
+        min-height: 45px !important;
+        font-size: 18px;
+        border: 1px solid #ffc59b;
+        border-radius: 14px;
+        margin-bottom: 2px
+    }
+}
+
+.lbl-style {
+    font-size: 9pt;
+    position: relative;
+    bottom: 33px;
+}
+
+.mat-dialog-content {
+    overflow: hidden !important;
+}
+
+.content-file {
+    max-height: 250px;
+    overflow-y: auto;
+    position: relative;
+    bottom: 20px;
+}
+
+ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.delete-file {
+    height: 16px;
+    cursor: pointer;
+    position: relative;
+    top: 6px;
+    color: red;
+}

@@ -1,0 +1,89 @@
+<page-header></page-header>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'common.title' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="form-field-full">
+          <form [formGroup]="formTicketExpireCause">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'ticket-expire-cause.name-expire-cause' | translate }} </mat-label>
+                  <input matInput placeholder="{{ 'ticket-expire-cause.enter-name-expire-cause' | translate }}"
+                    formControlName="name" #name autoFocus="name" />
+                  <button mat-button *ngIf="formTicketExpireCause.controls.name.value" class="showclear" matSuffix
+                    mat-icon-button
+                    (click)="formTicketExpireCause.controls.name.setValue(null); $event.stopPropagation()"
+                    type="button">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'ticket-expire-cause.code-expire-cause' | translate }} </mat-label>
+                  <input matInput placeholder="{{ 'ticket-expire-cause.enter-code-expire-cause' | translate }}"
+                    formControlName="code" />
+                  <button mat-button *ngIf="formTicketExpireCause.controls.code.value" class="showclear" matSuffix
+                    mat-icon-button
+                    (click)="formTicketExpireCause.controls.code.setValue(null); $event.stopPropagation()"
+                    type="button">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100" style="margin-bottom:20px">
+                <mat-form-field appearance="outline" floatLabel="always">
+                  <mat-label>{{'ticket-expire-cause.status-expire-cause' | translate}}
+                  </mat-label>
+                  <input matInput formControlName="status" readonly />
+                  <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl font-register-service">
+                    <mat-checkbox class="checkbox" value="1" [(ngModel)]="dataModel.validity"
+                      [ngModelOptions]="{standalone: true}">{{'pricelist.validity' | translate}}</mat-checkbox>
+                    <mat-checkbox class="checkbox ml-70" value="0" [(ngModel)]="dataModel.unValidity"
+                      [ngModelOptions]="{standalone: true}">{{'pricelist.unValidity' | translate}}</mat-checkbox>
+                  </div>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+              fxLayoutGap.xs="0" style="margin-right: 8px;">
+              <button mat-raised-button color="primary" type="submit" (click)="onSearch()">
+                {{ 'common.button.search' | translate }}
+              </button>
+              <button mat-raised-button color="primary" type="submit" (click)="addTicketExpireCause()">
+                {{ 'common.button.insert' | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-card>
+      <common-list [headerTable]="'ticket-expire-cause.list-ticket-expire-cause'" [dataSource]="dataModel.dataSource"
+        [columns]="columns" [totalRecord]="totalRecord" [isLoading]="isLoading" [isPaging]="true" [showHeader]="true"
+        (page)="onPageChange($event)" [pageIndex]="pageIndex" [startRecord]="formTicketExpireCause.value.startrecord"
+        [widthTable]="'2000px'">
+        <ng-template vtsTemplate='actionCustom' let-row>
+          <button mat-icon-button color="primary" (click)="viewDetail(row)"
+            matTooltip="{{'common.viewDetail'| translate}}">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="editTicketExpireCause(row)"
+            matTooltip="{{'common.edit'| translate}}">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="deleteTicketExpireCause(row)"
+            matTooltip="{{'common.button.delete'| translate}}">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </ng-template>
+      </common-list>
+    </mat-card>
+  </div>
+</div>

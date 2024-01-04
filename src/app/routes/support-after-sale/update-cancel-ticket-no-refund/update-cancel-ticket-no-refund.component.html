@@ -1,0 +1,157 @@
+<div *ngIf="hasPermission(permissionApp.CC_09)">
+  <page-header> </page-header>
+  <form [formGroup]="formSearch" class="form-field-full">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'update-cancel-ticket-no-refund.title' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.merge-contract.titleAutoComplete' | translate }}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput [matAutocomplete]="auto" formControlName="searchContract" #inputContract
+                autoFocus="inputContract"
+                placeholder="{{ 'support-after-sale.transfer-own-vehicle.code' | translate }}" />
+              <button mat-button *ngIf="formSearch.controls.searchContract.value" matSuffix mat-icon-button
+                aria-label="Clear" (click)="formSearch.controls.searchContract.setValue(null); $event.stopPropagation()"
+                class="showclear" type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error>{{ 'support-after-sale.transfer-own-vehicle.contract-or-plate' | translate }} </mat-error>
+            </mat-form-field>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+              (optionSelected)="onSelectedContract($event)">
+              <mat-option *ngIf="searchModel.isLoadingContract">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </mat-option>
+              <ng-container *ngIf="!searchModel.isLoadingContract">
+                <mat-option *ngFor="let contract of contracts" [value]="contract">
+                  <div innerHTML="{{
+                    contract?.contractNo | highlight: formSearch.controls.searchContract.value
+                  }}"></div>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'contract.code' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.contractNo" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'contract.signDate' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.signDate" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.detach-contract.create' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.signName" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.detach-contract.employee' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.createUser" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.detach-contract.validity-date' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.effDate" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.detach-contract.end-validity-date' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.expDate" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'support-after-sale.detach-contract.title_customer' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.transfer-own-vehicle.customer-name' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.custName" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.transfer-own-vehicle.phone' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.phoneNumber" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100"></div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.detach-contract.attachType' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.attachType" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'support-after-sale.transfer-own-vehicle.documentNumber' | translate }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.documentNumber" [ngModelOptions]="{ standalone: true }" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100"></div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-card appearance="outline">
+        <common-list [dataSource]="dataModel.dataSource" [columns]="columns" [totalRecord]="totalRecord"
+          [isLoading]="isLoading" [isPaging]="true" [headerTable]="'update-cancel-ticket-no-refund.ticket_list'"
+          (page)="onPageChange($event)" [pageIndex]="pageIndex">
+          <ng-template vtsTemplate="autoRenews" let-item>
+            <span *ngIf="item.autoRenew ==='1'">{{'common.yes'|translate}}</span>
+            <span *ngIf="item.autoRenew ==='0'">{{'common.no'|translate}}</span>
+          </ng-template>
+          <ng-template vtsTemplate="actions" let-item>
+            <button mat-icon-button color="warn" (click)="cancelAutoRenew(item)" *ngIf="item.autoRenew==='1'"
+              matTooltip="{{'cancel-ticket-refund.cancel_autorenew' |translate}}">
+              <mat-icon>close</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="renew(item)" *ngIf="item.autoRenew==='0'"
+              matTooltip="{{'cancel-ticket-refund.automatic_renewal' |translate}}">
+              <mat-icon>loop</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="cancel(item)"
+              matTooltip="{{'cancel-ticket-refund.cancel' |translate}}">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </ng-template>
+        </common-list>
+      </mat-card>
+    </mat-accordion>
+  </form>
+</div>
+<div *ngIf="!hasPermission(permissionApp.CC_09)">
+  <error-code code="403" [title]="'common.invalid-permission-title'" [message]="'common.invalid-permission'">
+  </error-code>
+</div>

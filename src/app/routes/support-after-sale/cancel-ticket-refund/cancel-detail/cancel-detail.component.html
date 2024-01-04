@@ -1,0 +1,121 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{'cancel-ticket-refund.title-detail'|translate}}
+</h2>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <form [formGroup]="formSearch">
+      <div class="form-field-full">
+        <common-list [showHeader]="false" [dataSource]="dataModel.dataSource" [columns]="columns" [isPaging]="false">
+          <ng-template vtsTemplate="statusCustom" let-item>
+            <span *ngIf="item.status == transactionStatus.UNPAID">{{'exchangeHistory.unpaid' | translate }}</span>
+            <span *ngIf="item.status == transactionStatus.BILLED">{{'exchangeHistory.billed' | translate }}</span>
+            <span *ngIf="item.status == transactionStatus.CANCEL">{{'common.cancel' | translate }}</span>
+            <span *ngIf="item.status == transactionStatus.PAID_NO_INVOICE">{{'exchangeHistory.paid_no_invoice' |
+              translate }}</span>
+          </ng-template>
+        </common-list>
+
+      </div>
+      <div class="form-field-full readonly" style="margin-top:20px">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field mat-form-field-should-float">
+              <mat-label>{{ 'cancel-ticket-refund.radio-title-bot-comfirm' | translate }}
+                <span class="required">*</span>
+              </mat-label>
+              <input matInput readonly hidden />
+              <mat-error *ngIf="formSearch.get('botComfirm').errors?.required">
+                {{ 'cancel-ticket-refund.bot-comfirm-requied-error' | translate }}
+              </mat-error>
+              <div class="radio-stl">
+                <mat-radio-group fxLayout="row wrap" fxLayoutGap="4px grid" class="font-register-service"
+                  formControlName="botComfirm">
+                  <mat-radio-button value="1">{{
+                    'cancel-ticket-refund.yes' | translate
+                    }}</mat-radio-button>
+                  <mat-radio-button value="2">
+                    {{ 'cancel-ticket-refund.no' | translate }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'common.reason' | translate }} <span class="required">*</span></mat-label>
+              <input matInput formControlName="reason">
+              <mat-error *ngIf="formSearch.get('reason').errors?.required">
+                {{ 'action_audit.reasonEr' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cancel-ticket-refund.documentNumber' | translate }}</mat-label>
+              <input matInput formControlName="documentNumber">
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'cancel-ticket-refund.refundDate' | translate }} <span class="required">*</span></mat-label>
+              <input matInput formControlName="refundDate" maskDate [matDatepicker]="refundDate"
+                placeholder="dd/mm/yyyy">
+              <mat-datepicker-toggle matSuffix *ngIf="formSearch.controls.refundDate.value" class="showclearDatePopup"
+                (click)="formSearch.controls.refundDate.setValue(null); $event.stopPropagation()">
+                <mat-icon matDatepickerToggleIcon>close</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="refundDate"></mat-datepicker-toggle>
+              <mat-datepicker #refundDate></mat-datepicker>
+              <mat-error *ngIf="formSearch.get('refundDate').errors?.required">
+                {{ 'cancel-ticket-refund.validator.requied-refundDate' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="8px grid" style="padding-bottom: 10px;">
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <div class="row table-toolbar">
+              <button mat-raised-button color="primary" (click)="chooseFileChange()" style="margin: 10px;"
+                type="button">
+                {{ 'document.select_file' | translate }}
+              </button>
+            </div>
+            <common-list #crmtable [dataSource]="dataModel.dataSourceProfile" [isPaging]="false" [showHeader]="true"
+              [headerTable]="'customer-management.updateProfileForm.resultSearch'"
+              [totalRecord]="dataModel.dataSourceProfile.length"
+              [stickyHeight]="getHeightProfile(dataModel.dataSourceProfile)" [showHeader]="false"
+              [columns]="columnProfiles" [pageIndex]="pageIndex">
+              <ng-template let-item let-index="index" vtsTemplate="actionCustom">
+                <button mat-icon-button type="button">
+                  <mat-icon svgIcon="ic_Delete" matTooltip="{{ 'change_card.delete' | translate }}"
+                    (click)="removeSelectedFile(index)">
+                  </mat-icon>
+                </button>
+              </ng-template>
+            </common-list>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="70" fxFlex.lt-sm="100">
+
+          </div>
+          <div fxFlex="30" fxFlex.lt-sm="100">
+            <button mat-button class="float-right ml-20 " mat-raised-button color="secondary" mat-dialog-close>
+              {{ 'common.button.close' | translate }}
+            </button>
+            <button mat-button class="float-right " mat-raised-button color="primary" (click)="save()" type="button"
+              [disabled]="formSearch.invalid">
+              {{ 'common.button.save' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

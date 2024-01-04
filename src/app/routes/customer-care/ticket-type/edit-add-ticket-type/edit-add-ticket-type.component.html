@@ -1,0 +1,123 @@
+<a class="close" (click)="onClosePopup()">
+  <mat-icon class="close-icon" color="warn" #enter_close autoFocus="enter_close">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{header}}
+</h2>
+
+<form [formGroup]="formSearch">
+  <div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <div class="form-field-full">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <!-- row 1 start -->
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'ticket-extend.ticketId' | translate }}
+              </mat-label>
+              <input matInput formControlName="name" autocomplete="off" required>
+              <button mat-button *ngIf="formSearch.controls.name.value" class="showclear" matSuffix mat-icon-button
+                (click)="formSearch.controls.name.setValue(''); $event.stopPropagation()" type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formSearch.get('name').errors?.required">
+                {{'ticket-extend.valid-enter-ticketName' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketCode' | translate}}</mat-label>
+              <input matInput formControlName="code" autocomplete="off" required>
+              <button mat-button *ngIf="formSearch.controls.code.value" class="showclear" matSuffix mat-icon-button
+                (click)="formSearch.controls.code.setValue(''); $event.stopPropagation()" type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="formSearch.get('code').errors?.required">
+                {{'ticket-extend.valid-enter-ticketId' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv1' | translate }}</mat-label>
+              <mtx-select formControlName="l1TicketTypeId" [items]="ticketTypeLv1List" bindLabel="label"
+                bindValue="value" [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketTypeLv1List?.length>10" (change)="onChangeTicketTypeLv1($event)">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv2' | translate }}</mat-label>
+              <mtx-select formControlName="l2TicketTypeId" [items]="ticketTypeLv2List" bindLabel="label"
+                bindValue="value" [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                [searchable]="ticketTypeLv2List?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100" style="margin-bottom:20px">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>{{'ticket-extend.isCpt' | translate}}
+              </mat-label>
+              <input matInput readonly />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl">
+                <mat-radio-group class="font-register-service" formControlName="isCpt">
+                  <mat-radio-button value="1">
+                    {{'common.yes' | translate}}</mat-radio-button>
+                  <mat-radio-button class="ml-102" value="0">
+                    {{'common.no' | translate}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'search-bot.note' | translate }}</mat-label>
+              <input matInput formControlName="description" autocomplete="off">
+              <button mat-button *ngIf="formSearch.controls.description.value" class="showclear" matSuffix
+                mat-icon-button (click)="formSearch.controls.description.setValue(''); $event.stopPropagation()"
+                type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100" style="margin-bottom:20px">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>{{'ticket-extend.use-status' | translate}}
+              </mat-label>
+              <input matInput readonly />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl">
+                <mat-radio-group class="font-register-service" formControlName="status">
+                  <mat-radio-button value="1">
+                    {{'customer-care.search-information-customer.effect' | translate}}</mat-radio-button>
+                  <mat-radio-button class="ml-102" value="0">
+                    {{'customer-care.search-information-customer.expire' | translate}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+          <div fxFlex="66.66" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'ticket-extend.ticketTemplate' | translate}}</mat-label>
+              <textarea matInput formControlName="ticketTemplate" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="2" cdkAutosizeMaxRows="50" autocomplete="off"></textarea>
+              <button mat-button *ngIf="formSearch.controls.ticketTemplate.value" class="showclear" matSuffix
+                mat-icon-button (click)="formSearch.controls.ticketTemplate.setValue(''); $event.stopPropagation()"
+                type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+  style="margin-right: 8px;">
+  <button mat-raised-button color="secondary" (click)="resetAllForm()">{{'common.button.reEnter' | translate}}</button>
+  <button mat-raised-button color="primary" style="margin-right: 8px;" (click)="onSave()"
+    [disabled]="formSearch.invalid">{{'common.button.save' | translate}}</button>
+</div>

@@ -1,0 +1,127 @@
+<h1 mat-dialog-title>{{'IMPORT DỮ LIỆU' | translate }}</h1>
+<div fxLayout="row wrap" fxLayoutGap="20px grid">
+  <div class="divTop" fxFlex="100" fxFlex.lt-sm="100">
+    <mat-icon class="add" color="black" style="cursor: pointer;"
+              matTooltip="{{'Thêm mới' | translate}}"
+              fontSize="large">
+      add
+    </mat-icon>
+    <mat-form-field appearance="outline" class="textExcel">
+      <input matInput formControlName="excelName" />
+      <button mat-button *ngIf="formSearch.controls.excelName.value" matSuffix mat-icon-button
+              aria-label="Clear" type="button"
+              (click)="formSearch.controls.excelName.setValue(null); $event.stopPropagation()"
+              class="showclear">
+        <mat-icon class="btnClose">close</mat-icon>
+      </button>
+    </mat-form-field>
+    <button type="submit" class="float-right ml-20" mat-button mat-raised-button
+            color="primary">{{'Upload' | translate}}
+    </button>
+    <button type="submit" class="float-right ml-20" mat-button mat-raised-button
+            color="primary">{{'File biểu mẫu' | translate}}
+    </button>
+  </div>
+  <div fxFlex="100" fxFlex.lt-sm="10">
+    <h2 class="label">{{'Thành công: 100, Thất bại: 50' | translate }}</h2>
+  </div>
+  <div fxFlex="33.33" fxFlex.lt-sm="100">
+    <mat-form-field class="float-left ml-20" appearance="outline">
+      <mat-label>{{'special-vehicle.createDateFrom'| translate}}</mat-label>
+      <mat-date-range-input [rangePicker]="createDatePicker" (click)="createDatePicker.open()"
+                            [comparisonStart]="formSearch.value.fromDate" [comparisonEnd]="formSearch.value.toDate">
+        <input matStartDate maskDate placeholder="dd/mm/yyyy" formControlName="fromDate" #fromDateId>
+        <input matEndDate maskDate placeholder="dd/mm/yyyy" formControlName="toDate" #toDateId>
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || toDateId.value" class="showclearDatePopup"
+                             (click)="formSearch.controls.fromDate.setValue(null);formSearch.controls.toDate.setValue(null); $event.stopPropagation()">
+        <mat-icon matDatepickerToggleIcon>close</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker-toggle matSuffix [for]="createDatePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #createDatePicker></mat-date-range-picker>
+    </mat-form-field>
+    <mat-icon class="btnSearch" style="cursor: pointer;"
+              matTooltip="{{'Tìm kiếm' | translate}}">
+      search
+    </mat-icon>
+  </div>
+
+</div>
+
+<div class="form-field-full">
+  <div fxLayout="row wrap" class="mt-15">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-accordion>
+        <div class="form-field-full">
+          <mat-card>
+            <crm-table [dataSource]="lstImport" [totalRecord]="countTableType"
+                       [isLoading]="isLoading"
+                       [isPaging]="false" [showHeader]="false" [displayedColumns]="displayedColumnsType"
+                       [pageIndex]="pageIndex" (onPage)="onPageChange($event)">
+
+              <ng-container *ngFor="let item of columns, let i = index" [ngSwitch]="item.field">
+
+                <ng-container matColumnDef="{{ item.field }}" *ngSwitchDefault>
+                  <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row[item.field] }}
+                  </td>
+                </ng-container>
+
+                <!-- STT -->
+                <ng-container matColumnDef="{{ item.field }}" *ngSwitchCase="'orderNumber'">
+                  <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                  <td mat-cell *matCellDef="let row; let i = dataIndex" class="ui-text-center">
+                    {{ i + 1 }}
+                  </td>
+                </ng-container>
+
+                <!-- File ket qua -->
+                <ng-container matColumnDef="fileResult" *ngSwitchCase="'fileResult'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{'File kết quả' | translate}}</th>
+                  <td mat-cell *matCellDef="let row; let i = dataIndex" class="ui-text-center"
+                      style="padding-left:0px;">
+                    {{row.fileResult}}
+                  </td>
+                </ng-container>
+
+                <!-- Thời gian import-->
+                <ng-container matColumnDef="timeImport" *ngSwitchCase="'timeImport'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Ngày import
+                  </th>
+                  <td mat-cell *matCellDef="let row; let i = index">
+                    {{row.timeImport}}
+                  </td>
+                </ng-container>
+
+                <!-- Người import-->
+                <ng-container matColumnDef="createUser" *ngSwitchCase="'createUser'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Người import
+                  </th>
+                  <td mat-cell *matCellDef="let row; let i = index">
+                    {{row.createUser}}
+                  </td>
+                </ng-container>
+                <!--                 kết quả import-->
+                <ng-container matColumnDef='resultImport' *ngSwitchCase="'resultImport'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Kết quả import
+                  </th>
+                  <td mat-cell *matCellDef='let row; let i = index'>
+                    {{row.resultImport}}
+                  </td>
+                </ng-container>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </crm-table>
+          </mat-card>
+        </div>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

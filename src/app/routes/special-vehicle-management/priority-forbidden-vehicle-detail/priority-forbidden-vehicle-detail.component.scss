@@ -1,0 +1,40 @@
+.radio-stl {
+  position: absolute;
+  top: 0;
+  left: 30px;
+}
+
+.ml-70 {
+  margin-left: 30px;
+}
+
+.documentation {
+  font-weight: bold;
+}
+
+.view-detail {
+  ::ng-deep .mat-form-field-appearance-outline {
+    .mat-form-field-outline-gap,
+    .mat-form-field-outline-end,
+    .mat-form-field-outline-start {
+      border-width: 1px !important;
+      color: #e0e0e0;
+    }
+  }
+}
+
+.comment {
+  ::ng-deep .mat-form-field-outline-start,
+  ::ng-deep .mat-form-field-outline-gap,
+  ::ng-deep .mat-form-field-outline-end {
+    height: 72px !important;
+  }
+}
+
+.lblFile {
+  position: relative;
+  top: 10px;
+  cursor: pointer;
+  margin-left: 20px;
+  color: #2979ff;
+}

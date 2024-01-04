@@ -1,0 +1,284 @@
+{
+  "menu": [
+    {
+      "route": "customer-care",
+      "name": "customer-care",
+      "type": "sub",
+      "icon": "ic_QlyKhachHang",
+      "children": [
+        {
+          "route": "search-information-customer",
+          "name": "search-information-customer",
+          "type": "link"
+        },
+        {
+          "route": "search-cc",
+          "name": "search-cc",
+          "type": "link"
+        },
+        {
+          "route": "search-process",
+          "name": "search-process",
+          "type": "link"
+        },
+        {
+          "route": "search-bot",
+          "name": "search-bot",
+          "type": "link"
+        },
+        {
+          "route": "search-agency",
+          "name": "search-agency",
+          "type": "link"
+        },
+        {
+          "1route": "config-process-time",
+          "1name": "config-process-time",
+          "1type": "link"
+        },
+        {
+          "route": "assign-handle-reflect",
+          "name": "assign-handle-reflect",
+          "type": "link"
+        },
+        {
+          "1route": "extent-process",
+          "1name": "extent-process",
+          "1type": "link"
+        },
+        {
+          "route": "ticket-statistics-search",
+          "name": "ticket-statistics-search",
+          "type": "link"
+        },
+        {
+          "route": "ticket-report-performmance",
+          "name": "ticket-report-performmance",
+          "type": "link"
+        },
+        {
+          "route": "approve-ticket",
+          "name": "approve-ticket",
+          "type": "link"
+        },
+        {
+          "1route": "ticket-type",
+          "1name": "ticket-type",
+          "1type": "link"
+        },
+        {
+          "1route": "ticket-expire-cause",
+          "1name": "ticket-expire-cause",
+          "1type": "link"
+        },
+        {
+          "1route": "ticket-error-cause",
+          "1name": "ticket-error-cause",
+          "1type": "link"
+        },
+        {
+          "route": "etag-change-regis",
+          "name": "etag-change-regis",
+          "type": "link"
+        }
+      ]
+    },
+    {
+      "route": "special-vehicle-management",
+      "name": "special-vehicle-management",
+      "type": "sub",
+      "icon": "ic_QuanlyPhuongTienDB",
+      "children": [
+        {
+          "route": "priority-forbidden-vehicle",
+          "name": "priority-forbidden-vehicle",
+          "type": "link"
+        },
+        {
+          "route": "priority-forbidden-vehicle-create",
+          "name": "priority-forbidden-vehicle-create",
+          "type": "not-link"
+        },
+        {
+          "route": "priority-forbidden-vehicle-update",
+          "name": "priority-forbidden-vehicle-update",
+          "type": "not-link"
+        },
+        {
+          "route": "exception-vehicle",
+          "name": "exception-vehicle",
+          "type": "link"
+        },
+        {
+          "route": "exception-vehicle-create",
+          "name": "exception-vehicle-create",
+          "type": "not-link"
+        },
+        {
+          "route": "exception-vehicle-update",
+          "name": "exception-vehicle-update",
+          "type": "not-link"
+        }
+      ]
+    },
+    {
+      "route": "document-management",
+      "name": "document-management",
+      "type": "sub",
+      "icon": "ic_QlyKhachHang",
+      "children": [
+        {
+          "route": "search-document",
+          "name": "search-document",
+          "type": "link"
+        },
+        {
+          "route": "approve-document",
+          "name": "approve-document",
+          "type": "link"
+        },
+        {
+          "route": "additional-document",
+          "name": "additional-document",
+          "type": "link"
+        },
+        {
+          "route": "document-report",
+          "name": "document-report",
+          "type": "link"
+        }
+      ]
+    },
+    {
+      "route": "support-after-sale",
+      "name": "support-after-sale",
+      "type": "sub",
+      "icon": "ic_QlyKhachHang",
+      "children": [
+        {
+          "route": "reset-password-lock-open-account",
+          "name": "reset-password-lock-open-account",
+          "type": "link"
+        },
+        {
+          "route": "change-info-customer-contract-vehicle",
+          "name": "change-info-customer-contract-vehicle",
+          "type": "link"
+        },
+        {
+          "route": "reset-password-lock-open-agency",
+          "name": "reset-password-lock-open-agency",
+          "type": "link"
+        },
+        {
+          "route": "transfer-own-vehicle",
+          "name": "transfer-own-vehicle",
+          "type": "link"
+        },
+        {
+          "route": "merge-contract",
+          "name": "merge-contract",
+          "type": "link"
+        },
+        {
+          "route": "detach-contract",
+          "name": "detach-contract",
+          "type": "link"
+        },
+        {
+          "route": "end-contract",
+          "name": "end-contract",
+          "type": "link"
+        },
+        {
+          "route": "cancel-ticket-refund",
+          "name": "cancel-ticket-refund",
+          "type": "link"
+        },
+        {
+          "route": "update-cancel-ticket-no-refund",
+          "name": "update-cancel-ticket-no-refund",
+          "type": "link"
+        }
+      ]
+    },
+    {
+      "route": "cate-config",
+      "name": "cate-config",
+      "type": "sub",
+      "icon": "ic_QlyKhachHang",
+      "children": [
+        {
+          "route": "ticket-group",
+          "name": "ticket-group",
+          "type": "link"
+        },
+        {
+          "route": "ticket-genre",
+          "name": "ticket-genre",
+          "type": "link"
+        },
+        {
+          "route": "ticket-type",
+          "name": "ticket-type",
+          "type": "link"
+        },
+        {
+          "route": "ticket-type-create",
+          "name": "ticket-type-create",
+          "type": "not-link"
+        },
+        {
+          "route": "ticket-type-update",
+          "name": "ticket-type-update",
+          "type": "not-link"
+        },
+        {
+          "route": "ticket-level-cate",
+          "name": "ticket-level-cate",
+          "type": "link"
+        },
+        {
+          "route": "ticket-processing-time-config",
+          "name": "ticket-processing-time-config",
+          "type": "link"
+        },
+        {
+          "route": "ticket-error-cause",
+          "name": "ticket-error-cause",
+          "type": "link"
+        },
+        {
+          "route": "ticket-expire-cause",
+          "name": "ticket-expire-cause",
+          "type": "link"
+        },
+        {
+          "route": "ticket-site",
+          "name": "ticket-site",
+          "type": "link"
+        },
+        {
+          "route": "map-cause-error",
+          "name": "map-cause-error",
+          "type": "link"
+        },
+        {
+          "route": "ticket-reflective-statistics",
+          "name": "ticket-reflective-statistics",
+          "type": "link"
+        },
+        {
+          "route": "notify-config",
+          "name": "notify-config",
+          "type": "link"
+        },
+        {
+          "route": "impact-log",
+          "name": "impact-log",
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}

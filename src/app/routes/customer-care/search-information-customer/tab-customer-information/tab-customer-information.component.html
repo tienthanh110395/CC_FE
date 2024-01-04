@@ -1,0 +1,141 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>{{ 'customer.info' | translate}}</h3>
+        </mat-expansion-panel-header>
+
+        <form [formGroup]="inforForm" class="form-field-full">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-management.formCustomerRegister.customerType'
+                  | translate}}</mat-label>
+                <input matInput formControlName="customerType" readonly />
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer.code' | translate}} </mat-label>
+                <input matInput formControlName="customerCode" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-information-customer.user_connector' | translate}} </mat-label>
+                <input matInput formControlName="username" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-information-customer.name_customer' | translate}}</mat-label>
+                <input matInput formControlName="fullName" readonly />
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer.dob' | translate}}</mat-label>
+                <input matInput formControlName="dateOfBirth" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100" class="readonly">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer.gender' | translate}}</mat-label>
+                <input matInput formControlName="gender" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'info.documentNumber' | translate}}</mat-label>
+                <input matInput formControlName="documentNumber" readonly />
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'document.createDate' | translate}}</mat-label>
+                <input matInput formControlName="dateRange" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'document.place' | translate}}</mat-label>
+                <input matInput formControlName="placeOfIssue" readonly />
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer.address' | translate}} </mat-label>
+                <input matInput formControlName="address" readonly />
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-information-customer.phone' | translate}} </mat-label>
+                <input matInput formControlName="numberPhone" readonly />
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-process.email' |
+                  translate}}
+                </mat-label>
+                <input matInput formControlName="email" readonly />
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'exchangeHistory.status_contract' | translate}} </mat-label>
+                <input matInput formControlName="status" readonly />
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-tab-group (selectedTabChange)="onTabChanged($event)">
+      <mat-tab label=" {{ 'contract.info' | translate }}">
+        <app-tab-contract-information [contract]="resultSearch[0].listContract[0]" [resultSearch]="resultSearch" (profileStatusEvent)='profileStatus($event)'>
+        </app-tab-contract-information>
+      </mat-tab>
+      <mat-tab label="{{ 'customer-care.search-information-customer.lst_pt' | translate }}">
+        <app-tab-vehicle-list *ngIf="dataModel.currentIndexTab==1"
+          [contractId]="resultSearch[0].listContract[0].contractId"></app-tab-vehicle-list>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          {{ 'customer-care.search-information-customer.attached_file' | translate }}
+          <mat-icon *ngIf="+resultSearch[0].profileStatus == 3" style='margin-bottom: 15px; color: red'>error</mat-icon>
+        </ng-template>
+        <app-tab-file-attach *ngIf="dataModel.currentIndexTab==2" [data]="resultSearch" [profileStatus]='resultSearch[0].profileStatus'>
+        </app-tab-file-attach>
+      </mat-tab>
+      <mat-tab label="{{ 'customer-care.search-information-customer.impact_history' | translate }}">
+        <app-tab-impact-history *ngIf="dataModel.currentIndexTab==3" [data]="resultSearch[0]">
+        </app-tab-impact-history>
+      </mat-tab>
+      <!-- tạm ẩn theo yêu cầu từ tester -->
+      <!-- <mat-tab label="{{ 'customer-care.search-information-customer.history_account' | translate }}">
+            <app-tab-account-history *ngIf="dataModel.currentIndexTab==4"></app-tab-account-history>
+          </mat-tab> -->
+      <mat-tab label="{{ 'customer-care.search-information-customer.history_invoice' | translate }}">
+        <app-tab-history-invoice *ngIf="dataModel.currentIndexTab==4" [data]="resultSearch[0]">
+        </app-tab-history-invoice>
+      </mat-tab>
+<!--      vietMap-->
+      <mat-tab label="{{ 'vietMap.vietMapWarn' | translate }}">
+        <app-tab-vietmap *ngIf="dataModel.currentIndexTab==5" [data]="resultSearch[0]">
+        </app-tab-vietmap>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

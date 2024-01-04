@@ -1,0 +1,82 @@
+.box {
+  display: flex;
+  width: 100%;
+}
+
+.item {
+  width: calc(25% - 10px);
+  margin: 5px;
+  height: 350px;
+  border: 1px solid #c9cdd2;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+  border-radius: 8px;
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  font-family: "Open Sans", sans-serif;
+  font-style: normal;
+}
+
+.mt-10 {
+  margin-top: 30px !important;
+}
+
+.mb-10 {
+  margin-bottom: 10px !important;
+}
+
+.mr-10 {
+  margin-right: 10px !important;
+}
+
+.ml-20 {
+  margin-left: 20px !important;
+}
+
+
+.example-viewport {
+  height: 220px;
+  overflow: auto;
+}
+
+.example-item {
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+.search-hero {
+  margin-top: -23px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 3px 10px;
+  gap: 10px;
+  width: 231px;
+  height: 30px;
+  background: #FFFFFF;
+  border: 1px solid #F0F0F0;
+  border-radius: 7px;
+  margin-left: 34px;
+}
+
+
+.chk-search {
+  margin-top: 15px;
+  float: left;
+  width: 100%;
+}
+
+.search-wrapper {
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+.hover-pointer {
+  cursor: pointer;
+}

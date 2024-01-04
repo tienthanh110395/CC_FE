@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>THÔNG TIN CẤU HÌNH THỜI GIAN</h2>
+<mat-dialog-content class='view-detail'>
+    <form [formGroup]='form' class='form-field-full'>
+        <!--    Row 1-->
+        <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+            <div fxFlex='50' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                    <mat-label>{{ 'ticketProcessConfig.receptionTimeFrom' | translate }} <span class='required'>*</span>
+                    </mat-label>
+                    <input matInput uppercaseText trim='blur' type="time"
+                        placeholder="{{ 'ticketProcessConfig.receptionTimeFrom' | translate }}"
+                        formControlName='receptionTimeFrom' autocomplete='off' />
+                    <mat-error *ngIf="form.get('receptionTimeFrom').errors?.required">
+                        {{'cateConfig.validators.requiredInput' | translate}}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('receptionTimeFrom').errors?.maxlength">
+                        {{'cateConfig.validators.maxLength-255' | translate}}
+                    </mat-error>
+                    <!-- <button mat-button matSuffix mat-icon-button
+                                    (click)='form.controls.ticketExpireCauseLevel.setValue(null); $event.stopPropagation()'
+                                    class='showclear' type='button'>
+                                    <mat-icon>close</mat-icon>
+                                </button> -->
+                </mat-form-field>
+            </div>
+            <div fxFlex='50' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                    <mat-label>{{ 'ticketProcessConfig.receptionTimeTo' | translate }}
+                        <span class='required'>*</span>
+                    </mat-label>
+                    <input matInput uppercaseText trim='blur' type="time"
+                        placeholder="{{ 'ticketProcessConfig.receptionTimeTo' | translate }}"
+                        formControlName='receptionTimeTo' autocomplete='off' />
+                    <mat-error *ngIf="form.get('receptionTimeTo').errors?.required">
+                        {{'cateConfig.validators.requiredInput' | translate}}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('receptionTimeTo').errors?.maxlength">
+                        {{'cateConfig.validators.maxLength-255' | translate}}
+                    </mat-error>
+                    <!-- <button mat-button matSuffix mat-icon-button
+                                    (click)='form.controls.ticketExpireCauseCode.setValue(null); $event.stopPropagation()'
+                                    class='showclear' type='button'>
+                                    <mat-icon>close</mat-icon>
+                                </button> -->
+                </mat-form-field>
+            </div>
+        </div>
+        <!--    Row 2-->
+        <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+            <div fxFlex='100' fxFlex.lt-sm='100'>
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button color='secondary'
+                    mat-dialog-close>Đóng
+                </button>
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button color='primary'
+                    (click)='doUpdateReception()'>Lưu
+                </button>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>

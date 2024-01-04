@@ -1,0 +1,152 @@
+<div fxLayout="row wrap">
+  <div fxFlex="25" fxFlex.lt-sm="100">
+    <mat-card>
+      <mat-card-title class="matcard__title--align">{{ 'menu.customer-care.config-process-time' | translate }}
+        <hr />
+      </mat-card-title>
+      <ng-container *ngIf="dataSourceTree$ |async as dataSourceTree">
+        <crm-tree-component [heightScroll]="'600px'" [treeData]="dataSourceTree" (selectNode)="selectNode($event)">
+        </crm-tree-component>
+      </ng-container>
+    </mat-card>
+  </div>
+  <div fxFlex="75" fxFlex.lt-sm="100">
+    <mat-card>
+      <div class="crm__table">
+        <table mat-table [dataSource]="dataModel.dataSource">
+          <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'priorityId'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                {{item.priorityName}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'processTime'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                <div fxLayout="row wrap">
+                  <div class="form-field-full">
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <input mat-input [(ngModel)]="item.processTime" [disabled]="checkDisable">
+                    </div>
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <mtx-select [items]="timeTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                        appendTo="body" [notFoundText]="'common.notFound' | translate" [disabled]="checkDisable"
+                        [searchable]="timeTypeList?.length>10" [(ngModel)]="item.processTimeType"></mtx-select>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'combineTimeL1'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                <div fxLayout="row wrap">
+                  <div class="form-field-full">
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <input mat-input [(ngModel)]="item.combineTimeL1" [disabled]="checkDisable">
+                    </div>
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <mtx-select [items]="timeTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                        appendTo="body" [notFoundText]="'common.notFound' | translate" [disabled]="checkDisable"
+                        [searchable]="timeTypeList?.length>10" [(ngModel)]="item.combineTimeL1Type"></mtx-select>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'combineTimeL2'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                <div fxLayout="row wrap">
+                  <div class="form-field-full">
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <input mat-input [(ngModel)]="item.combineTimeL2" [disabled]="checkDisable">
+                    </div>
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <mtx-select [items]="timeTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                        appendTo="body" [notFoundText]="'common.notFound' | translate" [disabled]="checkDisable"
+                        [searchable]="timeTypeList?.length>10" [(ngModel)]="item.combineTimeL2Type"></mtx-select>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'manTimeSla'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                <div fxLayout="row wrap">
+                  <div class="form-field-full">
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <input mat-input [(ngModel)]="item.manTimeSla" [disabled]="checkDisable">
+                    </div>
+                    <div fxFlex="50" fxFlex.lt-sm="100">
+                      <mtx-select [items]="timeTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                        appendTo="body" [notFoundText]="'common.notFound' | translate" [disabled]="checkDisable"
+                        [searchable]="timeTypeList?.length>10" [(ngModel)]="item.manTimeSlaType"></mtx-select>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'isAddCombine'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                <mat-checkbox [(ngModel)]="item.isAddCombine" [disabled]="checkDisable"></mat-checkbox>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'processType'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;">
+                <mtx-select [items]="processTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" [notFoundText]="'common.notFound' | translate" [disabled]="checkDisable"
+                  [searchable]="processTypeList?.length>10" [(ngModel)]="item.processType"></mtx-select>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+              <th mat-header-cell *matHeaderCellDef>
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                <button mat-icon-button color="primary" matTooltip="{{'common.button.edit'| translate}}"
+                  (click)="checkData()">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" matTooltip="{{'common.button.save'| translate}}"
+                  *ngIf="disabledIcon">
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" matTooltip="{{'common.button.cancel'| translate}}"
+                  *ngIf="disabledIcon" (click)="checkIcon()">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+              <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                {{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                {{row[item.field]}}
+              </td>
+            </ng-container>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayed"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayed;"></tr>
+        </table>
+        <span class="noRecored" *ngIf="!dataModel.dataSource || dataModel.dataSource?.data?.length === 0 ">
+          {{'common.noRecord' | translate}}
+        </span>
+      </div>
+      <div>
+        <mat-paginator #paginator [pageSizeOptions]="pageSizeList" showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </mat-card>
+  </div>
+</div>

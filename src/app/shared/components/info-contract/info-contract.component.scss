@@ -1,0 +1,27 @@
+.radio-stl {
+  position: absolute;
+  top: 0px;
+  left: 30px;
+}
+:host::ng-deep {
+  .hack-height-radio.mat-form-field-appearance-outline .mat-form-field-outline {
+    height: 70px;
+  }
+  .hack-height-checkbox.mat-form-field-appearance-outline .mat-form-field-outline {
+    height: 130px;
+  }
+}
+.font-register-service {
+  font-size: 12pt !important;
+}
+
+::ng-deep .fix__disable.mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+  color: black;
+}
+::ng-deep .fix__disable.mat-checkbox-disabled .mat-checkbox-label {
+  color: black;
+}
+
+.mr-20{
+  margin-right: 20px;
+}

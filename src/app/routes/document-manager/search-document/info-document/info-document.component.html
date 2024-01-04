@@ -1,0 +1,134 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>
+  {{ dataModel.titlePopup | translate }}
+</h2>
+<mat-dialog-content>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="80" fxFlex.lt-sm="100">
+      <info-customer-shared [custId]="data.custId"></info-customer-shared>
+      <info-contract-shared [data]="data"></info-contract-shared>
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header class="bg-white">
+            <mat-panel-title>
+              {{ 'vehicle.info' | translate | uppercase }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <common-list [dataSource]="dataModel.dataSource" [isLoading]="isLoading" [showHeader]="false"
+            [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns" (page)="onPageChange($event)"
+            [pageIndex]="pageIndex" [startRecord]="formSearch.controls.startrecord.value">
+            <ng-template vtsTemplate="vehicleTypeFee" let-item>
+              {{ showVehicleGroupName(item.vehicleGroupId) }}
+            </ng-template>
+            <ng-template vtsTemplate="vehicleTypeName" let-item>
+              {{ showVehicleTypeName(item.vehicleTypeId) }}
+            </ng-template>
+          </common-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header class="bg-white">
+            <mat-panel-title>
+              {{ 'contract.documents_attach' | translate | uppercase }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <common-list [dataSource]="dataModel.dataSourceDocumentAttach" [isLoading]="isLoadingDocumentAttach"
+            [showHeader]="false" [isPaging]="true" [totalRecord]="totalRecordDocumentAttach"
+            [columns]="columnsDocumentAttach" (page)="onPageChangeDocumentAttach($event)"
+            [pageIndex]="pageIndexDocumentAttach" [startRecord]="formSearchDocumentAttach.controls.startrecord.value">
+            <ng-template vtsTemplate="cskhStatus" let-item>
+              <span *ngIf="item.checkStatus == 0">{{ 'document.unchecked' | translate }}</span>
+              <span *ngIf="item.checkStatus == 1">{{ 'document.checked' | translate }}</span>
+            </ng-template>
+            <ng-template vtsTemplate="ocrStatus" let-item>
+              <span *ngIf="item.ocrStatus == 0">{{ 'document.unchecked' | translate }}</span>
+              <span *ngIf="item.ocrStatus == 1">{{ 'document.checked' | translate }}</span>
+            </ng-template>
+            <ng-template vtsTemplate="ocrResult" let-item>
+              <span *ngIf="item.ocrResult == 0">{{ 'document.notOk' | translate }}</span>
+              <span *ngIf="item.ocrResult == 1">{{ 'document.ok' | translate }}</span>
+            </ng-template>
+            <ng-template vtsTemplate="customView" let-item>
+              <button mat-icon-button color="primary" matTooltip="{{'document.view'| translate}}"
+                (click)="viewProfile(item)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </ng-template>
+          </common-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header class="bg-white">
+            <mat-panel-title>
+              {{ 'document.approve_content' | translate | uppercase }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <!-- <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-checkbox [ngModel]="dataModel.wrongInfo" disabled>{{'document.wrong_info' | translate}}
+              </mat-checkbox>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-checkbox [ngModel]="dataModel.fake" disabled>{{'document.fake' | translate}}</mat-checkbox>
+            </div> -->
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-checkbox [checked]="dataModel.status + '' === '1'" disabled>{{'document.approved' | translate}}
+              </mat-checkbox>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-checkbox [checked]="dataModel.status + '' === '2'" disabled>{{'document.reject' | translate}}
+              </mat-checkbox>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline" fxFill>
+                <mat-label>{{
+                  'common.reason' | translate
+                  }}</mat-label>
+                <input matInput [(ngModel)]="dataModel.reason" readonly />
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div fxFlex="20" fxFlex.lt-sm="100">
+      <ng-container *ngIf="fileData != null && fileExtension != null">
+        <div>
+          <img *ngIf="fileExtension !== 'pdf'" [src]="fileData" [class]="isFullSize ? '' : 'autofit'" />
+        </div>
+        <div>
+          <pdf-viewer *ngIf="fileExtension === 'pdf'" [src]="fileData" [original-size]="isFullSize">
+          </pdf-viewer>
+        </div>
+        <div fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px">
+          <button mat-icon-button color="primary" matTooltip="{{'Tải file'| translate}}" (click)="downloadFile()">
+            <mat-icon>download</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" matTooltip="{{'In file'| translate}}" (click)="print()">
+            <mat-icon>print</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" matTooltip="{{'Full size'| translate}}" (click)="setFullSize(true)">
+            <mat-icon>open_in_full</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" matTooltip="{{'Normal size'| translate}}"
+            (click)="setFullSize(false)">
+            <mat-icon>close_fullscreen</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <div fxLayout.xs="column" fxLayoutAlign="end" fxLayoutGap="10px" fxLayoutGap.xs="0" style="width: 100%;">
+    <button mat-raised-button type="button" color="secondary" mat-dialog-close style="float: right;">
+      {{ 'common.button.close' | translate }}
+    </button>
+  </div>
+</mat-dialog-actions>

@@ -1,0 +1,176 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class='view-detail'>
+
+  <div class='form-field-full'>
+    <!--    Row 1-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+
+      <!--Nhóm phản ánh-->
+      <div fxFlex='33.33' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{'cateConfig.ticketType.ticketGroup' | translate}}
+            <span class='required'>*</span></mat-label>
+          <mtx-select placeholder="{{'ticketProcessConfig.search.placehoderTicketGroup' | translate}}"
+                      [items]='lstTicketGroup' bindLabel='label' bindValue='value' [multiple]='false'
+                      (change)='onChangeGroup()' [(ngModel)]='searchModel' appendTo='body'
+                      [notFoundText]="'common.notFound' | translate">
+          </mtx-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!--Row 2-->
+    <div class='box' fxLayout='row wrap' fxLayoutGap='20px grid'>
+
+      <!--Thể loại phản ánh-->
+      <div class='item'>
+        <h2 class='title' mat-dialog-title>
+          {{'ticketProcessConfig.table.ticketGenre' | translate}}
+          <span class='required'>*</span>
+        </h2>
+
+        <div class='search-wrapper' *ngIf='lstTicketGenre.length > 0'>
+          <div class='col-md-11'>
+            <mat-form-field appearance='outline' class='input-search'>
+              <input type='text' matInput placeholder='Từ khóa tìm kiếm' [(ngModel)]='searchGenre'>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div itemSize='50' class='example-viewport'>
+          <div *ngFor='let item of lstTicketGenre | appFilter: searchGenre'>
+            <mat-checkbox class='example-item' [(ngModel)]='item.checked' (change)='onChangeItem($event,item)'>{{
+              item.name }}</mat-checkbox>
+          </div>
+        </div>
+
+      </div>
+
+      <!--Nguyên nhân lỗi cấp 1-->
+      <div class='item'>
+        <h2 class='title' mat-dialog-title>
+          {{'ticket-error-cause.ticketErrorCauseNameLv1' | translate}}
+          <span class='required'>*</span>
+        </h2>
+
+        <div class='search-wrapper'>
+          <div class='row'>
+            <div *ngIf='searchText.length == 0' class='col-md-1'>
+              <mat-checkbox class='chk-search' [checked]='allComplete' (change)='setAll($event.checked,2)'>
+              </mat-checkbox>
+            </div>
+            <div *ngIf='searchText.length > 0' class='col-md-1'>
+              <mat-checkbox class='chk-search' [checked]='allCompleteSearch'
+                            (change)='setAllSearch1($event.checked,lstTicketErrorCauseLv1,searchText)'>
+              </mat-checkbox>
+            </div>
+            <div class='col-md-11'>
+              <mat-form-field appearance='outline' class='input-search'>
+                <input type='text' matInput placeholder='Từ khóa tìm kiếm' [(ngModel)]='searchText'>
+                <mat-icon *ngIf='searchText.length == 0' matSuffix>search</mat-icon>
+                <mat-icon class='hover-pointer' *ngIf='searchText.length > 0' matSuffix (click)='close(1)'>close</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div itemSize='50' class='example-viewport'>
+          <div *ngFor='let item of lstTicketErrorCauseLv1 | appFilter: searchText'>
+            <mat-checkbox class='example-item' [(ngModel)]='item.checked' (change)='onChangeNNLoi($event,item,2)'>{{
+              item.name }}</mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <!--Nguyên nhân lỗi cấp 2-->
+      <div class='item'>
+        <h2 class='title' mat-dialog-title>
+          {{'ticket-error-cause.ticketErrorCauseNameLv2' | translate}}
+          <span class='required'>*</span>
+        </h2>
+
+        <div class='search-wrapper' *ngIf='lstTicketErrorCauseLv2.length > 0'>
+          <div class='row'>
+            <div *ngIf='searchText2.length == 0' class='col-md-1'>
+              <mat-checkbox class='chk-search' [checked]='allComplete2' (change)='setAll($event.checked,3)'>
+              </mat-checkbox>
+            </div>
+            <div *ngIf='searchText2.length > 0' class='col-md-1'>
+              <mat-checkbox class='chk-search' [checked]='allComplete2Search'
+                            (change)='setAllSearch2($event.checked,lstTicketErrorCauseLv2,searchText2)'>
+              </mat-checkbox>
+            </div>
+            <div class='col-md-11'>
+              <mat-form-field appearance='outline' class='input-search'>
+                <input type='text' matInput placeholder='Từ khóa tìm kiếm' [(ngModel)]='searchText2'>
+                <mat-icon *ngIf='searchText2.length == 0' matSuffix>search</mat-icon>
+                <mat-icon class='hover-pointer' *ngIf='searchText2.length > 0' matSuffix (click)='close(2)'>close</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div itemSize='50' class='example-viewport'>
+          <div *ngFor='let item of lstTicketErrorCauseLv2 | appFilter: searchText2'>
+            <mat-checkbox class='example-item' [(ngModel)]='item.checked' (change)='onChangeNNLoi($event,item,3)'>{{
+              item.name }}</mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <!--Nguyên nhân lỗi cấp 3-->
+      <div class='item'>
+        <h2 class='title' mat-dialog-title>
+          {{'ticket-error-cause.ticketErrorCauseNameLv3' | translate}}
+          <span class='required'>*</span>
+        </h2>
+
+        <div class='search-wrapper' *ngIf='lstTicketErrorCauseLv3.length > 0'>
+          <div class='row'>
+            <div *ngIf='searchText3.length == 0' class='col-md-1'>
+              <mat-checkbox class='chk-search' [checked]='allComplete3' (change)='setAll($event.checked,null)'>
+              </mat-checkbox>
+            </div>
+            <div *ngIf='searchText3.length > 0' class='col-md-1'>
+              <mat-checkbox class='chk-search' [checked]='allComplete3Search'
+                            (change)='setAllSearch3($event.checked,lstTicketErrorCauseLv3,searchText3)'>
+              </mat-checkbox>
+            </div>
+            <div class='col-md-11'>
+              <mat-form-field appearance='outline' class='input-search'>
+                <input type='text' matInput placeholder='Từ khóa tìm kiếm' [(ngModel)]='searchText3'>
+                <mat-icon *ngIf='searchText3.length == 0' matSuffix>search</mat-icon>
+                <mat-icon class='hover-pointer' *ngIf='searchText3.length > 0' matSuffix (click)='close(3)'>close</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div itemSize='50' class='example-viewport'>
+          <div *ngFor='let item of lstTicketErrorCauseLv3 | appFilter: searchText3'>
+            <mat-checkbox class='example-item' [(ngModel)]='item.checked' (change)='onChangeNNLoi($event,item,null)'>{{
+              item.name }}</mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!--Action-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div fxFlex='100' fxFlex.lt-sm='100'>
+        <button  class='float-right ml-20 m-10 mt-10' mat-button mat-raised-button color='secondary'
+                mat-dialog-close (click)='onClosePopup()'>{{ 'cateConfig.ticketType.close' | translate }}
+        </button>
+        <button [disabled] = "isLoading" type='submit' class='float-right ml-20 mb-10 mt-10' mat-button mat-raised-button color='primary'
+                (click)='doSave()'>{{ 'cateConfig.ticketType.save' | translate }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</mat-dialog-content>

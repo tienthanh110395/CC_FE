@@ -1,0 +1,17 @@
+<div class="content-file">
+  <common-list [headerTable]="'customer-care.search-information-customer.list_contract'"
+    [dataSource]="dataModel.dataSource" [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord"
+    [columns]="columns" [selectionMode]="selectionMode" (page)="onPageChange($event)" [pageIndex]="pageIndex">
+    <ng-template vtsTemplate="orderNumber" let-item let-index="index">
+      {{searchModel.startrecord +index+1}}
+    </ng-template>
+    <ng-template vtsTemplate="actionListContract" let-item let-index="index">
+      <button (click)="choose(item)" mat-icon-button color="primary">
+        <mat-icon>done</mat-icon>
+      </button>
+    </ng-template>
+  </common-list>
+  <button (click)="closePopup()" style="float :right" mat-raised-button color="primary">
+    Đóng
+  </button>
+</div>

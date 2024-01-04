@@ -1,0 +1,77 @@
+<a class="close-popup" mat-dialog-close>
+    <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h1 mat-dialog-title>
+    {{'search-bot.priceTable' | translate}}
+</h1>
+<div mat-dialog-content>
+    <mat-accordion>
+        <mat-card>
+            <div fxFlex="100" fxFlex.lt-sm="100">
+                <div class="crm__table">
+                    <table mat-table [dataSource]="dataSource">
+                        <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+                            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                                <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                                    {{item.i18n | translate}}</th>
+                                <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center"
+                                    style="width: 80px;">
+                                    {{(i+1) + (paginator.pageIndex * paginator.pageSize)}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'ticketPrices'">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    {{item.i18n | translate}}</th>
+                                <td mat-cell *matCellDef="let row;let i = index" class="ui-text-right">
+                                    {{ row[item.field] | number}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'monthlyTicketPrices'">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    {{item.i18n | translate}}</th>
+                                <td mat-cell *matCellDef="let row;let i = index" class="ui-text-right">
+                                    {{ row[item.field] | number}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'quarterlyTicketPrices'">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    {{item.i18n | translate}}</th>
+                                <td mat-cell *matCellDef="let row;let i = index" class="ui-text-right">
+                                    {{ row[item.field] | number}}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                                    {{item.i18n | translate}}</th>
+                                <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                                    {{row[item.field]}}
+                                </td>
+                            </ng-container>
+                        </ng-container>
+                        <ng-container matColumnDef="header-row-first-group">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"></th>
+                        </ng-container>
+                        <ng-container matColumnDef="header-row-second-group">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3">{{ 'search-bot.priceTicket' |
+                                translate }}</th>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="['header-row-first-group', 'header-row-second-group']">
+                        </tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <span class="noRecored" *ngIf="!dataSource || dataSource?.data?.length === 0 ">
+                        {{'common.noRecord' | translate}}
+                    </span>
+                </div>
+                <div>
+                    <mat-paginator #paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons>
+                    </mat-paginator>
+                </div>
+            </div>
+        </mat-card>
+    </mat-accordion>
+</div>
+<div mat-dialog-actions align="center">
+    <button mat-raised-button color="secondary" (click)="onDismiss()">{{'common.button.close' | translate}}</button>
+</div>

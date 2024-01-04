@@ -1,0 +1,70 @@
+<div *ngIf="hasPermission(permissionApp.CC_PROFILE_04)">
+  <page-header></page-header>
+  <div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ 'common.title' | translate | uppercase}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="formSearch" class="form-field-full">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'info.time' | translate }}
+                  </mat-label>
+                  <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+                    <input matStartDate formControlName="approveFromDate" #fromDateId maskDate
+                      placeholder="{{ 'common.fromDate' | translate }}">
+                    <input matEndDate formControlName="approveToDate" maskDate
+                      placeholder="{{ 'common.endDate' | translate }}" #endDateId>
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || endDateId.value"
+                    class="showclearDatePopup"
+                    (click)="formSearch.controls.approveFromDate.setValue(null);formSearch.controls.approveToDate.setValue(null); $event.stopPropagation()">
+                    <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                  <mat-error
+                    *ngIf="formSearch.get('approveFromDate').errors?.required && formSearch.get('approveToDate').errors?.required">
+                    {{ 'briefcase.err-create-date-requied' | translate }}
+                  </mat-error>
+                  <mat-error
+                    *ngIf="formSearch.get('approveFromDate').errors?.required && !formSearch.get('approveToDate').errors?.required">
+                    {{ 'briefcase.selectStartDate' | translate }}
+                  </mat-error>
+                  <mat-error
+                    *ngIf="!formSearch.get('approveFromDate').errors?.required && formSearch.get('approveToDate').errors?.required">
+                    {{ 'briefcase.selectEndDate' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="formSearch.get('approveFromDate').errors?.matStartDateInvalid">
+                    {{ 'customer.err_ResgiterFromDate' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <div fxLayout="row wrap" fxLayout.lt-sm="column" fxFlex="100" fxLayoutGap="10px" fxLayoutAlign="end">
+                <button type="button" mat-raised-button color="primary" (click)="exportFileExcel()"
+                  [disabled]="formSearch.invalid">
+                  {{ 'common.exportExcel' | translate }}
+                </button>
+                <button type="button" mat-raised-button color="primary" (click)="exportFilePdf()"
+                  [disabled]="formSearch.invalid || isLoading">
+                  {{ 'common.exportPDF' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>
+<div *ngIf="!hasPermission(permissionApp.CC_PROFILE_04)">
+  <error-code code="403" [title]="'common.invalid-permission-title'" [message]="'common.invalid-permission'">
+  </error-code>
+</div>

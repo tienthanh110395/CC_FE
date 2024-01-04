@@ -1,0 +1,306 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <form [formGroup]="formInfo" class="form-field-full">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>
+            {{ 'contract.info' | translate | uppercase }}
+          </h3>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'contract.number' | translate }} </mat-label>
+              <input matInput placeholder="{{ 'contract.enter-contract-number' | translate }}"
+                     formControlName="contractNo" [(ngModel)]="resultSearch.contractNo" readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'exchangeHistory.status_contract' | translate }}</mat-label>
+              <input matInput formControlName="status" [(ngModel)]="resultSearch.status" readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100" class="readonly">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'contractNew.validity-date' | translate }}</mat-label>
+              <input matInput formControlName="effDate" [(ngModel)]="resultSearch.effDate" readonly/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'contractNew.end-validity-date' | translate }} </mat-label>
+              <input matInput formControlName="expDate" [(ngModel)]="resultSearch.expDate" readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'contractNew.rank-customer' | translate }}</mat-label>
+              <input matInput formControlName="rankCustomer" [(ngModel)]="resultSearch.rankCustomer" readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'contract.sign-employee' | translate }}</mat-label>
+              <input matInput formControlName="signName" [(ngModel)]="resultSearch.signName" readonly/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+          <div fxFlex="16.5" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'contract.signDate' | translate }}</mat-label>
+              <input matInput formControlName="signDate" [(ngModel)]="resultSearch.signDate" readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="16.5" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'info.documentNumber' | translate}}</mat-label>
+              <input matInput formControlName="documentNumber" [(ngModel)]="resultSearch.documentNumber" readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'document.createDate' | translate}}</mat-label>
+              <input matInput formControlName="dateRange" [(ngModel)]="resultSearch.dateOfIssue" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer.address' | translate}} </mat-label>
+              <input matInput formControlName="address" [(ngModel)]="resultSearch.noticeAreaName" readonly/>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>
+            {{ 'contract.addressNotify' | translate | uppercase }}
+          </h3>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer.fullName' | translate }}
+              </mat-label>
+              <input matInput formControlName="noticeName" [(ngModel)]="resultSearch.custName" readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'search-agency.numberPhone' | translate }}
+              </mat-label>
+              <input matInput formControlName="noticePhoneNumber" [(ngModel)]="resultSearch.noticePhoneNumber"
+                     readonly/>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'search-bot.email' | translate }}</mat-label>
+              <input matInput formControlName="noticeEmail" [(ngModel)]="resultSearch.noticeEmail" readonly/>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="66.66" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-management.formCustomerRegister.address' | translate}}</mat-label>
+              <input matInput formControlName="address" [(ngModel)]="resultSearch.noticeAreaName" readonly/>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>
+            {{ 'contract.paymentAddress' | translate | uppercase }}
+          </h3>
+        </mat-expansion-panel-header>
+        <div class="form-field-full readonly">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'contract.accountType' | translate }}</mat-label>
+                <input matInput placeholder="{{ 'contract.accountType' | translate }}" formControlName="methodRecharge"
+                       [(ngModel)]="resultSearch.methodRecharge" readonly/>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'contract.wallet' | translate }}</mat-label>
+                <input matInput placeholder="{{ 'contract.wallet' | translate }}" formControlName="accountBank"
+                       [(ngModel)]="resultSearch.accountBank" readonly/>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'contract.accountNumber' | translate }}</mat-label>
+                <input matInput placeholder="{{ 'contract.accountNumber' | translate }}" formControlName="accountNumber"
+                       [(ngModel)]="resultSearch.accountNumber" readonly/>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'contract.accountOwner' | translate }}</mat-label>
+                <input matInput placeholder="{{ 'contract.accountOwner' | translate }}" formControlName="accountOwner"
+                       [(ngModel)]="resultSearch.accountOwner" readonly/>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mt-25">
+            <div class="col-sm-12">
+              <mat-checkbox class="btnRight ml-20" style="margin: 7px;" formControlName="isAuthorAccount"
+                            [disabled]="true" [(ngModel)]="resultSearch.isAuthorAccount">
+                {{ 'contract.isAuthorAccount' | translate }}</mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>
+            {{ 'contract.defaultAccount' | translate | uppercase }}
+          </h3>
+        </mat-expansion-panel-header>
+        <div class="form-field-full readonly">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'contract.accountBalance' | translate }}</mat-label>
+                <input matInput placeholder="{{ 'contract.accountBalance' | translate }}"
+                       formControlName="accountBalance" [value]="resultSearch.balance | formatCurrency" readonly/>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'contract.availableBalance' | translate }}</mat-label>
+                <input matInput placeholder="{{ 'contract.availableBalance' | translate }}"
+                       formControlName="availableBalances" [value]="resultSearch.balance | formatCurrency" readonly/>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>
+            {{ 'contract.registeService' | translate | uppercase }}
+          </h3>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>{{ 'contract.packageRegister' | translate }}
+              </mat-label>
+              <input matInput readonly>
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl">
+                <mat-radio-group class="font-register-service" formControlName="goicuoc" disabled>
+                  <mat-radio-button class="fix__disable mr-20" value="1">{{'contract.prepaid' | translate}}
+                  </mat-radio-button>
+                  <mat-radio-button class="fix__disable" value="2">{{ 'contract.postpaid' | translate }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="50" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>{{ 'contract.invoiceCycle' | translate }}
+              </mat-label>
+              <input matInput readonly/>
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl">
+                <mat-radio-group class="font-register-service" formControlName="chuky" disabled>
+                  <mat-radio-button class="fix__disable mr-20" value="1">{{ 'contract.byTimes' | translate }}
+                  </mat-radio-button> &nbsp;&nbsp;
+                  <mat-radio-button class="fix__disable mr-20" value="2">{{ 'contractNew.day'
+                    |
+                    translate }}</mat-radio-button> &nbsp;&nbsp;
+                  <mat-radio-button value="3" class="fix__disable">{{ 'contract.byMonth' | translate }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>{{ 'contract.receiveNotify' | translate }}
+              </mat-label>
+              <input matInput style="height: 0;"/>
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl font-register-service">
+                <mat-checkbox formControlName="receiveNotify" class="fix__disable mr-20" disabled>
+                  {{ 'common.notification' | translate }}</mat-checkbox>
+                <mat-checkbox formControlName="receiveSMS" class="fix__disable mr-20" disabled>
+                  {{ 'contract.sms' | translate }}
+                </mat-checkbox>
+                <mat-checkbox *ngIf="this.formInfo.controls['receiveSMS'].value" formControlName="smsRenew"
+                              class="fix__disable mr-20">
+                  {{ 'contract.extendSMS' | translate }}
+                </mat-checkbox>
+              </div>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <!--      //VietMap-->
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>{{ 'vietMap.integratedVietMap' | translate | uppercase}}</h3>
+        </mat-expansion-panel-header>
+        <div class="form-field-full readonly">
+          <mat-panel-title>
+            <div>{{ 'vietMap.integratedStatus' | translate}}:&nbsp;
+              <b *ngIf="this?.vietMapConnect === 1">{{'vietMap.connected' | translate}}</b>
+              <b *ngIf="this?.vietMapConnect !== 1">{{'vietMap.disconnected' | translate}}</b>
+            </div>
+          </mat-panel-title>
+          <span>{{'vietMap.infoLink' | translate}}:</span>
+          <br>
+          <br>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'vietMap.vietMapTel' | translate }}</mat-label>
+                <input [(ngModel)]="phoneNumberVm" matInput formControlName="phoneNumber"
+                       placeholder="{{ 'vietMap.vietMapTel' | translate }}" readonly/>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline" class="common-field">
+                <mat-label>{{ 'vietMap.vietMapCusName' | translate }}</mat-label>
+                <input [(ngModel)]="custNameVm" matInput formControlName="custName"
+                       placeholder="{{ 'vietMap.vietMapCusName' | translate }}" readonly/>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100" class="readonly">
+              <mat-form-field appearance="outline" class="common-field">
+                <mat-label>{{ 'vietMap.dateTimeLink' | translate }}</mat-label>
+                <input [value]="createDateVm" matInput formControlName="createDate"
+                       placeholder="{{ 'vietMap.dateTimeLink' | translate }}" readonly/>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </form>
+  </div>
+</div>

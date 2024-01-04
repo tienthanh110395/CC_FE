@@ -1,0 +1,24 @@
+<br>
+<div class="form-field-full">
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="130" fxFlex.lt-sm="100">
+      <common-list [headerTable]="'contract.attachList'" [dataSource]="dataModel.dataSource" [isLoading]="isLoading"
+        [totalRecord]="totalRecord" [isPaging]="true" [columns]="columns" [pageIndex]="pageIndex"
+        (page)="onPageChange($event)">
+        <ng-template vtsTemplate="custom" let-row let-index="index">
+          <button mat-icon-button>
+            <mat-icon svgIcon="ic_download" (click)="downloadFile(row)"
+              matTooltip="{{'customer-management.updateProfileTable.fileDownload' | translate}}"></mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon svgIcon="ic_xem" (click)="viewProfile(row)" matTooltip="{{'common.viewFile' | translate}}">
+            </mat-icon>
+          </button>
+        </ng-template>
+        <ng-template vtsTemplate="documentTypeName-custom" let-row let-index="index">
+          {{row.documentTypeName}} <span *ngIf='+profileStatus === 3 && row.isDocumentError' style='color: red'><i>(Hồ sơ chưa hợp lệ)</i></span>
+        </ng-template>
+      </common-list>
+    </div>
+  </div>
+</div>

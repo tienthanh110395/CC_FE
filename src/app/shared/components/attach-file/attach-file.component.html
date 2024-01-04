@@ -1,0 +1,44 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{'reset-agency.choosePaper' | translate}}</h2>
+<mat-dialog-content class="over-hidden" class="modal-body">
+  <form [formGroup]="formAttachFile" class="form-field-full">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <input matInput style="height: 0px;" />
+          <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+            <input #chooseFile hidden="true" type="file" [multiple]="!data?.data?.isOnlySeleted"
+              onclick="this.value=null" (change)="chooseFileChange($event)" accept=".jpg, .png, .tiff, .bmp, .pdf"
+              ngf-max-size="5MB" />
+            <button (click)="chooseFile.click()"
+              class="btn-file">{{'customer-management.updateProfileForm.btnChooseFile' | translate}}</button>
+          </div>
+        </mat-form-field>
+        <label class="lbl-style">{{'common.format-profile-notify' | translate}}</label>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="8px grid" class="content-file">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <ul>
+          <li *ngFor="let item of listChooseFile" style="margin-top: 5px;">
+            <label>{{item.fileName}}</label>
+            <mat-icon class="delete-file" (click)="onDeleteFile(item)"
+              matTooltip="{{'reset-agency.delete' | translate}}">
+              delete
+            </mat-icon>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100" class="btn-saveFile">
+        <button class="float-right" mat-button [mat-dialog-close]="listChooseFile" mat-raised-button
+          color="primary">{{'common.button.save' | translate}}</button>
+        <button class="float-right" style="right: 2%;" mat-button mat-raised-button mat-dialog-close
+          color="secondary">{{'common.button.close' | translate}}</button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>

@@ -1,0 +1,58 @@
+<div fxLayout='row wrap' fxLayoutGap='20px grid'>
+  <div fxFlex='100' fxFlex.lt-sm='100'>
+    <button type='submit' class='float-right ml-20' mat-button mat-raised-button
+            color='primary'>{{'cateConfig.importFile.importFile' | translate}}
+    </button>
+    <button type='submit' class='float-right ml-20' mat-button mat-raised-button
+            color='primary'>{{'cateConfig.importFile.downloadTemplate' | translate}}
+    </button>
+    <button type='submit' class='float-right' mat-button mat-raised-button
+            color='primary'>{{'cateConfig.importFile.exportExcel' | translate}}
+    </button>
+  </div>
+</div>
+<h2 class='text_h2'>{{'cateConfig.importFile.historyImportFile' | translate | uppercase}}</h2>
+<div fxLayout='row wrap' class='mt-15'>
+  <div fxFlex='100' fxFlex.lt-sm='100'>
+    <div class='crm__table'>
+      <table mat-table [dataSource]='lstImport'>
+        <ng-container *ngFor='let item of columns' [ngSwitch]='item.field'>
+          <ng-container matColumnDef='{{item.field}}' *ngSwitchCase="'orderNumber'" sticky>
+            <th mat-header-cell *matHeaderCellDef style='width: 80px;'>
+              {{item.i18n | translate}}</th>
+            <td mat-cell *matCellDef='let row;let i = index' class='ui-text-center' style='width: 80px;'>
+              {{(i + 1) + (paginatorDetail.pageIndex * paginatorDetail.pageSize)}}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef='timeImport' *ngSwitchCase="'timeImport'">
+            <th mat-header-cell *matHeaderCellDef>
+              {{'cateConfig.importFile.timeImport' | translate}}
+            </th>
+            <td mat-cell *matCellDef='let row; let i = index'> {{row.timeImport}} </td>
+          </ng-container>
+          <ng-container matColumnDef='createUser' *ngSwitchCase="'createUser'">
+            <th mat-header-cell *matHeaderCellDef>
+              {{'cateConfig.importFile.createUser' | translate}}
+            </th>
+            <td mat-cell *matCellDef='let row; let i = index'> {{row.createUser}} </td>
+          </ng-container>
+          <ng-container matColumnDef='fileImport' *ngSwitchCase="'fileImport'">
+            <th mat-header-cell *matHeaderCellDef>
+              {{'cateConfig.importFile.fileImport' | translate}}
+            </th>
+            <td mat-cell *matCellDef='let row; let i = index'> {{row.fileImport}} </td>
+          </ng-container>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef='displayedColumnsImport'></tr>
+        <tr mat-row *matRowDef='let row; columns: displayedColumnsImport;'></tr>
+      </table>
+      <span class='noRecored' *ngIf='!dataSource || dataSource?.data?.length === 0'>
+          {{'common.noRecord' | translate}}
+      </span>
+    </div>
+    <div>
+      <mat-paginator #paginatorDetail [pageSizeOptions]='[5, 10, 20, 50]' showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</div>

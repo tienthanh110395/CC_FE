@@ -1,0 +1,169 @@
+<page-header></page-header>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'common.title' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="form-field-full">
+          <form [formGroup]="formTicketReport">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'customer-care.search-process.userProcess' | translate }} </mat-label>
+                  <input matInput placeholder="{{ 'ticket-statistic.enter-contract-user' | translate }}"
+                    formControlName="processUser" #processUser autoFocus="processUser" />
+                  <button mat-button *ngIf="formTicketReport.controls.processUser.value" class="showclear" matSuffix
+                    mat-icon-button type="button"
+                    (click)="formTicketReport.controls.processUser.setValue(null); $event.stopPropagation()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'customer-care.search-cc.ticketSource' | translate }}</mat-label>
+                  <mat-select formControlName="sourceId" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formTicketReport.controls.sourceId.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allTicketSource *ngIf="ticketSourceList.length > 0" (click)="onChangeTicketSourceAll()"
+                      [value]="-1">
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let ticketSource of ticketSourceList" [value]="ticketSource"
+                      (click)="onChangeTicketSourceOne()">
+                      {{ ticketSource.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="formTicketReport.controls.sourceId.value?.length > 0" matSuffix mat-icon-button
+                    type="button" class="btn-clear-drop"
+                    (click)="formTicketReport.controls.sourceId.setValue(null); $event.stopPropagation();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'customer-care.search-cc.ticketTypeLv1' | translate }}</mat-label>
+                  <mat-select formControlName="l1TicketTypeId" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formTicketReport.controls.l1TicketTypeId.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allTicketTypeLv1 *ngIf="ticketTypeLv1List.length > 0"
+                      (click)="onChangeTicketTypeLv1All()" [value]="-1">
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let ticketTypeLv1 of ticketTypeLv1List" [value]="ticketTypeLv1"
+                      (click)="onChangeTicketTypeLv1One()">
+                      {{ ticketTypeLv1.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="formTicketReport.controls.l1TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                    type="button" class="btn-clear-drop"
+                    (click)="formTicketReport.controls.l1TicketTypeId.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv1();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'customer-care.search-cc.ticketTypeLv2' | translate }}</mat-label>
+                  <mat-select formControlName="l2TicketTypeId" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formTicketReport.controls.l2TicketTypeId.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allTicketTypeLv2 *ngIf="ticketTypeLv2List.length > 0"
+                      (click)="onChangeTicketTypeLv2All()" [value]="-1">
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let ticketTypeLv2 of ticketTypeLv2List" [value]="ticketTypeLv2"
+                      (click)="onChangeTicketTypeLv2One()">
+                      {{ ticketTypeLv2.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="formTicketReport.controls.l2TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                    type="button" class="btn-clear-drop"
+                    (click)="formTicketReport.controls.l2TicketTypeId.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv2();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'customer-care.search-cc.ticketTypeLv3' | translate }}</mat-label>
+                  <mat-select formControlName="l3TicketTypeId" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formTicketReport.controls.l3TicketTypeId.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allTicketTypeLv3 *ngIf="ticketTypeLv3List.length > 0"
+                      (click)="onChangeTicketTypeLv3All()" [value]="-1">
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let ticketTypeLv3 of ticketTypeLv3List" [value]="ticketTypeLv3"
+                      (click)="onChangeTicketTypeLv3One()">
+                      {{ ticketTypeLv3.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="formTicketReport.controls.l3TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                    type="button" class="btn-clear-drop"
+                    (click)="formTicketReport.controls.l3TicketTypeId.setValue(null); $event.stopPropagation();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'ticket-statistic.date-time-from-end' | translate}}</mat-label>
+                  <mat-date-range-input [rangePicker]="receiveTimePicker" (click)="receiveTimePicker.open()">
+                    <input matStartDate formControlName="fromDate" #receiveTimeFromId maskDate
+                      placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+                    <input matEndDate formControlName="toDate" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                      #receiveTimeToId (keyup.enter)="onSearch()">
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix *ngIf="receiveTimeFromId.value || receiveTimeToId.value"
+                    class="showclearDatePopup"
+                    (click)="formTicketReport.controls.fromDate.setValue(null);formTicketReport.controls.toDate.setValue(null); $event.stopPropagation()">
+                    <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="receiveTimePicker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+                  <mat-error *ngIf="checkFormatDate(receiveTimeFromId.value)">
+                    {{ 'common.invalidStartDate' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="checkFormatDate(receiveTimeToId.value)">
+                    {{ 'common.invalidEndDate' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="formTicketReport.controls.fromDate.hasError('matStartDateInvalid')">
+                    {{ 'common.invalidFromDate' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+              fxLayoutGap.xs="0" style="margin-right: 8px;">
+              <button mat-raised-button color="primary" type="submit" (click)="getDataTicketReportPerformmance()">
+                {{ 'common.button.search' | translate }}
+              </button>
+              <button mat-raised-button color="primary" type="submit" (click)="exportFile()">
+                {{ 'common.exportExcel' | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-card>
+      <common-list [headerTable]="'Báo cáo năng suất xử lý phản ánh'" [dataSource]="dataModel.dataSource"
+        [columns]="columns" [totalRecord]="totalRecord" [isLoading]="isLoading" [isPaging]="true" [showHeader]="true"
+        (page)="onPageChange($event)" [pageIndex]="pageIndex" [startRecord]="formTicketReport.value.startrecord"
+        [widthTable]="'2000px'">
+      </common-list>
+    </mat-card>
+  </div>
+</div>

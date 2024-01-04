@@ -1,0 +1,79 @@
+<h2 mat-dialog-title>THÊM MỚI THỂ LOẠI PHẢN ÁNH</h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class="view-detail">
+  <form [formGroup]="formSearch" class="form-field-full">
+    <!--    Row 1-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <!--      Nhóm thể loại-->
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cateConfig.ticketType.ticketGroup' | translate }}
+            <span class="required">*</span>
+          </mat-label>
+          <mtx-select formControlName="ticketGroup" [items]="lstTicketGroup" bindLabel="label" bindValue="value"
+            [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate" [clearable]="isClear"
+          (change)="onChangeValue();">
+          </mtx-select>
+          <mat-error *ngIf="formSearch.get('ticketGroup').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+<!--          <button matSuffix mat-icon-button type="button" class="btn-clear-drop"-->
+<!--            *ngIf="formSearch.controls.ticketGroup.value.length>0 && !isEdit"-->
+<!--            (click)="formSearch.controls.ticketGroup.setValue(null); $event.stopPropagation();">-->
+<!--            <mat-icon>close</mat-icon>-->
+<!--          </button>-->
+        </mat-form-field>
+      </div>
+      <!--      tên thể loại-->
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label> {{ 'cateConfig.ticket-genre.search.ticket-genre-name' | translate }}
+            <span class="required">*</span>
+          </mat-label>
+          <input matInput formControlName="ticketTypeName" maxlength="255" />
+          <mat-error *ngIf="formSearch.get('ticketTypeName').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formSearch.get('ticketTypeName').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <button mat-button *ngIf="formSearch.controls.ticketTypeName.value" matSuffix mat-icon-button
+            aria-label="Clear" type="button"
+            (click)="formSearch.controls.ticketTypeName.setValue(null); $event.stopPropagation()" class="showclear">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    Row 2-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <!--      mô tả-->
+      <div fxFlex="100" fxFlex.lt-sm="200">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'cateConfig.ticket-genre.table.ticketDes' | translate}}</mat-label>
+          <textarea maxlength="1024" formControlName="description" type="text" trim="blur" matInput placeholder="Mô tả"></textarea>
+          <mat-error *ngIf="formSearch.get('description').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-1024' | translate}}
+          </mat-error>
+          <button mat-button *ngIf="formSearch.controls.description.value" matSuffix mat-icon-button aria-label="Clear"
+            type="button" (click)="formSearch.controls.description.setValue(null); $event.stopPropagation()"
+            class="showclear">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <button class="float-right ml-20" mat-button mat-raised-button color="secondary"
+          mat-dialog-close>Đóng
+        </button>
+        <button [disabled] = "isLoading"  type="submit" class="float-right ml-20" mat-button mat-raised-button color="primary"
+          (click)="doSave()">Lưu
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>

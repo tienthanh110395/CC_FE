@@ -1,0 +1,147 @@
+<form [formGroup]="formGroup">
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header class="bg-white">
+                <mat-panel-title>
+                    {{ 'customer-care.search-process.ticketInfo' | translate | uppercase }}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="form-field-full readonly">
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                    <!-- row 1 -->
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.search-cc.plateNumber' | translate}}</mat-label>
+                            <input matInput formControlName="plateNumber" autocomplete="off" readonly />
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.ticket-history.custName' | translate}}</mat-label>
+                            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10" 
+                            matInput formControlName="custName" readonly></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.ticket-history.documentNumber' | translate}}</mat-label>
+                            <input matInput formControlName="documentNumber" autocomplete="off" readonly />
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.search-cc.custType' | translate}}</mat-label>
+                            <mtx-select [items]="customerTypeList" bindLabel="label" bindValue="value"
+                                [multiple]="false" appendTo="body" formControlName="custType" [disabled]="true"
+                                [notFoundText]="'common.notFound' | translate"
+                                [searchable]="customerTypeList?.length>10">
+                            </mtx-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- row 1 -->
+                    <!-- row 2 -->
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.search-process.contactNumber' | translate}}</mat-label>
+                            <input matInput formControlName="contactNumber" autocomplete="off" readonly />
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.search-process.email' | translate}}</mat-label>
+                            <input matInput formControlName="email" autocomplete="off" readonly />
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.search-cc.ticketStatus' | translate}}</mat-label>
+                            <mtx-select [items]="statusList" bindLabel="label" bindValue="value" [multiple]="false"
+                                appendTo="body" formControlName="ticketStatus" [disabled]="true"
+                                [notFoundText]="'common.notFound' | translate" [searchable]="statusList?.length>10">
+                            </mtx-select>
+                        </mat-form-field>
+                    </div>
+                    <div fxFlex="25" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.ticket-history.receiveSource' | translate}}</mat-label>
+                            <input matInput formControlName="receiveSource" autocomplete="off" readonly />
+                        </mat-form-field>
+                    </div>
+                    <!-- row 2 -->
+                    <!-- row 3 -->
+                    <div fxFlex="100" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.search-cc.address' | translate}}</mat-label>
+                            <input matInput formControlName="address" autocomplete="off" readonly />
+                        </mat-form-field>
+                    </div>
+                    <!-- row 3 -->
+                    <!-- row 4 -->
+                    <div fxFlex="100" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{'customer-care.search-cc.ticketContent' | translate}}</mat-label>
+                            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="10" cdkAutosizeMaxRows="50" 
+                            matInput formControlName="ticketContent" readonly></textarea>
+                        </mat-form-field>
+                    </div>
+                    <!-- row 4 -->
+                    <div fxFlex="100" fxFlex.lt-sm="100" style="margin-top: -20px;">
+                        <div class="row table-toolbar">
+                            <div class="col-md-9 table-toolbar-title">
+                                {{'customer-care.search-process.file' | translate | uppercase}} <span
+                                    class="table__totalRecord--color">({{dataSource?.data?.length || 0}})</span>
+                            </div>
+                        </div>
+                        <div class="crm__table">
+                            <table mat-table [dataSource]="dataSource">
+                                <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+                                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                                        <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                                            {{item.i18n | translate}}</th>
+                                        <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center"
+                                            style="width: 80px;">
+                                            {{(i+1) + (paginator.pageIndex * paginator.pageSize)}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                                        <th mat-header-cell *matHeaderCellDef style="width: 120px;">{{item.i18n |
+                                            translate}}</th>
+                                        <td mat-cell *matCellDef="let row;" class="ui-text-center"
+                                            style="width: 120px;">
+                                            <mat-icon color="primary" *ngIf="row.filePath" style="margin-right: 5px;"
+                                                class="delete-file btn-delete-file" (click)="onDownloadFile(row)"
+                                                matTooltip="{{'common.downloadFile' | translate}}">
+                                                download
+                                            </mat-icon>
+                                            <mat-icon color="primary" *ngIf="row.filePath" style="margin-left: 5px;"
+                                                class="delete-file btn-delete-file" (click)="onViewFile(row)"
+                                                matTooltip="{{'common.viewFile' | translate}}">
+                                                visibility
+                                            </mat-icon>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                                        <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                                            {{item.i18n | translate}}</th>
+                                        <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                                            {{row[item.field]}}
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                            <span class="noRecored" *ngIf="!dataSource || dataSource?.data?.length === 0 ">
+                                {{'common.noRecord' | translate}}
+                            </span>
+                        </div>
+                        <div>
+                            <mat-paginator #paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons>
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</form>

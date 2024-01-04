@@ -1,0 +1,196 @@
+<h2 mat-dialog-title [innerHTML]='title'></h2>
+<div class='loading-icon' *ngIf='isLoading'>
+  <mat-spinner diameter='30' *ngIf='isLoading' mode='indeterminate' style='margin:0 auto;'></mat-spinner>
+</div>
+<mat-dialog-content class='view-detail'>
+  <form [formGroup]='form' class='form-field-full'>
+    <!--    Row 1-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'cateConfig.ticketSite.ticketSiteName' | translate }}
+            <span class='required'>*</span>
+          </mat-label>
+          <input trim='blur' maxlength='255' matInput
+            placeholder="{{'cateConfig.ticketSite.ticketSiteName' | translate}}" formControlName='ticketSiteName'
+            autocomplete='off' />
+          <mat-error *ngIf="form.get('ticketSiteName').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketSiteName').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button
+            *ngIf='form.controls.ticketSiteName.value?.length && isEdit==true'
+            (click)='form.controls.ticketSiteName.setValue(null); $event.stopPropagation()' class='showclear'
+            type='button'>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'cateConfig.ticketSite.ticketSiteLv' | translate }}
+            <span class='required'>*</span>
+          </mat-label>
+          <input trim="blur" [OnlyNumber]="true" maxlength="2" matInput
+            placeholder="{{'cateConfig.ticketSite.ticketSiteLv' | translate}}" formControlName='ticketSiteLv'
+            autocomplete='off' />
+          <mat-error *ngIf="form.get('ticketSiteLv').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf='form.controls.ticketSiteLv.value?.length && isEdit==true'
+            (click)='form.controls.ticketSiteLv.setValue(null); $event.stopPropagation()' class='showclear'
+            type='button'>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    row 2-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'cateConfig.ticketSite.ticketSitePhoneNumber' | translate }}
+            <span class='required'>*</span>
+          </mat-label>
+          <input trim='blur' [OnlyNumber]='true' maxlength='11' matInput
+            placeholder="{{'cateConfig.ticketSite.ticketSitePhoneNumber' | translate}}"
+            formControlName='ticketSitePhoneNumber' autocomplete='off' />
+          <mat-error *ngIf="form.get('ticketSitePhoneNumber').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketSitePhoneNumber').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-11' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketSitePhoneNumber').errors?.pattern">
+            {{'common.numberPhoneRegex' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf='form.controls.ticketSitePhoneNumber.value?.length'
+            (click)='form.controls.ticketSitePhoneNumber.setValue(null); $event.stopPropagation()' class='showclear'
+            type='button'>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'cateConfig.ticketSite.ticketSiteEmail' | translate }}
+            <span class='required'>*</span>
+          </mat-label>
+          <input trim='blur' matInput placeholder="{{'cateConfig.ticketSite.ticketSiteEmail' | translate}}"
+            formControlName='ticketSiteEmail' autocomplete='off' />
+          <mat-error *ngIf="form.get('ticketSiteEmail').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketSiteEmail').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-50' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketSiteEmail').errors?.pattern">
+            {{'cateConfig.validators.emailRegex' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf='form.controls.ticketSiteEmail.value?.length'
+            (click)='form.controls.ticketSiteEmail.setValue(null); $event.stopPropagation()' class='showclear'
+            type='button'>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <form [formGroup]='userForm' class='form-field-full'>
+      <mat-accordion>
+        <mat-expansion-panel [expanded]='true'><br>
+          <h3 mat-dialog-title>{{ 'cateConfig.ticketSite.user' | translate }}</h3>
+          <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+            <div fxFlex='50' fxFlex.lt-sm='100'>
+              <mat-form-field appearance='outline'>
+                <mat-label>{{ 'cateConfig.ticketSite.accountUser' | translate }}</mat-label>
+                <input matInput [matAutocomplete]='auto' formControlName='keySearch'
+                  placeholder="{{ 'cateConfig.ticketSite.plahoderUser' | translate }}">
+                <button mat-button *ngIf='userForm.controls.keySearch.value' class='showclear' matSuffix mat-icon-button
+                  (click)='userForm.controls.keySearch.setValue(null); $event.stopPropagation()' type='button'>
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error>{{ 'support-after-sale.transfer-own-vehicle.paper-or-phone' | translate }} </mat-error>
+              </mat-form-field>
+              <mat-autocomplete #auto='matAutocomplete' [displayWith]='getOptionText'
+                (optionSelected)='onSelectedUser($event)'>
+                <mat-option *ngIf='isLoadingAuto'>
+                  <mat-progress-bar mode='indeterminate'></mat-progress-bar>
+                </mat-option>
+                <ng-container *ngIf='!isLoadingAuto'>
+                  <mat-option *ngFor='let state of filterUserHandle' [value]='state'>
+                    <div innerHTML='{{ state?.userName | highlight: userForm.controls.keySearch.value }}
+                            {{state.siteName| highlight: userForm.controls.keySearch.value }}'>
+                    </div>
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+            </div>
+          </div>
+          <crm-table #userHandle [isLoading]='isLoading' [dataSource]='lstUserHandle'
+            [displayedColumns]='displayedColumnsUser' [isPaging]='false' [showHeader]='false'>
+            <ng-container *ngFor='let item of columns; let rowIndex = dataIndex' [ngSwitch]='item.field'>
+              <ng-container matColumnDef='{{item.field}}' *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+                <td mat-cell *matCellDef='let row;'>
+                  {{row[item.field]}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='{{item.field}}' *ngSwitchCase="'orderNumber'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>{{item.i18n | translate}}</th>
+                <td mat-cell *matCellDef='let row;let i = dataIndex' class='ui-text-center'>
+                  {{i + 1}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='{{item.field}}' *ngSwitchCase="'action'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketType.action' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let item ; let i = index' class='ui-text-center'>
+                  <button mat-icon-button>
+                    <mat-icon color='warn' (click)='deleteUser(item)'
+                      matTooltip="{{'cateConfig.ticketSite.deleteUser' | translate}}">delete
+                    </mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='userName' *ngSwitchCase="'userName'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketSite.userName' | translate}}</th>
+                <td mat-cell *matCellDef='let element'> {{element.userName}} </td>
+              </ng-container>
+              <ng-container matColumnDef='name' *ngSwitchCase="'name'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketSite.fullName' | translate}}</th>
+                <td mat-cell *matCellDef='let element'> {{element.name}} </td>
+              </ng-container>
+              <ng-container matColumnDef='phone' *ngSwitchCase="'phone'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketSite.phoneNumber' | translate}}</th>
+                <td class='ui-text-center' mat-cell *matCellDef='let element'> {{element.phone}} </td>
+              </ng-container>
+              <ng-container matColumnDef='mail' *ngSwitchCase="'mail'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>{{'cateConfig.ticketSite.mail' |
+                  translate}}</th>
+                <td mat-cell *matCellDef='let element'> {{element.mail}} </td>
+              </ng-container>
+            </ng-container>
+          </crm-table>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div fxFlex='100' fxFlex.lt-sm='100'>
+        <button class='float-right ml-20 mb-10 mt-10' mat-button mat-raised-button color='secondary'
+          mat-dialog-close (click)='onClosePopup()'>{{ 'cateConfig.ticketType.close' | translate }}
+        </button>
+        <button [disabled]='isLoading' type='submit' class='float-right ml-20 mb-10 mt-10' mat-button mat-raised-button
+          color='primary' (click)='doSave()'>{{ 'cateConfig.ticketType.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>

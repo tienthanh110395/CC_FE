@@ -1,0 +1,80 @@
+<a class="close" (click)="onClosePopup()">
+  <mat-icon class="close-icon" color="warn" #enter_close autoFocus="enter_close">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{header}}
+</h2>
+
+<form [formGroup]="formAccount">
+  <div class="form-field-full">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline" class="common-field">
+          <mat-label>{{ 'reset-agency.reason-action' | translate }} <span class="required">*</span></mat-label>
+          <mtx-select [items]="listActType" bindLabel="name" bindValue="actTypeId" [multiple]="false" appendTo="body"
+            formControlName="actTypeName" [notFoundText]="'common.notFound' | translate"
+            [searchable]="listActType?.length>10">
+          </mtx-select>
+          <mat-error *ngIf="formAccount.get('actTypeName').errors?.required">
+            {{'reset-agency.valid-reason-action' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33" fxFlex.lt-sm="100" ngClass.xs="mb-10">
+        <button mat-raised-button color="primary" fxFlex.lt-sm="100" (click)="chooseFileChange($event)"
+          type="button">{{'document.select_file' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="content-file">
+  <div class="crm__table">
+    <table mat-table [dataSource]="dataSourceProfile" #tableProfile>
+      <ng-container matColumnDef="stt">
+        <th mat-header-cell *matHeaderCellDef style="width:60px;">
+          {{'customer-management.updateProfileTable.stt' | translate}}</th>
+        <td mat-cell *matCellDef="let row; let i= index" style="text-align: center; padding-left: 0px !important;">
+          {{i + 1 + indexPaginator}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="documentName">
+        <th mat-header-cell *matHeaderCellDef>
+          {{'customer-management.updateProfileTable.documentName' |
+          translate}}</th>
+        <td mat-cell *matCellDef="let row; let i= index">
+          {{row.documentName}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actionDelete">
+        <th mat-header-cell *matHeaderCellDef style="width:100px">
+          {{'common.action' | translate}}</th>
+        <td mat-cell *matCellDef="let row;let i= index" class="ui-text-center" style="padding-right: 0px;">
+          <button mat-icon-button>
+            <mat-icon svgIcon="ic_xem" matTooltip="{{'reset-agency.view-profile' | translate}}"
+              (click)="viewProfile(row)">
+            </mat-icon>
+          </button>
+          <button mat-icon-button>
+            <mat-icon svgIcon="ic_Delete" matTooltip="{{'reset-agency.delete' | translate}}" (click)="deleteProfile(i)">
+            </mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsProfile"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsProfile"></tr>
+    </table>
+    <span class="noRecored" *ngIf="listDataProfile.length == 0 ">
+      {{'common.noRecord' |translate}}
+    </span>
+    <mat-paginator [pageSizeOptions]="pageSizeList" [pageSize]="10" [length]="listDataProfile.length" id="fix-page"
+      showFirstLastButtons (page)="onPaginateChange($event)">
+    </mat-paginator>
+  </div>
+  <div div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+    fxLayoutGap.xs="0" style="margin-right: 8px;">
+    <!-- <button mat-raised-button color="secondary" (click)="cancelForm()">{{'common.button.cancel' | translate}}</button> -->
+    <button mat-raised-button color="primary" style="margin-right: 8px;" [disabled]="formAccount.invalid"
+      (click)="resetAccCTV()">{{'common.button.save' | translate}}</button>
+  </div>
+</div>

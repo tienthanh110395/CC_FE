@@ -1,0 +1,30 @@
+.font-register-service {
+  font-size: 12pt !important;
+}
+
+.ml-102 {
+  margin-left: 102px;
+}
+
+.ml-130 {
+  margin-left: 130px;
+}
+
+.radio-stl {
+  position: absolute;
+  top: 0;
+  left: 30px;
+}
+
+.noRecored {
+  text-align: center;
+  padding: 10px;
+  display: block;
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
+  font-weight: 700;
+}
+#fix-page ::ng-deep .mat-paginator-page-size-select {
+  width: 60px !important;
+}

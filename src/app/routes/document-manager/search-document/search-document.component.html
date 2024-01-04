@@ -1,0 +1,186 @@
+<div *ngIf="hasPermission(permissionApp.CC_PROFILE_01)">
+  <page-header></page-header>
+  <div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ 'common.title' | translate | uppercase}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="formSearch" class="form-field-full">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'contract.number' | translate }}</mat-label>
+                  <input matInput #contractNo autoFocus="contractNo" formControlName="contractNo"
+                    (keyup.enter)="onSearch()" />
+                  <button mat-button *ngIf="formSearch.controls.contractNo.value" matSuffix mat-icon-button
+                    class="showclear" type="button"
+                    (click)="formSearch.controls.contractNo.setValue(''); $event.stopPropagation()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'vehicle.plateNumber' | translate }}</mat-label>
+                  <input matInput formControlName="plateNumber" (keyup.enter)="onSearch()" />
+                  <button type="button" mat-button *ngIf="formSearch.controls.plateNumber.value" matSuffix
+                    mat-icon-button class="showclear"
+                    (click)="formSearch.controls.plateNumber.setValue(''); $event.stopPropagation()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{
+                    'info.phoneNumber' | translate
+                    }}</mat-label>
+                  <input matInput formControlName="phoneNumber" (keyup.enter)="onSearch()" />
+                  <button type="button" mat-button *ngIf="formSearch.controls.phoneNumber.value" matSuffix
+                    mat-icon-button class="showclear"
+                    (click)="formSearch.controls.phoneNumber.setValue(''); $event.stopPropagation()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{
+                    'info.documentNumber' | translate
+                    }}</mat-label>
+                  <input matInput formControlName="documentNumber" (keyup.enter)="onSearch()" />
+                  <button type="button" mat-button *ngIf="formSearch.controls.documentNumber.value" matSuffix
+                    mat-icon-button class="showclear"
+                    (click)="formSearch.controls.documentNumber.setValue(''); $event.stopPropagation()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'briefcase.status' | translate }}</mat-label>
+                  <mat-select formControlName="profileStatus" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formSearch.controls.profileStatus.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allStatus *ngIf="statuses.length > 0" (click)="onChangeStatusAll()" [value]="-1">
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let status of statuses" [value]="status" (click)="onChangeStatusOne()">
+                      {{ status.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="formSearch.controls.profileStatus.value" matSuffix mat-icon-button type="button"
+                    class="btn-clear-drop"
+                    (click)="formSearch.controls.profileStatus.setValue(null); $event.stopPropagation();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'briefcase.briefcaseType' | translate }}</mat-label>
+                  <mtx-select [items]="contractHasVehicle" bindLabel="label" bindValue="value" [multiple]="false"
+                    appendTo="body" formControlName="contractHasVehicle" [notFoundText]="'common.notFound' | translate"
+                    [searchable]="contractHasVehicle?.length>10">
+                  </mtx-select>
+                </mat-form-field>
+              </div>
+              <div fxFlex="25" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'info.action_date' | translate }}
+                    <span class="required">*</span>
+                  </mat-label>
+                  <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+                    <input matStartDate formControlName="fromDate" #fromDateId maskDate
+                      placeholder="{{ 'common.fromDate' | translate }}">
+                    <input matEndDate formControlName="toDate" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                      #endDateId>
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || endDateId.value"
+                    class="showclearDatePopup"
+                    (click)="formSearch.controls.fromDate.setValue(null);formSearch.controls.toDate.setValue(null); $event.stopPropagation()">
+                    <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+                  <mat-error
+                    *ngIf="formSearch.get('fromDate').errors?.required && formSearch.get('toDate').errors?.required">
+                    {{ 'briefcase.err-create-date-requied' | translate }}
+                  </mat-error>
+                  <mat-error
+                    *ngIf="formSearch.get('fromDate').errors?.required && !formSearch.get('toDate').errors?.required">
+                    {{ 'briefcase.selectStartDate' | translate }}
+                  </mat-error>
+                  <mat-error
+                    *ngIf="!formSearch.get('fromDate').errors?.required && formSearch.get('toDate').errors?.required">
+                    {{ 'briefcase.selectEndDate' | translate }}
+                  </mat-error>
+                  <mat-error *ngIf="formSearch.get('fromDate').errors?.matStartDateInvalid">
+                    {{ 'customer.err_ResgiterFromDate' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <div fxLayout="row wrap" fxLayout.lt-sm="column" fxFlex="100" fxLayoutGap="10px" fxLayoutAlign="end">
+                <button mat-raised-button color="primary" (click)="onSearch()" [disabled]="formSearch.invalid">
+                  {{ 'common.button.search' | translate }}
+                </button>
+                <button mat-raised-button color="primary" (click)="exportFilePdf()" [disabled]="formSearch.invalid">
+                  {{ 'common.exportPDF' | translate }}
+                </button>
+                <button mat-raised-button color="primary" (click)="exportFileExcel()" [disabled]="formSearch.invalid">
+                  {{ 'common.exportExcel' | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-card>
+        <common-list [headerTable]="'document.list'" [dataSource]="dataModel.dataSource" [isLoading]="isLoading"
+          [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns" (page)="onPageChange($event)"
+          [pageIndex]="pageIndex" [startRecord]="formSearch.controls.startrecord.value">
+          <ng-template vtsTemplate="statusName" let-item>
+            <span *ngIf="item.status == statusContract.CHUAHOATDONG">{{ 'contract.not_active' | translate }}</span>
+            <span *ngIf="item.status == statusContract.HOATDONG">{{ 'contract.active' | translate }}</span>
+            <span *ngIf="item.status == statusContract.HUY">{{ 'contract.cancel' | translate }}</span>
+            <span *ngIf="item.status == statusContract.CHAMDUT">{{ 'contract.destroy' | translate }}</span>
+          </ng-template>
+          <ng-template vtsTemplate="profileStatusName" let-item>
+            <span
+              *ngIf="item.contractProfileStatus == statusProfile.CHUATIEPNHAN">{{ 'briefcase.unreception' | translate }}</span>
+            <span
+              *ngIf="item.contractProfileStatus == statusProfile.DAPHEDUYET">{{ 'briefcase.approval' | translate }}</span>
+            <span *ngIf="item.contractProfileStatus == statusProfile.BITUCHOI">{{ 'briefcase.deny' | translate }}</span>
+            <span
+              *ngIf="item.contractProfileStatus == statusProfile.BOSUNG">{{ 'briefcase.additional' | translate }}</span>
+          </ng-template>
+          <ng-template vtsTemplate="customView" let-item>
+            <button mat-icon-button color="primary" (click)="viewDocument(item)"
+              matTooltip="{{'document.view'| translate}}">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </ng-template>
+          <ng-template vtsTemplate="customViewLog" let-item>
+            <button mat-icon-button color="primary" (click)="viewLogProfile(item)"
+              matTooltip="{{'document.log-profile'| translate}}">
+              <mat-icon>history</mat-icon>
+            </button>
+          </ng-template>
+        </common-list>
+      </mat-card>
+    </div>
+  </div>
+</div>
+<div *ngIf="!hasPermission(permissionApp.CC_PROFILE_01)">
+  <error-code code="403" [title]="'common.invalid-permission-title'" [message]="'common.invalid-permission'">
+  </error-code>
+</div>

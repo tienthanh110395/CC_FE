@@ -1,0 +1,107 @@
+<h2 mat-dialog-title>THÔNG TIN CẤU HÌNH THỜI GIAN</h2>
+<mat-dialog-content class='view-detail'>
+    <form [formGroup]='form' class='form-field-full'>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+                <mat-form-field floatLabel="always">
+                    <input matInput formControlName="inputFile" style="padding-left: 80px;" readonly />
+                    <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+                        <input #chooseFile hidden="true" type="file" accept=".xlsx" onclick="this.value=null"
+                            (change)="onFileChange($event.target.files)" />
+                        <button (click)="chooseFile.click()"
+                            class="btn-file">{{'customer-management.updateProfileForm.btnChooseFile' |
+                            translate}}</button>
+                    </div>
+                    <mat-error *ngIf="form.get('inputFile').errors?.required">
+                        {{'common.importFile' | translate}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+                <div fxFlex='100' fxFlex.lt-sm='100'>
+                    <button mat-raised-button class='float-right ml-20' (click)="downloadTemplateTicketTime()"
+                        color="primary">{{'common.downloadTemplate' |
+                        translate}}</button>
+                    <button mat-raised-button class='float-right ml-20' (click)="uploadFile()"
+                        [disabled]="form.get('inputFile').value == ''" color="primary">Upload</button>
+                </div>
+            </div>
+        </div>
+        <div fxLayout='row wrap' class='mt-15'>
+            <div fxFlex='100' fxFlex.lt-sm='100'>
+                <mat-accordion>
+                    <div class='form-field-full'>
+                        <mat-card appearance='outline'>
+                            <crm-table [headerTable]="'cateConfig.impactLog.listImpactLog'" [dataSource]='lstDataImport'
+                                [totalRecord]='countTable' [isLoading]='isLoading' [isPaging]='true' [showHeader]='true'
+                                [displayedColumns]='displayedColumns' [pageIndex]='pageIndex'
+                                (onPage)='onPageChange($event)'>
+                                <ng-container *ngFor='let item of columns' [ngSwitch]='item.field'>
+                                    <ng-container matColumnDef='{{ item.field }}' *ngSwitchDefault>
+                                        <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                                        <td mat-cell *matCellDef='let row'>
+                                            {{ row[item.field] }}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef='{{ item.field }}' *ngSwitchCase="'orderNumber'">
+                                        <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                                        <td mat-cell *matCellDef='let row; let i = dataIndex' class='ui-text-center'>
+                                            {{ i + 1 + (form.value.startRecord * form.value.pageSize) }}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef='fileImports' *ngSwitchCase="'fileImports'">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{'cateConfig.impactLog.impactDate' | translate}}
+                                        </th>
+                                        <td mat-cell *matCellDef='let row; let i = index'>
+                                            {{row.createDate}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef='importDate' *ngSwitchCase="'importDate'">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{'cateConfig.impactLog.impactDate' | translate}}
+                                        </th>
+                                        <td mat-cell *matCellDef='let row; let i = index'>
+                                            {{row.createDate}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef='importUser' *ngSwitchCase="'importUser'">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{'cateConfig.impactLog.impactUser' | translate}}
+                                        </th>
+                                        <td mat-cell *matCellDef='let row; let i = index'>
+                                            {{row.createUser}}
+                                        </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef='fileResult' *ngSwitchCase="'fileResult'">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{'cateConfig.impactLog.impactDate' | translate}}
+                                        </th>
+                                        <td mat-cell *matCellDef='let row; let i = index'>
+                                            {{row.createDate}}
+                                        </td>
+                                    </ng-container>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+                                <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
+                                <!-- <span class='noRecored' *ngIf='!dataSource || dataSource?.data?.length === 0 '>
+                                    {{'common.noRecord' | translate}}
+                                </span> -->
+                            </crm-table>
+                        </mat-card>
+                    </div>
+                </mat-accordion>
+            </div>
+        </div>
+        <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+            <div fxFlex='100' fxFlex.lt-sm='100'>
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button color='secondary'
+                    mat-dialog-close>Đóng
+                </button>
+                <button mat-raised-button class='float-right ml-20' (click)="onSaveFile()"
+                    [disabled]="form.get('inputFile').value == ''" color="primary">{{'common.button.save' |
+                    translate}}</button>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>

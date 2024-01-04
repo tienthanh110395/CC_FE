@@ -1,0 +1,25 @@
+::ng-deep .mat-header-cell {
+  color: #000000 !important;
+  text-align: center;
+  font-weight: 400 !important;
+  font-size: 15px !important;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+::ng-deep .mat-header-row {
+    align-items: flex-start;
+    padding: 10px;
+    height: 39px !important;
+    background: #F0F0F0;
+    border: 1px solid #E2DFDF;
+}
+
+.mat-error {
+  text-align: center;
+}
+
+
+.button-add{
+  background: #FFFFFF;
+}

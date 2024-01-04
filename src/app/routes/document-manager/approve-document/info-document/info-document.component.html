@@ -1,0 +1,452 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>
+  {{ dataModel.titlePopup | translate }}
+</h2>
+<as-split direction="horizontal">
+  <as-split-area [size]="60">
+    <info-customer-shared [custId]="data.custId"></info-customer-shared>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header class="bg-white">
+          <mat-panel-title>
+            {{ 'contract.info' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <info-contract-shared [data]="data"></info-contract-shared>
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header class="bg-white">
+              <mat-panel-title>
+                {{ 'Chứng từ hợp đồng' | translate | uppercase }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <div class="crm__table">
+                <table mat-table [dataSource]="dataSourceDocumentAttach">
+                  <ng-container *ngFor="let item of columnsDocumentAttach" [ngSwitch]="item.field">
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                      <th mat-header-cell *matHeaderCellDef style="width: 60px">
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 60px;">
+                        {{(i+1) + (paginatorDocumentAttach.pageIndex * paginatorDocumentAttach.pageSize)}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'checkStatus'">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                        <mat-form-field fxFill>
+                          <mat-select [(ngModel)]="item.checkStatus"
+                            (selectionChange)="handleChangeStatus($event, item)" [disabled]="data.isView">
+                            <mat-option [value]="0">
+                              {{ 'document.unchecked' | translate}}
+                            </mat-option>
+                            <mat-option [value]="1">
+                              {{ 'document.checked' | translate}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'scanFalse'">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                        <mat-checkbox (change)="handleChangeCheckbox(item)" [(ngModel)]="item.scanFalse"
+                          [disabled]="item.isDisabledScanFalse" (change)="checkBoxScanFalse(item)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'infoFalse'">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                        <mat-checkbox [(ngModel)]="item.infoFalse" (change)="handleChangeCheckbox(item)"
+                          [disabled]="item.isDisabledInfoFalse" (change)="checkBoxInfoFalse(item)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'infoFake'">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                        <mat-checkbox (change)="handleChangeCheckbox(item)" [(ngModel)]="item.infoFake"
+                          [disabled]="item.isDisabledInfoFake" (change)="checkBoxInfoFake(item)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'noScan'">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                        <mat-checkbox (change)="handleChangeCheckbox(item)" [(ngModel)]="item.noScan"
+                          [disabled]="item.isDisabledNoScan" (change)="checkBoxNoScan(item)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'reason'">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let item;">
+                        <mat-form-field>
+                          <textarea matInput [(ngModel)]="item.reason" autocomplete="off"></textarea>
+                        </mat-form-field>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                        <button mat-icon-button color="primary" matTooltip="{{'document.view'| translate}}"
+                          (click)="viewProfile(item)">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                      <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                        {{row[item.field]}}
+                      </td>
+                    </ng-container>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsAttach"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsAttach;"></tr>
+                </table>
+                <span class="noRecored"
+                  *ngIf="!dataSourceDocumentAttach || dataSourceDocumentAttach?.data?.length === 0 ">
+                  {{'common.noRecord' | translate}}
+                </span>
+              </div>
+              <div>
+                <mat-paginator #paginatorDocumentAttach [pageSizeOptions]="pageSizeList" showFirstLastButtons>
+                </mat-paginator>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <form [formGroup]="formDocument">
+          <mat-accordion>
+            <mat-expansion-panel [expanded]="true">
+              <mat-expansion-panel-header class="bg-white">
+                <mat-panel-title>
+                  {{ 'document.approve_content_profile_contract' | translate | uppercase }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div fxLayout="row wrap" fxLayoutGap="20px grid" class="form-field-full">
+                <div fxFlex="33.33" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'Trạng thái hồ sơ hiện tại' | translate }}</mat-label>
+                    <input matInput formControlName="currentStatus" [readonly]="true">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="row wrap" fxLayoutGap="20px grid" class="form-field-full">
+                <div fxFlex="33.33" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'document.approve_status' | translate }}
+                      <span class="required">*</span>
+                    </mat-label>
+                    <mat-select formControlName="status" [(ngModel)]="dataModel.optionContractStatus">
+                      <mat-option [value]="'1'" [disabled]="checkDisableOptionContract"
+                        (click)="checkDataReasonContract()">
+                        {{ 'document.approved' | translate}}
+                      </mat-option>
+                      <mat-option [value]="'2'" (click)="checkDataReasonContract()">
+                        {{ 'document.reject' | translate}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="formDocument.get('status').errors?.required">
+                      {{ 'document.approve_status' | translate }}
+                      {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="66.67" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline"
+                    *ngIf="this.formDocument.value.status == statusContractVehicle.PHE_DUYET">
+                    <mat-label>{{ 'common.reason' | translate }}</mat-label>
+                    <textarea style="resize: none;" matInput formControlName="reason"></textarea>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline"
+                    *ngIf="this.formDocument.value.status == statusContractVehicle.TU_CHOI">
+                    <mat-label>{{ 'common.reason' | translate }}</mat-label>
+                    <textarea style="resize: none;" matInput formControlName="reason" required></textarea>
+                    <mat-error *ngIf="formDocument.get('reason').errors?.required">
+                      {{ 'customer-management.errorMessageVehicle.reason' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header class="bg-white">
+          <mat-panel-title>
+            {{ 'vehicle.info' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <div class="crm__table">
+            <table mat-table [dataSource]="dataSource">
+              <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                  <th mat-header-cell *matHeaderCellDef style="width: 60px;">
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 60px;">
+                    {{(i+1) + (paginator.pageIndex * paginator.pageSize)}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'vehicleTypeFee'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;">
+                    {{ showVehicleGroupName(item.vehicleGroupId) }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'vehicleTypeName'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;">
+                    {{ showVehicleTypeName(item.vehicleTypeId) }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'statusCurrent'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;">
+                    {{item.statusCurrent}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item let row" class="ui-text-center">
+                    <mat-radio-button (click)="checkButtonView(row)" (click)="viewFileVehicle(item)"
+                      matTooltip="{{'Xem danh sách chứng từ'| translate}}">
+                    </mat-radio-button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                  <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }" [class]="item.class">
+                    {{row[item.field]}}
+                  </td>
+                </ng-container>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <span class="noRecored" *ngIf="!dataSource || dataSource?.data?.length === 0 ">
+              {{'common.noRecord' | translate}}
+            </span>
+          </div>
+          <div>
+            <mat-paginator #paginator [pageSizeOptions]="pageSizeList" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header class="bg-white">
+          <mat-panel-title>
+            {{ 'Chứng từ phương tiện' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <div class="crm__table">
+            <table mat-table [dataSource]="dataSourceVehicleAttach">
+              <ng-container *ngFor="let item of columnsDocumentAttach" [ngSwitch]="item.field">
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                  <th mat-header-cell *matHeaderCellDef style="width: 60px;">
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 60px;">
+                    {{(i+1) + (paginatorVehicleAttach.pageIndex * paginatorVehicleAttach.pageSize)}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'checkStatus'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                    <mat-form-field fxFill>
+                      <mat-select [(ngModel)]="item.checkStatus"
+                        (selectionChange)="handleChangeStatusVehicle($event, item)" [disabled]="this.data.isView">
+                        <mat-option [value]="0">
+                          {{ 'document.unchecked' | translate}}
+                        </mat-option>
+                        <mat-option [value]="1">
+                          {{ 'document.checked' | translate}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'scanFalse'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                    <mat-checkbox (change)="handleChangeCheckboxVehicle(item)" [(ngModel)]="item.scanFalse"
+                      [disabled]="item.isDisabledScanFalse" (change)="checkBoxScanFalse(item)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'infoFalse'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                    <mat-checkbox (change)="handleChangeCheckboxVehicle(item)" [(ngModel)]="item.infoFalse"
+                      [disabled]="item.isDisabledInfoFalse" (change)="checkBoxInfoFalse(item)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'infoFake'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                    <mat-checkbox (change)="handleChangeCheckboxVehicle(item)" [(ngModel)]="item.infoFake"
+                      [disabled]="item.isDisabledInfoFake" (change)="checkBoxInfoFake(item)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'noScan'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                    <mat-radio-group>
+                      <mat-checkbox (change)="handleChangeCheckboxVehicle(item)" [(ngModel)]="item.noScan"
+                        [disabled]="item.isDisabledNoScan" (change)="checkBoxNoScan(item)">
+                      </mat-checkbox>
+                    </mat-radio-group>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'reason'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;">
+                    <mat-form-field>
+                      <textarea matInput [(ngModel)]="item.reason" autocomplete="off"></textarea>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let item;" class="ui-text-center">
+                    <button mat-icon-button color="primary" matTooltip="{{'document.view'| translate}}"
+                      (click)="viewProfile(item)">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                  <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                    {{row[item.field]}}
+                  </td>
+                </ng-container>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsAttach"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsAttach;"></tr>
+            </table>
+            <span class="noRecored" *ngIf="!dataSourceVehicleAttach || dataSourceVehicleAttach?.data?.length === 0 ">
+              {{'common.noRecord' | translate}}
+            </span>
+          </div>
+          <div>
+            <mat-paginator #paginatorVehicleAttach [pageSizeOptions]="pageSizeList" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+          <form [formGroup]="formInfoVehicle" *ngIf="checkValidForm">
+            <mat-panel-title>
+              {{ 'document.approve_content_profile_vehicle' | translate | uppercase }}
+            </mat-panel-title><br>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid" class="form-field-full">
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'document.approve_status' | translate }}
+                  </mat-label>
+                  <mat-select [(ngModel)]="dataModel.vehicleSelected.statusProfiles" formControlName="statusVehicle">
+                    <mat-option [value]="'1'" [disabled]="checkDisableOptionVehicle" (click)="checkDataReasonVehicle()">
+                      {{ 'document.approved' | translate}}
+                    </mat-option>
+                    <mat-option [value]="'2'" (click)="checkDataReasonVehicle()">
+                      {{ 'document.reject' | translate}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div fxFlex="66.67" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline" *ngIf="this.formInfoVehicle.value.statusVehicle == 1">
+                  <mat-label>{{ 'common.reason' | translate }}</mat-label>
+                  <textarea style="resize: none;" matInput formControlName="reasonVehicle"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="this.formInfoVehicle.value.statusVehicle == 2">
+                  <mat-label>{{ 'common.reason' | translate }}</mat-label>
+                  <textarea style="resize: none;" matInput formControlName="reasonVehicle" required
+                    (input)="checkValidate($event.target.value)"></textarea>
+                  <mat-error *ngIf="formInfoVehicle.get('reasonVehicle').errors?.required">
+                    {{ 'customer-management.errorMessageVehicle.reason' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </form>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-dialog-actions align="end">
+      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxFlex="100" fxLayoutGap="10px" fxLayoutAlign="end">
+        <button *ngIf="!this.data.isView" mat-raised-button type="button" color="primary" (click)="onSubmit()"
+          [disabled]="formDocument.invalid && this.formDocument.value.status == 2 || checkValidButton">
+          {{ 'common.button.update' | translate }}
+        </button>
+        <button mat-raised-button type="button" color="secondary" mat-dialog-close>
+          {{ 'common.button.close' | translate }}
+        </button>
+      </div>
+    </mat-dialog-actions>
+  </as-split-area>
+  <as-split-area [size]="40">
+    <ng-container *ngIf="fileData != null && fileExtension != null">
+      <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <span style="float: right;">
+          <img *ngIf="fileExtension != 'pdf'" [src]="fileData" [class]="isFullSize ? '' : 'autofit'"
+            (click)="showImg(fileData)" style="width: 750px; object-fit: contain;
+          background-repeat: no-repeat; background-position: center center; background-size: cover;" />
+        </span>
+      </div>
+      <div>
+        <pdf-viewer *ngIf="fileExtension === 'pdf'" [src]="fileData" [original-size]="isFullSize">
+        </pdf-viewer>
+      </div>
+      <div fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="10px">
+        <button mat-icon-button color="primary" matTooltip="{{'Tải file'| translate}}" (click)="downloadFile()">
+          <mat-icon>download</mat-icon>
+        </button>
+        <button mat-icon-button color="primary" matTooltip="{{'In file'| translate}}" (click)="print()">
+          <mat-icon>print</mat-icon>
+        </button>
+        <!-- <button mat-icon-button color="primary" matTooltip="{{'Full size'| translate}}" (click)="setFullSize(true)">
+            <mat-icon>open_in_full</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" matTooltip="{{'Normal size'| translate}}"
+            (click)="setFullSize(false)">
+            <mat-icon>close_fullscreen</mat-icon>
+          </button> -->
+      </div>
+    </ng-container>
+  </as-split-area>
+</as-split>

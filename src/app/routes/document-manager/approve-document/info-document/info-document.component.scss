@@ -1,0 +1,18 @@
+.noRecored {
+  text-align: center;
+  padding: 10px;
+  display: block;
+  border-bottom: 1px solid #c9cdd2;
+  border-right: 1px solid #c9cdd2;
+  border-left: 1px solid #c9cdd2;
+  font-weight: 700;
+}
+
+.autofit {
+  height: 100%;
+  width: 100%;
+}
+
+:host ::ng-deep .mat-dialog-content {
+  max-height: none;
+}

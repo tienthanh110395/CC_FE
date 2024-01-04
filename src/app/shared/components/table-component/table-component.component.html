@@ -1,0 +1,29 @@
+<div class="row table-toolbar" *ngIf="showHeader">
+  <div class="col-md-9 table-toolbar-title">
+    {{headerTable |translate | uppercase}} <span class="table__totalRecord--color">({{totalRecord}})</span>
+  </div>
+</div>
+<div class="container">
+  <div class="loading-icon" *ngIf="isLoading">
+    <mat-spinner diameter="30" *ngIf="isLoading"></mat-spinner>
+  </div>
+  <div class="crm__table">
+    <perfect-scrollbar [ngStyle]="{ height: stickyHeight }">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows [ngStyle]="{width:widthTable}">
+        <ng-container *ngFor="let item of columns; trackBy: trackByFn" [ngSwitch]="item.type"></ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: stickyHeader"></tr>
+        <tr class="" mat-row [ngClass]="{'evenColumn-color': index%2 !=0,'selectedRow':row.selected}"
+          (click)="onClickRow(row)" *matRowDef="let row;let index= dataIndex; columns: displayedColumns;">
+        </tr>
+      </table>
+    </perfect-scrollbar>
+    <span class="noRecored" *ngIf="!dataSource || dataSource.length ==0 ">
+      {{'common.noRecord' |translate}}
+    </span>
+  </div>
+  <div [hidden]="!isPaging">
+    <mat-paginator [pageSizeOptions]="pageSizeList" [length]="totalRecord" showFirstLastButtons [disabled]="isLoading"
+      (page)="onPaginateChange($event)">
+    </mat-paginator>
+  </div>
+</div>

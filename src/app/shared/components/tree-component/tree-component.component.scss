@@ -1,0 +1,30 @@
+.mat-form-field {
+  margin-right: 4px;
+}
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+.change-cursor{
+  cursor: pointer;
+}
+.label-tree{
+  cursor: pointer;
+  &.activated {
+    color: #ff7b1f;
+    font-weight: 500;
+    font-size: 14px;
+
+}
+.parent-label{
+  position: absolute;
+        margin-top: 4px;
+        margin-left: 5px;
+}
+}

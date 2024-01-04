@@ -1,0 +1,27 @@
+.btn-delete-file {
+    vertical-align: middle;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.radio-stl {
+    position: absolute;
+    top: 0px;
+    left: 30px;
+  }
+:host::ng-deep {
+    .hack-height-radio.mat-form-field-appearance-outline .mat-form-field-outline {
+      height: 70px;
+    }
+    .hack-height-checkbox.mat-form-field-appearance-outline .mat-form-field-outline {
+      height: 130px;
+    }
+}
+.font-register-service {
+    font-size: 12pt !important;
+}
+.lbl-style {
+  font-size: 9pt;
+  position: relative;
+  bottom: 8px;
+  color: #666;
+}

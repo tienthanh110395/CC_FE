@@ -1,0 +1,28 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{ 'common.button.confirm' | translate}}</h2>
+<form [formGroup]="formGroupPopup">
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="100" fxFlex.lt-sm="100" class="form-field-full">
+      <mat-form-field appearance="outline">
+        <mat-label>{{'special-vehicle.note_deny'| translate}} <span class="required">*</span></mat-label>
+        <textarea style="resize: none;" formControlName="approveReason" matInput rows="4"></textarea>
+        <mat-error *ngIf="formGroupPopup.get('approveReason').errors?.required">
+          {{'ticket-extend.valid-approve-reason' | translate}}
+        </mat-error>
+        <mat-error *ngIf="formGroupPopup.get('approveReason').errors?.maxlength">
+          {{'common.validate.maxlength-255' | translate}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<mat-dialog-actions align="end">
+  <button class="ml-20" (click)="send()" mat-button mat-raised-button color="primary"
+    [disabled]="formGroupPopup.invalid">{{'common.button.send' |
+    translate}}</button>
+
+  <button class="ml-20" mat-dialog-close mat-button mat-raised-button color="secondary">{{'common.button.close' |
+    translate}}</button>
+</mat-dialog-actions>

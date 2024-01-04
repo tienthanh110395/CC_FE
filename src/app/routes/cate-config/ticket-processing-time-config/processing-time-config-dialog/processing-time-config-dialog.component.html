@@ -1,0 +1,202 @@
+<h2 mat-dialog-title>THÔNG TIN CẤU HÌNH THỜI GIAN</h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class='view-detail'>
+  <form [formGroup]='form' class='form-field-full'>
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <!-- row 1 -->
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'cateConfig.ticketType.ticketGroup' | translate }}
+            <span class='required'>*</span>
+          </mat-label>
+          <mtx-select formControlName='ticketGroup' [items]='lstTicketGroup' bindLabel='ticketTypeName'
+            bindValue='ticketTypeId' [multiple]='false' (change)='onGroupChange($event)' appendTo='body'
+            [notFoundText]="'common.notFound' | translate" [clearable]="isClearGroup">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketGroup').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+
+        </mat-form-field>
+      </div>
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'cateConfig.ticketType.ticketGenre' | translate }}
+            <span class='required'>*</span>
+          </mat-label>
+          <mtx-select formControlName='ticketGenre' [items]='lstTicketGenre' bindLabel='ticketTypeName'
+            bindValue='ticketTypeId' [multiple]='false' (change)='onChangeTicketGenre($event)' appendTo='body'
+            [notFoundText]="'common.notFound' | translate" [clearable]="isClearGroup">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketGenre').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    Row 2-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'ticketProcessConfig.receptionTimeFrom' | translate }} <span class='required'>*</span>
+          </mat-label>
+          <input  (keydown)="onKeyDown($event)" matInput uppercaseText trim='blur' type='time' class="inputy_d"
+            placeholder="{{ 'ticketProcessConfig.receptionTimeFrom' | translate }}" formControlName='receptionTimeFrom'
+            autocomplete='off' />
+          <mat-error *ngIf="form.get('receptionTimeFrom').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('receptionTimeFrom').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{ 'ticketProcessConfig.receptionTimeTo' | translate }}
+            <span class='required'>*</span>
+          </mat-label>
+          <input  (keydown)="onKeyDown($event)" matInput uppercaseText trim='blur' type='time' class="inputy_d"
+            placeholder="{{ 'ticketProcessConfig.receptionTimeTo' | translate }}" formControlName='receptionTimeTo'
+            autocomplete='off' (change)="onChangeTime()" />
+          <mat-error *ngIf="form.get('receptionTimeTo').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('receptionTimeTo').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <!-- <button mat-button matSuffix mat-icon-button
+              (click)='form.controls.ticketExpireCauseCode.setValue(null); $event.stopPropagation()'
+              class='showclear' type='button'>
+              <mat-icon>close</mat-icon>
+          </button> -->
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    Row 3-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div fxFlex='35' fxFlex.lt-sm='100'>
+        <mat-accordion>
+          <mat-expansion-panel [expanded]='true' class='accordion-item'>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{'ticketProcessConfig.search.ticketType' | translate | uppercase}}
+                <span class='required'>*</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div *ngFor='let item of lstTicketType'>
+              <mat-checkbox (change)='onCheckItem(item, $event)' *ngIf='!data' [(ngModel)]='item.check'
+                [ngModelOptions]='{standalone: true}'>
+                <mat-label class='mat-label-item'>{{ item.ticketTypeName}}</mat-label>
+              </mat-checkbox>
+              <mat-label *ngIf='data' class='mat-label-item toggle_on'>{{
+                item.ticketTypeName}}</mat-label>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div fxFlex='65' fxFlex.lt-sm='100'>
+        <mat-accordion>
+          <div class='form-field-full'>
+            <mat-card appearance='outline' class='accordion-item1'>
+              <crm-table [dataSource]='lstDataTicketTimeConfig' [displayedColumns]='displayedColumns'
+                [pageIndex]='pageIndex' [isPaging]='false' [showHeader]='false'>
+                <ng-container *ngFor='let item of columns' [ngSwitch]='item.field'>
+                  <ng-container matColumnDef='{{ item.field }}' *ngSwitchDefault>
+                    <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                    <td mat-cell *matCellDef='let row'>
+                      {{ row[item.field] }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef='{{ item.field }}' *ngSwitchCase="'orderNumber'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ item.i18n |
+                      translate }}</th>
+                    <td mat-cell *matCellDef='let row; let i = dataIndex' style='width: 20px; text-align: center;'>
+                      {{ i + 1 }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef='levelCate' *ngSwitchCase="'levelCate'">
+                    <th mat-header-cell *matHeaderCellDef style='width: 230px;'>
+                      {{'ticketProcessConfig.table.LevelCate' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef='let row; let i = index'>
+                      {{row.ticketLevelCateName}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef='ticketTimeFull' *ngSwitchCase="'ticketTimeFull'">
+                    <th mat-header-cell *matHeaderCellDef class='config-time-item'>
+                      {{'ticketProcessConfig.table.ticketTimeFull' | translate}}
+                      <span class='required'>*</span>
+                    </th>
+                    <td mat-cell *matCellDef='let row; let i = index'>
+                      <mat-form-field appearance='outline' class='config-time-item'>
+                        <input  (keydown)="onKeyDown($event)" matInput digitOnly [(ngModel)]='row.ticketTimeFull' [ngModelOptions]='{standalone: true}'
+                          minlength='1' maxlength="5" name='ticketTimeFull{{i}}' #ticketTimeFull='ngModel' required />
+                        <mat-error *ngIf="ticketTimeFull.errors?.required">Vui lòng nhập giá trị</mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef='ticketTimeLv1' *ngSwitchCase="'ticketTimeLv1'">
+                    <th mat-header-cell *matHeaderCellDef class='config-time-item'>
+                      {{'ticketProcessConfig.table.ticketTimeLv1' | translate}}
+                      <span class='required'>*</span>
+                    </th>
+                    <td mat-cell *matCellDef='let row; let i = index'>
+                      <mat-form-field appearance='outline' class='config-time-item'>
+                        <input  (keydown)="onKeyDown($event)" matInput digitOnly [(ngModel)]='row.ticketTimeLv1' [ngModelOptions]='{standalone: true}'
+                          minlength='1' maxlength="4" name='ticketTimeLv1{{i}}' #ticketTimeLv1='ngModel' required />
+                        <mat-error *ngIf="ticketTimeLv1.errors?.required">Vui lòng nhập giá trị</mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef='ticketTimeLv2' *ngSwitchCase="'ticketTimeLv2'">
+                    <th mat-header-cell *matHeaderCellDef class='config-time-item'>
+                      {{'ticketProcessConfig.table.ticketTimeLv2' | translate}}
+                      <span class='required'>*</span>
+                    </th>
+                    <td mat-cell *matCellDef='let row; let i = index'>
+                      <mat-form-field appearance='outline' class='config-time-item'>
+                        <input  (keydown)="onKeyDown($event)" matInput digitOnly [(ngModel)]='row.ticketTimeLv2' [ngModelOptions]='{standalone: true}'
+                          minlength='1' maxlength="4" name='ticketTimeLv2{{i}}' #ticketTimeLv2='ngModel' required />
+                        <mat-error *ngIf="ticketTimeLv2.errors?.required">Vui lòng nhập giá trị</mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef='ticketRetime' *ngSwitchCase="'ticketRetime'">
+                    <th mat-header-cell *matHeaderCellDef class='config-time-item'>
+                      {{'ticketProcessConfig.table.ticketRetime' | translate}}
+                      <span class='required'>*</span>
+                    </th>
+                    <td mat-cell *matCellDef='let row; let i = index'>
+                      <mat-form-field appearance='outline' class='config-time-item'>
+                        <input  (keydown)="onKeyDown($event)" matInput digitOnly [(ngModel)]='row.ticketRetime' [ngModelOptions]='{standalone: true}'
+                          minlength='1' maxlength="4" name='ticketRetime{{i}}' #ticketRetime='ngModel' required />
+                        <mat-error *ngIf="ticketRetime.errors?.required">Vui lòng nhập giá trị</mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+                <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
+              </crm-table>
+            </mat-card>
+          </div>
+        </mat-accordion>
+      </div>
+    </div>
+    <!--    Row 4-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+      <div fxFlex='100' fxFlex.lt-sm='100' >
+        <button  class='float-right ml-20' mat-button mat-raised-button color='secondary'
+                 mat-dialog-close>Đóng
+        </button>
+        <button [disabled]="isLoading" type='submit' class='float-right ml-20' mat-button mat-raised-button
+                color='primary' (click)='doSave()'>Lưu
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>

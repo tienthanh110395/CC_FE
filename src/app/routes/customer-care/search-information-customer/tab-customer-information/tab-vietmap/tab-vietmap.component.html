@@ -1,0 +1,90 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <form [formGroup]="formSearch">
+      <br>
+      <div class="form-field-full">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>{{ 'vietMap.warnDate' | translate }}
+                <span class="required">*</span>
+              </mat-label>
+              <mat-date-range-input [rangePicker]="picker" (click)="picker.open()" [max]="today">
+                <input matStartDate [formControl]="fromDate" formControlName="fromDate" #fromDateId maskDate
+                       placeholder="{{ 'vietMap.warnDate' | translate }}">
+                <input matEndDate [formControl]="toDate" formControlName="toDate" maskDate
+                       placeholder="{{ 'common.endDate' | translate }}"
+                       #endDateId>
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || endDateId.value" class="showclearDatePopup"
+                                     (click)="fromDate.setValue(null);
+                                     toDate.setValue(null); $event.stopPropagation()">
+                <mat-icon matDatepickerToggleIcon>close</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>{{'vietMap.plateNumber' | translate}}</mat-label>
+              <input matInput (keyup.enter)="onSearch()" formControlName="plateNumber" maxlength="13"
+                     (keyup.enter)="onSearch()"/>
+              <button mat-button *ngIf="formSearch.value.plateNumber" matSuffix mat-icon-button
+                      (click)="formSearch.controls.plateNumber.reset()" class="showclear">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field>
+              <mat-label>{{ 'vietMap.station-name' | translate }}</mat-label>
+              <mtx-select [items]="listStation" formControlName="botId" bindLabel="name" bindValue="id"
+                          [clearable]="true" [searchable]="true"
+                          appendTo="body">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+             fxLayoutGap.xs="0">
+          <button mat-raised-button color="primary" style="margin-right: 8px;" type="button" (click)="onSearch()"
+                  [disabled]="!formSearch.value.fromDate || !formSearch.value.toDate">
+            {{ 'common.button.search' | translate }}
+          </button>
+          <button mat-raised-button color="primary" style="margin-right: 8px;" type="button" (click)="export()"
+                  [disabled]="!formSearch.value.fromDate || !formSearch.value.toDate">
+            {{ 'common.exportExcel' | translate }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-expansion-panel>
+  <mat-card>
+    <common-list [headerTable]="'vietMap.warnHistory'" [startRecord]="searchModel.startrecord"
+                 [dataSource]="dataModel.dataSource" [isLoading]="loadingSubject | async" [isPaging]="true"
+                 [totalRecord]="totalRecord"
+                 [columns]="columns" (page)="onPageChange($event)" [pageIndex]="pageIndex" [widthTable]="getWith()">
+      <ng-template let-item vtsTemplate="action">
+        <button mat-icon-button (click)="viewDetail(item)">
+          <mat-icon svgIcon="ic_xem" matTooltip="{{'vietMap.alarmHistoryInfor' | translate}}">
+          </mat-icon>
+        </button>
+      </ng-template>
+      <ng-template let-item vtsTemplate="customB">
+        <span *ngIf="item.balanceState === 1">{{'vietMap.full' | translate}}</span>
+        <span *ngIf="item.balanceState === 0">{{'vietMap.noFull' | translate}}</span>
+      </ng-template>
+      <ng-template let-item vtsTemplate="customD">
+        <span *ngIf="item.actStatus === 1">{{'vietMap.stationPass' | translate}}</span>
+        <span *ngIf="item.actStatus === 0">{{'vietMap.stationNonePass' | translate}}</span>
+      </ng-template>
+      <ng-template let-item vtsTemplate="customC">
+        <span>{{item.totalPrice |formatCurrency}}</span>
+      </ng-template>
+      <ng-template let-item vtsTemplate="listStation">
+        <span [title]="item.listStation" class="line-clamp">{{item.listStation}}</span>
+      </ng-template>
+    </common-list>
+  </mat-card>
+</mat-accordion>

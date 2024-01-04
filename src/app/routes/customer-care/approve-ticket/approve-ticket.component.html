@@ -1,0 +1,121 @@
+<page-header></page-header>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'common.title' | translate | uppercase}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="approveExtentProcessForm" class="form-field-full">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'ticket-extend.action_date' | translate}}</mat-label>
+                <mat-date-range-input [rangePicker]="receiveTimePicker" (click)="receiveTimePicker.open()">
+                  <input matStartDate formControlName="startExtentDate" #receiveTimeFromId maskDate
+                    placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+                  <input matEndDate formControlName="endExtentDate" maskDate
+                    placeholder="{{ 'common.endDate' | translate }}" #receiveTimeToId (keyup.enter)="onSearch()">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix *ngIf="receiveTimeFromId.value || receiveTimeToId.value"
+                  class="showclearDatePopup"
+                  (click)="approveExtentProcessForm.controls.startExtentDate.setValue(null);approveExtentProcessForm.controls.endExtentDate.setValue(null); $event.stopPropagation()">
+                  <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="receiveTimePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+                <mat-error *ngIf="checkFormatDate(receiveTimeFromId.value)">
+                  {{ 'common.invalidStartDate' | translate }}
+                </mat-error>
+                <mat-error *ngIf="checkFormatDate(receiveTimeToId.value)">
+                  {{ 'common.invalidEndDate' | translate }}
+                </mat-error>
+                <mat-error *ngIf="approveExtentProcessForm.controls.startExtentDate.hasError('matStartDateInvalid')">
+                  {{ 'common.invalidFromDate' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-management.request-combination-support' | translate }}</mat-label>
+                <input matInput formControlName="ticketSearchList" (keyup.enter)="onSearch()" />
+                <button mat-button *ngIf="approveExtentProcessForm.controls.ticketSearchList.value" matSuffix
+                  mat-icon-button class="showclear" type="button"
+                  (click)="approveExtentProcessForm.controls.ticketSearchList.setValue(''); $event.stopPropagation()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticket-extend.extent-status' | translate }}</mat-label>
+                <mtx-select formControlName="status" [items]="statusExtentList" bindLabel="label" bindValue="value"
+                  [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="statusExtentList?.length>10">
+                </mtx-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'ticket-extend.approveUserName' | translate}} </mat-label>
+                <mtx-select formControlName="approveUserName" [items]="approveUserNameList" bindLabel="label"
+                  bindValue="value" [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="approveUserNameList?.length>10">
+                </mtx-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'ticket-extend.managerUserNameExtent' | translate}} </mat-label>
+                <mtx-select formControlName="managerUserName" [items]="managerUserNameList" bindLabel="label"
+                  bindValue="value" [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="managerUserNameList?.length>10">
+                </mtx-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+            fxLayoutGap.xs="0" style="margin-right: 8px;">
+            <button mat-raised-button color="primary" type="submit" (click)="onSearch()">
+              {{ 'common.button.search' | translate }}
+            </button>
+            <button mat-raised-button color="primary" type="submit" (click)="exportFile()">
+              {{ 'common.exportExcel' | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-card>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: right;">
+            <button mat-raised-button color="primary" style="margin-right: 8px;" (click)="approveTicket()"
+              [disabled]="selection.selected.length == 0">
+              {{ 'ticket-extend.approve-ticket' | translate }}
+            </button>
+          </div>
+        </div>
+        <common-list [headerTable]="'ticket-statistic.list-required-ticket'" [dataSource]="dataModel.dataSource"
+          [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns"
+          (page)="onPageChange($event)" [pageIndex]="pageIndex"
+          [startRecord]="approveExtentProcessForm.controls.startrecord.value" [widthTable]="'4000px'">
+          <ng-template vtsTemplate='actionCustom' let-row>
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? checkChange(row) : null"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"
+              [disabled]="row.status == 2 || row.status == null || row.status == 0">
+            </mat-checkbox>
+            <button mat-icon-button color="primary" matTooltip="{{'ticket-extend.refuse-ticket'| translate}}"
+              (click)="rejectTicket(row)" [disabled]="row.status == 0 || row.status == 2">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </ng-template>
+        </common-list>
+      </mat-card>
+    </mat-accordion>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<form [formGroup]="formListOrder" class="form-field-full">
+  <mat-accordion>
+    <mat-card>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="33.33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'etag-change-regis.register-date' | translate}}</mat-label>
+            <mat-date-range-input [rangePicker]="receiveTimePicker" (click)="receiveTimePicker.open()">
+              <input matStartDate formControlName="regDateFrom" #receiveTimeFromId maskDate
+                placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+              <input matEndDate formControlName="regDateTo" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                #receiveTimeToId (keyup.enter)="onSearch()">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix *ngIf="receiveTimeFromId.value || receiveTimeToId.value"
+              class="showclearDatePopup"
+              (click)="formListOrder.controls.regDateFrom.setValue(null);formListOrder.controls.regDateTo.setValue(null); $event.stopPropagation()">
+              <mat-icon matDatepickerToggleIcon>close</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="receiveTimePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+            <mat-error *ngIf="checkFormatDate(receiveTimeFromId.value)">
+              {{ 'common.invalidStartDate' | translate }}
+            </mat-error>
+            <mat-error *ngIf="checkFormatDate(receiveTimeToId.value)">
+              {{ 'common.invalidEndDate' | translate }}
+            </mat-error>
+            <mat-error *ngIf="formListOrder.controls.regDateFrom.hasError('matStartDateInvalid')">
+              {{ 'common.invalidFromDate' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'etag-change-regis.sync-status-online' | translate }}</mat-label>
+            <mtx-select formControlName="syncStatus" [items]="syncStatusList" bindLabel="label" bindValue="value"
+              [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+              [searchable]="syncStatusList?.length>10">
+            </mtx-select>
+          </mat-form-field>
+        </div>
+        <div fxFlex="33.33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'etag-change-regis.regis-status' | translate }}</mat-label>
+            <mtx-select formControlName="regStatus" [items]="regStatusList" bindLabel="label" [multiple]="false"
+              appendTo="body" [notFoundText]="'common.notFound' | translate" [searchable]="regStatusList?.length>10">
+            </mtx-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+        fxLayoutGap.xs="0" style="margin-right: 8px;">
+        <button mat-raised-button color="primary" type="submit" (click)="onSearch()">
+          {{ 'common.button.search' | translate }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" (click)="exportExcelChangeEtag()">
+          {{ 'common.exportExcel' | translate }}
+        </button>
+      </div>
+    </mat-card>
+  </mat-accordion>
+  <mat-accordion>
+    <mat-card>
+      <common-list [headerTable]="'etag-change-regis.list-order-change'" [dataSource]="dataModel.dataSource"
+        [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns"
+        (page)="onPageChange($event)" [pageIndex]="pageIndex" [startRecord]="formListOrder.controls.startrecord.value"
+        [widthTable]="'2000px'">
+        <ng-template vtsTemplate="customRegStatus" let-item>
+          <span *ngIf="item.regStatus == registerStatus.DON_MOI">{{ 'etag-change-regis.order-new' | translate }}</span>
+          <span
+            *ngIf="item.regStatus == registerStatus.DON_DA_XU_LY">{{ 'etag-change-regis.order-process' | translate }}</span>
+          <span
+            *ngIf="item.regStatus == registerStatus.DON_HUY">{{ 'etag-change-regis.order-cancle' | translate }}</span>
+        </ng-template>
+        <ng-template vtsTemplate="customSyncStatus" let-item>
+          <span *ngIf="item.orderNumber">{{ 'etag-change-regis.yes-sync-status' | translate }}</span>
+          <span *ngIf="!item.orderNumber">{{ 'etag-change-regis.no-sync-status' | translate }}</span>
+        </ng-template>
+      </common-list>
+    </mat-card>
+  </mat-accordion>
+</form>

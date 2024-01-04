@@ -1,0 +1,32 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <div fxLayout="row wrap">
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <br>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <mat-tab-group (selectedTabChange)="onTabHistory($event)">
+                <mat-tab label="{{ 'customer-care.search-information-customer.ticket_purchase_history' | translate }}">
+                  <app-ticket-purchase-history [vehicleId]="vehicleId"></app-ticket-purchase-history>
+                </mat-tab>
+                <mat-tab
+                  label="{{ 'customer-care.search-information-customer.vehicle_history_through_the_station' | translate }}">
+                  <app-vehicle-station-history [plateNumber]="plateNumber" [listMedia]="listMedia"
+                    [contractId]="contractId" *ngIf="dataModel.currentIndex==1">
+                  </app-vehicle-station-history>
+                </mat-tab>
+                <mat-tab
+                  label="{{ 'customer-care.search-information-customer.history_transactions_other' | translate }}">
+                  <app-deal-other-history [vehicleId]="vehicleId" [contractId]="contractId"
+                    *ngIf="dataModel.currentIndex==2">
+                  </app-deal-other-history>
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

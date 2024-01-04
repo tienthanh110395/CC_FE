@@ -1,0 +1,121 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class='view-detail'>
+  <form [formGroup]='form' class='form-field-full'>
+    <!--    Row 1-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid' class='row1'>
+      <!-- Cấp nguyên nhân lỗi -->
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label> {{'ticketError.table.errorGrant' | translate}} <span class='required'>*</span>
+          </mat-label>
+          <mat-select (selectionChange)="onChangeLevelReasonError($event)" formControlName='levelError'>
+            <mat-option>Chọn cấp nguyên nhân lỗi</mat-option>
+            <ng-container *ngFor="let item of lstLevelError">
+              <mat-option [value]='item.value'>
+                {{ item.label }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="form.get('levelError').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+          <button mat-button
+                  matSuffix mat-icon-button
+                  *ngIf="form.controls.levelError.value"
+                  (click)="form.controls.levelError.setValue(null); $event.stopPropagation(); btnClear();"
+                  class="showclear" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <!-- Nguyên nhân lỗi -->
+      <div fxFlex='50' fxFlex.lt-sm='100'>
+        <mat-form-field appearance='outline'>
+          <mat-label>{{'ticketError.table.errorName' | translate}} <span class='required'>*</span>
+          </mat-label>
+          <input maxlength="255" matInput placeholder="Tên nguyên nhân lỗi" formControlName='ticketErrorCauseName' autocomplete='off'
+            trim='blur' />
+          <mat-error *ngIf="form.get('ticketErrorCauseName').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketErrorCauseName').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <button *ngIf="form.controls.ticketErrorCauseName.value.length > 0" mat-button matSuffix mat-icon-button
+                  (click)='form.controls.ticketErrorCauseName.setValue(null); $event.stopPropagation()' class='showclear' type='button'>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <!-- Nguyên nhân lỗi cấp 1 -->
+      <div *ngIf="selectedErrorCauseLv==3 || selectedErrorCauseLv==2" fxFlex='50'
+           fxFlex.lt-sm='100' >
+        <mat-form-field appearance='outline' style='width: 100%'>
+          <mat-label>Nguyên nhân lỗi cấp 1 <span class='required'>*</span>
+          </mat-label>
+          <mtx-select [clearable]="isClearLv1" formControlName='ticketErrorLevelOne' [items]="lstTicketErrorCauseNameLv1" bindLabel="label" bindValue="value" [multiple]="false"
+                      (change)="onChangLevelOne($event)"  appendTo="body"
+                      [notFoundText]="'common.notFound' | translate">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketErrorLevelOne').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Nguyên nhân lỗi cấp 2 -->
+      <div *ngIf="selectedErrorCauseLv==3" fxFlex='50' fxFlex.lt-sm='100' >
+        <mat-form-field appearance='outline' style='width: 100%'>
+          <mat-label>Nguyên nhân lỗi cấp 2 <span class='required'>*</span>
+          </mat-label>
+          <mtx-select [clearable]="isClearLv2" formControlName='ticketErrorLevelTwo' [items]="lstTicketErrorCauseNameLv2" bindLabel="label" bindValue="value" [multiple]="false"
+                      appendTo="body" (change)="onChangLevelTwo()"
+                      [notFoundText]="'common.notFound' | translate">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketErrorLevelTwo').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!--    Row 3-->
+    <div fxLayout='row wrap' fxLayoutGap='20px grid' class="row3">
+      <mat-form-field appearance='outline'>
+        <mat-label>Mô tả</mat-label>
+        <textarea maxlength="1024" formControlName='description' type='text' trim='blur' matInput placeholder='Mô tả'></textarea>
+        <mat-error *ngIf="form.get('description').errors?.maxlength">
+          {{'cateConfig.validators.maxLength-1024' | translate}}
+        </mat-error>
+        <button *ngIf="form.controls.description.value.length > 0" mat-button matSuffix mat-icon-button
+          (click)='form.controls.description.setValue(null); $event.stopPropagation()' class='showclear' type='button'>
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+  </form>
+
+  <!-- Form Action -->
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+    style="margin-right: 8px;">
+
+    <!-- Button Lưu -->
+    <button [disabled] = "isLoading" type='submit' class='float-right ml-20' mat-button mat-raised-button color='primary'
+      (click)="doSaveOrUpdate()">Lưu
+    </button>
+
+    <!-- Button Đóng -->
+    <button  class='float-right ml-20' mat-button mat-raised-button color='secondary' mat-dialog-close>Đóng
+    </button>
+
+  </div>
+
+</mat-dialog-content>

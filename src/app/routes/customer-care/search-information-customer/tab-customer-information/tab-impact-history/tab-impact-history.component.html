@@ -1,0 +1,62 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <form [formGroup]="formSearchImpactHistory" class="form-field-full">
+      <br>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'info.action_date' | translate }}
+            </mat-label>
+            <mat-date-range-input [rangePicker]="picker3" (click)="picker3.open()">
+              <input matStartDate formControlName="startDate" #fromDateId maskDate
+                placeholder="{{ 'common.fromDate' | translate }}">
+              <input matEndDate formControlName="endDate" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                #endDateId>
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || endDateId.value" class="showclearDatePopup"
+              (click)="formSearchImpactHistory.controls.startDate.setValue(null);formSearchImpactHistory.controls.endDate.setValue(null); $event.stopPropagation()">
+              <mat-icon matDatepickerToggleIcon>close
+              </mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="picker3">
+            </mat-datepicker-toggle>
+            <mat-date-range-picker #picker3>
+            </mat-date-range-picker>
+            <mat-error
+              *ngIf="formSearchImpactHistory.get('startDate').errors?.required && formSearchImpactHistory.get('endDate').errors?.required">
+              {{ 'briefcase.err-create-date-requied' |
+              translate }}
+            </mat-error>
+            <mat-error
+              *ngIf="formSearchImpactHistory.get('startDate').errors?.required && !formSearchImpactHistory.get('endDate').errors?.required">
+              {{ 'briefcase.selectStartDate' | translate }}
+            </mat-error>
+            <mat-error
+              *ngIf="!formSearchImpactHistory.get('startDate').errors?.required && formSearchImpactHistory.get('endDate').errors?.required">
+              {{ 'briefcase.selectEndDate' | translate }}
+            </mat-error>
+            <mat-error *ngIf="formSearchImpactHistory.get('startDate').errors?.matStartDateInvalid">
+              {{ 'customer-care.search-information-customer.error_date' | translate
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="66" fxFlex.lt-sm="100 ">
+          <button (click)="exportExcelImpactHistory()" fxFlexAlign="end" mat-raised-button color="secondary">
+            {{ 'common.exportExcel' | translate }}
+          </button>
+          <button (click)="onSearch()" fxFlexAlign="end" mat-raised-button color="primary" class="ml10">
+            {{ 'common.button.search' | translate }}
+          </button>
+        </div>
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <common-list [headerTable]="'customer-care.search-information-customer.impact_history'"
+            [dataSource]="listImpactHistory" [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord"
+            [columns]="columns" [startRecord]="searchModel.startrecord" (page)="onPageChange($event)"
+            [pageIndex]="pageIndex">
+          </common-list>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

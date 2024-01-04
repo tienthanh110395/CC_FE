@@ -1,0 +1,6 @@
+<div class="matero-error-wrap">
+  <div class="matero-error-code">{{code}}</div>
+  <div class="matero-error-title" *ngIf="title">{{title | translate}}</div>
+  <div class="matero-error-message" *ngIf="message">{{message | translate}}</div>
+  <div><a mat-raised-button color="primary" routerLink="/">{{'common.back-home' | translate}}</a></div>
+</div>

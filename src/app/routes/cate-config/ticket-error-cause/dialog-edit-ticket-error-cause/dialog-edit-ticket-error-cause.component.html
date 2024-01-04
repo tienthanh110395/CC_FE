@@ -1,0 +1,135 @@
+<h2 mat-dialog-title>CẬP NHẬT NGUYÊN NHÂN LỖI</h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class="view-detail">
+  <form [formGroup]="form" class="form-field-full">
+
+    <!--    Row 1-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+
+      <!-- Cấp nguyên nhân lỗi -->
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>Cấp nguyên nhân lỗi <span class="required">*</span>
+          </mat-label>
+          <mat-select (selectionChange)="onChangeLevelReasonError($event)" formControlName="levelReasonError">
+            <mat-option>Chọn cấp nguyên nhân lỗi</mat-option>
+            <mat-option *ngFor="let item of lstLevelReasonError" [value]="item">
+              {{ item.label }}
+            </mat-option>
+          </mat-select>
+          <button matSuffix mat-icon-button type="button" class="btn-clear-drop"
+            (click)="form.controls.levelReasonError.setValue(null); $event.stopPropagation();">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <!-- Nguyên nhân lỗi -->
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>Nguyên nhân lỗi
+          </mat-label>
+          <input required maxlength="255" matInput placeholder="Tên nguyên nhân lỗi" formControlName="name"
+            autocomplete="off" />
+          <mat-error *ngIf="form.get('name').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('name').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button
+            (click)="form.controls.name.setValue(null); $event.stopPropagation()" class="showclear" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <!-- Mã nguyên nhân -->
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>Mã nguyên nhân <span class="required">*</span>
+          </mat-label>
+          <input matInput placeholder="Mã nguyên nhân lỗi" formControlName="code" autocomplete="off" />
+          <button mat-button matSuffix mat-icon-button
+            (click)="form.controls.code.setValue(null); $event.stopPropagation()" class="showclear" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <!--    Row 2-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid" class="row2">
+      <!-- Nguyên nhân lỗi cấp 1 -->
+      <div *ngIf="selectedReasonErrorLv=='level3' || selectedReasonErrorLv=='level2'" fxFlex="33.33" fxFlex.lt-sm="100"
+        [(ngModel)]="selectedLevel1" [disabled]="!selectedLevel1">
+        <mat-form-field appearance="outline">
+          <mat-label>Nguyên nhân lỗi cấp 1 <span class="required">*</span>
+          </mat-label>
+          <mat-select formControlName="parentId">
+            <mat-option>{{ 'common.default-select' | translate }}</mat-option>
+            <ng-container *ngFor="let item of lstTicketGenre">
+              <mat-option [value]="item.code">{{item.value}}</mat-option>
+            </ng-container>
+          </mat-select>
+          <button matSuffix mat-icon-button type="button" class="btn-clear-drop"
+            (click)="form.controls.form.setValue(null); $event.stopPropagation();">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <!-- Nguyên nhân lỗi cấp 2 -->
+      <div *ngIf="selectedReasonErrorLv=='level3'" fxFlex="33.33" fxFlex.lt-sm="100" [(ngModel)]="selectedLevel2"
+        [disabled]="!selectedLevel2">
+        <mat-form-field appearance="outline">
+          <mat-label>Nguyên nhân lỗi cấp 2 <span class="required">*</span>
+          </mat-label>
+          <mat-select formControlName="parentId">
+            <mat-option>{{ 'common.default-select' | translate }}</mat-option>
+            <ng-container *ngFor="let item of lstTicketGenre">
+              <mat-option [value]="item.code">{{item.value}}</mat-option>
+            </ng-container>
+          </mat-select>
+          <button matSuffix mat-icon-button type="button" class="btn-clear-drop"
+            (click)="form.controls.ticketGroup.setValue(null); $event.stopPropagation();">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <!--    Row 3-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid" class="row3">
+      <mat-form-field appearance="outline">
+        <mat-label>Mô tả</mat-label>
+        <textarea formControlName="description" type="text" trim="blur" matInput placeholder="Mô tả"></textarea>
+        <button mat-button matSuffix mat-icon-button
+          (click)="form.controls.description.setValue(null); $event.stopPropagation()" class="showclear" type="button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+  </form>
+
+  <!-- Form Action -->
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+    style="margin-right: 8px;">
+
+    <!-- Button Lưu -->
+    <button type="submit" class="float-right ml-20" mat-button mat-raised-button color="primary"
+      (click)="doSaveOrUpdate()">Lưu
+    </button>
+
+    <!-- Button Đóng -->
+    <button type="submit" class="float-right ml-20" mat-button mat-raised-button color="secondary" mat-dialog-close>Đóng
+    </button>
+
+  </div>
+
+</mat-dialog-content>

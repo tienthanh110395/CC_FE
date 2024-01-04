@@ -1,0 +1,167 @@
+<h2 mat-dialog-title>THÔNG TIN THÊM MỚI THỂ LOẠI PHẢN ÁNH</h2>
+<mat-dialog-content class="view-detail">
+  <!--  <div fxLayout='row wrap' fxLayoutGap='20px grid'>-->
+  <!--    <div fxFlex='100' fxFlex.lt-sm='100'>-->
+  <!--      <button type='submit' class='float-left ml-20' mat-button mat-raised-button-->
+  <!--              color='primary' (click)='onClickInsertRow()'>Thêm mới-->
+  <!--      </button>-->
+  <!--    </div>-->
+  <!--  </div>-->
+  <div class="form-field-full">
+    <div fxLayout="row wrap" class="mt-15">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <mat-accordion>
+          <div class="form-field-full">
+            <mat-card>
+              <crm-table #crmtable [dataSource]="dataSource.data"
+                         [totalRecord]="countTableType" [isLoading]="isLoading" [isPaging]="false" [showHeader]="false"
+                         [displayedColumns]="displayedColumnsType" [pageIndex]="pageIndex"
+                         (onPage)="onPageChange($event)">
+                <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+                  <ng-container matColumnDef="{{ item.field }}" *ngSwitchDefault>
+                    <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                    <td mat-cell *matCellDef="let row">
+                      {{ row[item.field] }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="{{ item.field }}" *ngSwitchCase="'orderNumber'">
+                    <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                    <td mat-cell *matCellDef="let row; let i = dataIndex" class="ui-text-center">
+                      {{  i + 1}}
+                    </td>
+                  </ng-container>
+                  <!-- Tác động -->
+                  <ng-container matColumnDef="action" *ngSwitchCase="'action'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'common.action' | translate}}</th>
+                    <td mat-cell *matCellDef="let row; let i = dataIndex" class="ui-text-center"
+                        style="padding-left:0px;">
+                      <button mat-icon-button [disabled]="">
+                        <mat-icon color="warn" (click)="deleteRow(row)"
+                                  matTooltip="{{'common.button.delete' | translate}}">
+                          delete
+                        </mat-icon>
+                      </button>
+                      <button mat-icon-button class="button-add" [disabled]="!row.ticketTypeCode || !row.ticketTypeName"
+                              *ngIf="i == lastIndex">
+                        <mat-icon color="black" (click)="doAddRow(row)" style="cursor: pointer;"
+                                  matTooltip="{{'common.button.insert' | translate}}">
+                          add
+                        </mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+                  <!--                  nhóm phản ánh-->
+                  <ng-container matColumnDef="ticketGroup" *ngSwitchCase="'ticketGroup'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'cateConfig.ticket-genre.table.ticketGroup' | translate}}
+                      <span class="required">*</span>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                      <mat-form-field class="mat-form-field-appearance-outline1" appearance="outline">
+<!--                        <mat-select [(ngModel)]="row.ticketGroup">-->
+<!--                          <mat-option *ngFor="let item of lstTicketGroup" [value]="item.value"-->
+<!--                                      (click)="onChangGenre(item.value)">{{ item.label }}-->
+<!--                          </mat-option>-->
+<!--                        </mat-select>-->
+                        <mtx-select [items]="lstTicketGroup" bindLabel="label" bindValue="value" [multiple]="false"
+                                    [(ngModel)]="row.ticketGroup" appendTo="body"
+                                    [notFoundText]="'common.notFound' | translate">
+                          <mat-option *ngFor="let item of lstTicketGroup" [value]="item.value"
+                                      (click)="onChangGenre(item.value)">{{ item.label }}
+                          </mat-option>
+                        </mtx-select>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <!--                  Tên thể loại-->
+                  <ng-container matColumnDef="ticketTypeName" *ngSwitchCase="'ticketTypeName'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'cateConfig.ticket-genre.table.ticketGenreName' | translate}}
+                      <span class="required">*</span>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                      <mat-form-field class="mat-form-field-appearance-outline1" appearance="outline">
+                        <input matInput [(ngModel)]="row.ticketTypeName" autocomplete="off" id="ticketTypeName"
+                               name="ticketTypeName" required maxlength="255" #ticketTypeName="ngModel"
+                               (ngModelChange)="onInputChangeTypeName(row)" />
+                        <mat-error *ngIf="ticketTypeName.invalid && (ticketTypeName.dirty || ticketTypeName.touched)">
+                          <mat-error *ngIf="ticketTypeName.errors?.required">
+                            Vui lòng nhập thông tin tên thể loại phán ánh
+                          </mat-error>
+
+                          <mat-error *ngIf="ticketTypeName.errors?.maxlength">
+                            Tên thể loại phán ánh không được dài hơn 255 kí tự
+                          </mat-error>
+                        </mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <!--                  Mã thể loại-->
+                  <ng-container matColumnDef="ticketTypeCode" *ngSwitchCase="'ticketTypeCode'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'cateConfig.ticket-genre.table.ticketGenreCode' | translate}}
+                      <span class="required">*</span>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                      <mat-form-field class="mat-form-field-appearance-outline1" appearance="outline">
+                        <input matInput [(ngModel)]="row.ticketTypeCode" autocomplete="off"
+                               id="ticketTypeCode"
+                               name="ticketTypeCode" required maxlength="32" #ticketTypeCode="ngModel"
+                               (ngModelChange)="onChangeTitle()" />
+                        <mat-error *ngIf="ticketTypeCode.invalid && (ticketTypeCode.dirty || ticketTypeCode.touched)">
+                          <mat-error *ngIf="ticketTypeCode.errors?.required">
+                            Vui lòng nhập thông tin mã thể loại phán ánh
+                          </mat-error>
+
+                          <mat-error *ngIf="ticketTypeCode.errors?.maxlength">
+                            Mã thể loại phán ánh không được dài hơn 32 kí tự
+                          </mat-error>
+
+                        </mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="description" *ngSwitchCase="'description'">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{'cateConfig.ticket-genre.table.ticketDes' | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                      <mat-form-field class="mat-form-field-appearance-outline2" appearance="outline">
+                        <textarea matInput [(ngModel)]="row.description"></textarea>
+                        <!--                        <textarea matInput-->
+                        <!--                                  cdkTextareaAutosize-->
+                        <!--                                  #autosize="cdkTextareaAutosize"-->
+                        <!--                                  cdkAutosizeMinRows="1"-->
+                        <!--                                  cdkAutosizeMaxRows="5"></textarea>-->
+                        <mat-error *ngIf="formSearch.get('description').errors?.maxlength">
+                          {{'cateConfig.validators.maxLength-1024' | translate}}
+                        </mat-error>
+                      </mat-form-field>
+                    </td>
+                  </ng-container>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </crm-table>
+            </mat-card>
+          </div>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+  <!-- Form Action -->
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+       style="margin-right: 8px;">
+
+    <!-- Button Lưu -->
+    <button type="submit" [disabled] = "isLoading" (click)="doSave()" class="float-right ml-20" mat-button mat-raised-button color="primary">
+      {{'cateConfig.ticket-genre.dialog.btnSave' | translate}}
+    </button>
+
+    <!-- Button Đóng -->
+    <button type="submit" class="float-right ml-20" mat-button mat-raised-button color="secondary" mat-dialog-close>
+      {{'cateConfig.ticket-genre.dialog.btnClose' | translate}}
+    </button>
+  </div>
+</mat-dialog-content>

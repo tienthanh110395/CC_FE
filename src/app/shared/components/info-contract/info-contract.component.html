@@ -1,0 +1,241 @@
+<div class="form-field-full readonly">
+  <mat-panel-title>
+    <b> {{ 'contract.addressNotify' | translate }}</b>
+  </mat-panel-title>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'customer.fullName' | translate
+          }}</mat-label>
+        <input matInput [(ngModel)]="dataModel.noticeName" readonly />
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'info.phoneNumber' | translate
+          }}</mat-label>
+        <input matInput [(ngModel)]="dataModel.noticePhoneNumber" readonly />
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'Email' | translate
+          }}</mat-label>
+        <input matInput [(ngModel)]="dataModel.noticeEmail" readonly />
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'customer.address' | translate
+          }}</mat-label>
+        <input matInput [(ngModel)]="dataModel.noticeAreaName" readonly />
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-panel-title>
+    <b> {{ 'contract.paymentAddress' | translate }}</b>
+  </mat-panel-title>
+  <mat-panel-title>
+    <b><i>{{ 'contract.linkAccount' | translate }}</i></b>
+  </mat-panel-title>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'contract.accountType' | translate
+          }}</mat-label>
+        <input matInput [(ngModel)]="data.methodRecharge" readonly />
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'contract.bankName' | translate }}</mat-label>
+        <input matInput [(ngModel)]="data.accountBank" readonly />
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-checkbox disabled [(ngModel)]="data.isAuthorAccount">{{ 'contract.isAuthorAccount' | translate }}
+      </mat-checkbox>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'contract.accountNumber' | translate
+          }}</mat-label>
+        <input matInput [(ngModel)]="dataModel.accountNumber" readonly />
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'contract.accountOwner' | translate
+          }}</mat-label>
+        <input matInput [(ngModel)]="dataModel.accountOwner" readonly />
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-panel-title>
+    <b><i>{{ 'contract.defaultAccount' | translate }}</i></b>
+  </mat-panel-title>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          'contract.accountBalance' | translate
+          }}</mat-label>
+        <input matInput [value]="data.balance" readonly />
+      </mat-form-field>
+    </div>
+    <div fxFlex="33.33" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'contract.availableBalance' | translate }}</mat-label>
+        <input matInput [value]="data.balance" readonly />
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-panel-title>
+    <b>{{ 'contract.registeService' | translate }}</b>
+  </mat-panel-title>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="50" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline" floatLabel="always" [ngClass.xs]="'hack-height-radio'">
+        <mat-label>{{'contract.packageRegister'
+          | translate}}</mat-label>
+        <input matInput style="height: 0px;" />
+        <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl" style="height: 10px;">
+          <!-- <mat-radio-group class="font-register-service" disabled>
+            <mat-radio-button style="margin-right:20px" [checked]="dataModel.payCharge + '' === '1'">
+              {{ 'contract.prepaid' | translate }}
+            </mat-radio-button>
+            <mat-radio-button [checked]="dataModel.payCharge + '' !== '1'">
+              {{ 'contract.postpaid' | translate }}</mat-radio-button>
+          </mat-radio-group> -->
+          <mat-radio-group class="font-register-service" [(ngModel)]="dataModel.payCharge" disabled>
+            <mat-radio-button class="fix__disable mr-20" value="1">
+              {{ 'contract.prepaid' | translate }}</mat-radio-button>
+            <mat-radio-button class="fix__disable" value="2">
+              {{ 'contract.postpaid' | translate }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </mat-form-field>
+    </div>
+    <div fxFlex="50" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline" floatLabel="always" [ngClass.xs]="'hack-height-radio'">
+        <mat-label>{{'contract.invoiceCycle'
+          | translate}}</mat-label>
+        <input matInput style="height: 0px;" />
+        <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl" style="height: 10px;">
+          <!-- <mat-radio-group class="font-register-service" disabled>
+            <mat-radio-button style="margin-right:20px" [checked]="dataModel.billCycle + '' === '1'">
+              {{ 'contract.byTimes' | translate }}
+            </mat-radio-button>
+            <mat-radio-button [checked]="dataModel.billCycle + '' !== '1'">
+              {{ 'contract.byMonth' | translate }}</mat-radio-button>
+          </mat-radio-group> -->
+          <mat-radio-group class="font-register-service" [(ngModel)]="dataModel.billCycle" disabled>
+            <mat-radio-button value="1" class="fix__disable mr-20">
+              {{ 'contract.byTimes' | translate }}</mat-radio-button>
+            <mat-radio-button class="fix__disable mr-20" value="2">
+              {{ 'contract.byDay' | translate }}
+            </mat-radio-button>
+            <mat-radio-button class="fix__disable " value="3">
+              {{ 'contract.byMonth' | translate }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxLayoutGap="20px grid" [ngStyle.xs]="'padding-bottom:20px'">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-form-field appearance="outline" floatLabel="always" [ngClass.xs]="'hack-height-checkbox'">
+        <mat-label>{{'contract.receiveNotify'
+          | translate}}</mat-label>
+        <input matInput style="height: 0px;" />
+        <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl
+              font-register-service" style="height: 10px;">
+          <mat-checkbox style="margin-right:20px" [checked]="dataModel.emailNotification + '' === '1'" disabled>
+            Email
+          </mat-checkbox>
+          <mat-checkbox style="margin-right:20px" [checked]="dataModel.pushNotification + '' === '1'" disabled>
+            {{ 'contract.viaNotify' |
+            translate }}</mat-checkbox>
+          <mat-checkbox style="margin-right:20px" [checked]="dataModel.smsNotification + '' === '1'" disabled>
+            {{ 'contract.sms' |
+            translate }}</mat-checkbox>
+          <mat-checkbox style="margin-right:20px" [checked]="dataModel.smsRenew + '' === '1'" disabled>
+            {{ 'contract.extendSMS' |
+            translate }}</mat-checkbox>
+        </div>
+      </mat-form-field>
+    </div>
+  </div>
+  <div *ngIf="!dataModel.hiddenInfoContractPerSon">
+    <mat-panel-title>
+      <b>{{ 'contract.contracting_person_info' | translate }}</b>
+    </mat-panel-title>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            'customer-care.search-information-customer.user_sign' | translate
+            }}</mat-label>
+          <input matInput [(ngModel)]="dataModel.signName" readonly />
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            'customer-care.search-information-customer.date_sign' | translate
+            }}</mat-label>
+          <input matInput [(ngModel)]="dataModel.signDate" readonly />
+        </mat-form-field>
+      </div>
+      <!-- <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{
+                'customer.gender' | translate
+                }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.gender" readonly />
+            </mat-form-field>
+          </div> -->
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            'customer-care.search-information-customer.effective_date' | translate
+            }}</mat-label>
+          <input matInput [(ngModel)]="dataModel.effDate" readonly />
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            'customer-care.search-information-customer.expiration_date' | translate
+            }}</mat-label>
+          <input matInput [(ngModel)]="dataModel.expDate" readonly />
+        </mat-form-field>
+      </div>
+      <!-- <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{
+                'document.place' | translate
+                }}</mat-label>
+              <input matInput [(ngModel)]="dataModel.placeOfIssue" readonly />
+            </mat-form-field>
+          </div> -->
+    </div>
+  </div>
+</div>
+<!-- </mat-expansion-panel>
+</mat-accordion> -->

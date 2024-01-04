@@ -1,0 +1,162 @@
+<div *ngIf="hasPermission(permissionApp.CC_CUSTOMER_03)">
+  <page-header></page-header>
+  <form [formGroup]="formSearch" [hidden]="isEdit">
+    <div fxLayout="row wrap">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ 'common.title' | translate | uppercase }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="form-field-full">
+              <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                <!-- row 1 start -->
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{'customer-care.search-process.createTime' | translate}}</mat-label>
+                    <mat-date-range-input [rangePicker]="receiveTimePicker" (click)="receiveTimePicker.open()">
+                      <input matStartDate formControlName="startReceiveDate" #receiveTimeFromId maskDate
+                        placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+                      <input matEndDate formControlName="endReceiveDate" maskDate
+                        placeholder="{{ 'common.endDate' | translate }}" #receiveTimeToId (keyup.enter)="onSearch()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix *ngIf="receiveTimeFromId.value || receiveTimeToId.value"
+                      class="showclearDatePopup"
+                      (click)="formSearch.controls.startReceiveDate.setValue(null);formSearch.controls.endReceiveDate.setValue(null); $event.stopPropagation()">
+                      <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix [for]="receiveTimePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+                    <mat-error *ngIf="checkFormatDate(receiveTimeFromId.value)">
+                      {{ 'common.invalidStartDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="checkFormatDate(receiveTimeToId.value)">
+                      {{ 'common.invalidEndDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="formSearch.controls.startReceiveDate.hasError('matStartDateInvalid')">
+                      {{ 'common.invalidFromDate' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{'customer-care.search-cc.processTime' | translate}}</mat-label>
+                    <mat-date-range-input [rangePicker]="processTimePicker" (click)="processTimePicker.open()">
+                      <input matStartDate formControlName="startProcessDate" #processTimeFromId maskDate
+                        placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+                      <input matEndDate formControlName="endProcessDate" maskDate
+                        placeholder="{{ 'common.endDate' | translate }}" #processTimeToId (keyup.enter)="onSearch()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix *ngIf="processTimeFromId.value || processTimeToId.value"
+                      class="showclearDatePopup"
+                      (click)="formSearch.controls.startProcessDate.setValue(null);formSearch.controls.endProcessDate.setValue(null); $event.stopPropagation()">
+                      <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix [for]="processTimePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #processTimePicker></mat-date-range-picker>
+                    <mat-error *ngIf="checkFormatDate(processTimeFromId.value)">
+                      {{ 'common.invalidStartDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="checkFormatDate(processTimeToId.value)">
+                      {{ 'common.invalidEndDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="formSearch.controls.startProcessDate.hasError('matStartDateInvalid')">
+                      {{ 'common.invalidFromDate' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline" class="common-field">
+                    <mat-label>{{ 'customer-care.search-cc.ticketCode' | translate }}
+                    </mat-label>
+                    <input matInput formControlName="ticketId" autoFocus="ticketId" autocomplete="off" />
+                    <button mat-button *ngIf="formSearch.controls.ticketId.value" class="showclear" matSuffix
+                      mat-icon-button (click)="formSearch.controls.ticketId.setValue(''); $event.stopPropagation()"
+                      type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-process.status' | translate }}</mat-label>
+                    <mat-select formControlName="ticketStatus" multiple>
+                      <mat-select-trigger>
+                        {{ getLabelInList(formSearch.controls.ticketStatus.value) }}
+                      </mat-select-trigger>
+                      <mat-option #allStatus *ngIf="statusList.length > 0" (click)="onChangeStatusAll()" [value]="-1">
+                        {{ 'common.all' | translate }}
+                      </mat-option>
+                      <mat-option *ngFor="let status of statusList" [value]="status" (click)="onChangeStatusOne()">
+                        {{ status.label }}
+                      </mat-option>
+                    </mat-select>
+                    <button *ngIf="formSearch.controls.ticketStatus.value" matSuffix mat-icon-button type="button"
+                      class="btn-clear-drop"
+                      (click)="formSearch.controls.ticketStatus.setValue(null); $event.stopPropagation();">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <!-- row 1 end -->
+                <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: right;">
+                  <button mat-raised-button color="primary" type="submit" (click)="onSearch()"
+                    [disabled]="formSearch.invalid">
+                    {{'common.button.search' | translate}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-card>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: right;">
+                <button mat-raised-button color="primary" (click)="exportFile()" style="margin-right: 8px;">
+                  {{ 'common.exportExcel' | translate }}
+                </button>
+              </div>
+            </div>
+            <common-list [headerTable]="'customer-care.search-cc.ticketList'" [dataSource]="dataModel.dataSource"
+              #tableTicket [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns"
+              (page)="onPageChange($event)" [pageIndex]="pageIndex"
+              [startRecord]="formSearch.controls.startrecord.value" [widthTable]="'4000px'">
+              <ng-template vtsTemplate='actionCustom' let-row>
+                <button mat-icon-button color="primary" (click)="handleProcessAction(row, 'process')"
+                  matTooltip="{{ 'customer-care.search-process.process' | translate }}">
+                  <mat-icon>settings</mat-icon>
+                </button>
+              </ng-template>
+              <ng-template vtsTemplate='ticketStatus' let-item>
+                <span
+                  *ngIf="item.ticketStatus == 1">{{'customer-care.dropdown.ticketAssignStatus.new'|translate}}</span>
+                <span
+                  *ngIf="item.ticketStatus == 2">{{'customer-care.dropdown.ticketAssignStatus.receive'|translate}}</span>
+                <span
+                  *ngIf="item.ticketStatus == 3">{{'customer-care.dropdown.ticketAssignStatus.conclude'|translate}}</span>
+                <span
+                  *ngIf="item.ticketStatus == 4">{{'customer-care.dropdown.ticketAssignStatus.complete'|translate}}</span>
+                <span
+                  *ngIf="item.ticketStatus == 5">{{'customer-care.dropdown.ticketAssignStatus.close'|translate}}</span>
+                <span
+                  *ngIf="item.ticketStatus == 6">{{'customer-care.dropdown.ticketAssignStatus.reject'|translate}}</span>
+                <span
+                  *ngIf="item.ticketStatus == 7">{{'customer-care.dropdown.ticketAssignStatus.cancel'|translate}}</span>
+              </ng-template>
+            </common-list>
+          </mat-card>
+        </mat-accordion>
+      </div>
+    </div>
+  </form>
+  <app-update-assign-process #updateProcess *ngIf="isEdit" [data]="objectEdit" (onChangeIsEdit)="changeIsEdit($event)"
+    (onSearch)="searchTicketAssign()">
+  </app-update-assign-process>
+</div>
+<div *ngIf="!hasPermission(permissionApp.CC_CUSTOMER_03)">
+  <error-code code="403" [title]="'common.invalid-permission-title'" [message]="'common.invalid-permission'">
+  </error-code>
+</div>

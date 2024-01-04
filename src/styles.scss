@@ -1,0 +1,189 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'styles/themes';
+@import 'styles/grid';
+@import 'styles/helpers';
+@import 'styles/plugins';
+@import 'styles/custom';
+@import 'photoviewer/dist/photoviewer.css';
+
+.mt-15 {
+  margin-top: 15px;
+}
+
+.mt-25 {
+  margin-top: 25px;
+}
+
+.mt-40 {
+  margin-top: 40px;
+}
+
+.over-hidden {
+  overflow: hidden !important;
+}
+
+.required {
+  color: red;
+}
+
+.float-right {
+  float: right;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.position-btn {
+  margin-top: 65px;
+  position: relative;
+  bottom: 45px;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+mat-error {
+  margin-top: 1px !important;
+}
+
+.orange-color {
+  color: #f48833;
+}
+
+.red-color {
+  color: red;
+}
+
+.green-color {
+  color: green;
+}
+
+th.mat-header-cell {
+  padding: 0px !important;
+  text-align: center !important;
+}
+
+.crm__table table th {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.radio-stl {
+  position: relative;
+  bottom: 30px;
+  left: 30px;
+}
+
+.font-register-service {
+  font-size: 12pt !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: rgba(0, 0, 0, 0.25);
+  min-height: 30px;
+  height: auto;
+}
+
+.ng-select.ng-select-disabled .ng-value {
+  color: rgba(0, 0, 0, .87) !important;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label {
+  color: #666 !important;
+}
+
+.mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+  color: rgba(0, 0, 0, .87) !important;
+}
+
+.toggle-size {
+  font-size: 36px;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.mb-10 {
+  margin-bottom: 10px !important;
+}
+
+.mr-10 {
+  margin-right: 10px !important;
+}
+
+.ml-20 {
+  margin-left: 20px !important;
+}
+
+.description {
+  float: left;
+  width: 100%;
+  white-space: pre-line;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+  text-align: left;
+  padding: 10px 8px;
+  font-family: Roboto, sans-serif;
+}
+
+.toggle-off-color {
+  color: #00c853;
+}
+
+.toggle_on {
+  color: #f16e43;
+}
+
+.item-row-number {
+  width: 40px;
+  text-align: center;
+}
+
+.item-row-checkbox {
+  width: 30px;
+  text-align: center;
+}
+
+.item-row-action {
+  width: 120px;
+  text-align: center;
+}
+
+.item-row-date {
+  width: 150px;
+}
+
+.item-row-status {
+  width: 100px;
+}
+
+.item-row-user {
+  width: 130px;
+}
+
+.item-row-code {
+  width: 200px;
+}
+
+.item-row-name {
+  width: 300px;
+}
+
+.item-row-description {
+  width: 400px;
+}
+
+.resize-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  // max-height: 30px;
+}
+
+.text_center {
+  text-align: center !important;
+}

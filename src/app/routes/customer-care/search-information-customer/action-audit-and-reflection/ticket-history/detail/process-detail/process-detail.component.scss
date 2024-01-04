@@ -1,0 +1,30 @@
+.radio-stl {
+    position: absolute;
+    top: 0px;
+    left: 30px;
+  }
+:host::ng-deep {
+    .hack-height-radio.mat-form-field-appearance-outline .mat-form-field-outline {
+      height: 70px;
+    }
+    .hack-height-checkbox.mat-form-field-appearance-outline .mat-form-field-outline {
+      height: 130px;
+    }
+}
+.font-register-service {
+    font-size: 12pt !important;
+}
+.btn-delete-file {
+  vertical-align: middle;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.noRecored {
+    text-align: center;
+    padding: 10px;
+    display: block;
+    border-bottom: 1px solid #c9cdd2;
+    border-right: 1px solid #c9cdd2;
+    border-left: 1px solid #c9cdd2;
+    font-weight: 700;
+}

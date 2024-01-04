@@ -1,0 +1,29 @@
+<button mat-icon-button class="matero-toolbar-button button-language" [matMenuTriggerFor]="menu"
+  [ngSwitch]="langSelected">
+  <img src="assets/icons/ic_vietnam.png" *ngSwitchCase="'vi-VN'"
+    matTooltip="{{ 'common.current-language-vi' | translate }}" />
+  <img src="assets/icons/ic_UK.png" *ngSwitchCase="'en-US'"
+    matTooltip="{{ 'common.current-language-en' | translate }}" />
+</button>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item *ngFor="let lang of langs" (click)="useLanguage(lang.key)" [ngSwitch]="lang.key">
+    <mat-icon svgIcon="ic_TiengViet" *ngSwitchCase="'vi-VN'" matTooltip="{{ lang.tooltip | translate }}"
+      [matTooltipPosition]="'left'"></mat-icon>
+    <mat-icon svgIcon="ic_TiengAnh" *ngSwitchCase="'en-US'" matTooltip="{{ lang.tooltip | translate }}"
+      [matTooltipPosition]="'left'"></mat-icon>
+    <span matTooltip="{{ lang.tooltip | translate }}" [matTooltipPosition]="'left'"
+      [className]="langSelected === lang.key ? 'language-active' : ''">{{ lang.value | translate }}
+    </span>
+  </button>
+</mat-menu>
+<style>
+  img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .language-active {
+    color: #ff7b1f
+  }
+</style>

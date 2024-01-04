@@ -1,0 +1,395 @@
+<page-header></page-header>
+<div class="form-field-full">
+  <form [formGroup]="assignTicketForm" class="form-field-full">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'support-after-sale.merge-contract.title-search' | translate | uppercase}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketCode' | translate}}</mat-label>
+              <input matInput formControlName="ticketId" autocomplete="off" #ticketId autoFocus="ticketId" />
+              <button *ngIf="assignTicketForm.controls.ticketId.value?.length > 0" matSuffix mat-icon-button
+                type="button" class="btn-clear-drop"
+                (click)="assignTicketForm.controls.ticketId.setValue(null); $event.stopPropagation();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.contractNo' | translate}}</mat-label>
+              <input matInput formControlName="contractNos" autocomplete="off" />
+              <button *ngIf="assignTicketForm.controls.contractNos.value?.length > 0" matSuffix mat-icon-button
+                type="button" class="btn-clear-drop"
+                (click)="assignTicketForm.controls.contractNos.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv1();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv1' | translate }}</mat-label>
+              <mat-select formControlName="l1TicketTypeId" multiple>
+                <mat-select-trigger>
+                  {{ getLabelInList(assignTicketForm.controls.l1TicketTypeId.value) }}
+                </mat-select-trigger>
+                <mat-option #allTicketTypeLv1 *ngIf="ticketTypeLv1List.length > 0" (click)="onChangeTicketTypeLv1All()"
+                  [value]="-1">
+                  {{ 'common.all' | translate }}
+                </mat-option>
+                <mat-option *ngFor="let ticketTypeLv1 of ticketTypeLv1List" [value]="ticketTypeLv1"
+                  (click)="onChangeTicketTypeLv1One()">
+                  {{ ticketTypeLv1.label }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="assignTicketForm.controls.l1TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                type="button" class="btn-clear-drop"
+                (click)="assignTicketForm.controls.l1TicketTypeId.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv1();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv2' | translate }}</mat-label>
+              <mat-select formControlName="l2TicketTypeId" multiple>
+                <mat-select-trigger>
+                  {{ getLabelInList(assignTicketForm.controls.l2TicketTypeId.value) }}
+                </mat-select-trigger>
+                <mat-option #allTicketTypeLv2 *ngIf="ticketTypeLv2List.length > 0" (click)="onChangeTicketTypeLv2All()"
+                  [value]="-1">
+                  {{ 'common.all' | translate }}
+                </mat-option>
+                <mat-option *ngFor="let ticketTypeLv2 of ticketTypeLv2List" [value]="ticketTypeLv2"
+                  (click)="onChangeTicketTypeLv2One()">
+                  {{ ticketTypeLv2.label }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="assignTicketForm.controls.l2TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                type="button" class="btn-clear-drop"
+                (click)="assignTicketForm.controls.l2TicketTypeId.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv2();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv3' | translate }}</mat-label>
+              <mat-select formControlName="l3TicketTypeId" multiple>
+                <mat-select-trigger>
+                  {{ getLabelInList(assignTicketForm.controls.l3TicketTypeId.value) }}
+                </mat-select-trigger>
+                <mat-option #allTicketTypeLv3 *ngIf="ticketTypeLv3List.length > 0" (click)="onChangeTicketTypeLv3All()"
+                  [value]="-1">
+                  {{ 'common.all' | translate }}
+                </mat-option>
+                <mat-option *ngFor="let ticketTypeLv3 of ticketTypeLv3List" [value]="ticketTypeLv3"
+                  (click)="onChangeTicketTypeLv3One()">
+                  {{ ticketTypeLv3.label }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="assignTicketForm.controls.l3TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                type="button" class="btn-clear-drop"
+                (click)="assignTicketForm.controls.l3TicketTypeId.setValue(null); $event.stopPropagation();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.receiveTime' | translate}}</mat-label>
+              <mat-date-range-input [rangePicker]="receiveTimePicker" (click)="receiveTimePicker.open()">
+                <input matStartDate formControlName="fromDate" #receiveTimeFromId maskDate
+                  placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+                <input matEndDate formControlName="toDate" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                  #receiveTimeToId (keyup.enter)="onSearch()">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix *ngIf="receiveTimeFromId.value || receiveTimeToId.value"
+                class="showclearDatePopup"
+                (click)="assignTicketForm.controls.fromDate.setValue(null);assignTicketForm.controls.toDate.setValue(null); $event.stopPropagation()">
+                <mat-icon matDatepickerToggleIcon>close</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="receiveTimePicker"></mat-datepicker-toggle>
+              <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+              <mat-error *ngIf="checkFormatDate(receiveTimeFromId.value)">
+                {{ 'common.invalidStartDate' | translate }}
+              </mat-error>
+              <mat-error *ngIf="checkFormatDate(receiveTimeToId.value)">
+                {{ 'common.invalidEndDate' | translate }}
+              </mat-error>
+              <mat-error *ngIf="assignTicketForm.controls.fromDate.hasError('matStartDateInvalid')">
+                {{ 'common.invalidFromDate' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketStatus' | translate }}</mat-label>
+              <mat-select formControlName="status" multiple>
+                <mat-select-trigger>
+                  {{ getLabelInList(assignTicketForm.controls.status.value) }}
+                </mat-select-trigger>
+                <mat-option #allStatus *ngIf="ticketStatusList.length > 0" (click)="onChangeStatusAll()" [value]="-1">
+                  {{ 'common.all' | translate }}
+                </mat-option>
+                <mat-option *ngFor="let ticketStatus of ticketStatusList" [value]="ticketStatus"
+                  (click)="onChangeStatusOne()">
+                  {{ ticketStatus.label }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="assignTicketForm.controls.status.value?.length > 0" matSuffix mat-icon-button type="button"
+                class="btn-clear-drop"
+                (click)="assignTicketForm.controls.status.setValue(null); $event.stopPropagation();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.priority' | translate }}</mat-label>
+              <mat-select formControlName="priorityId" multiple>
+                <mat-select-trigger>
+                  {{ getLabelInList(assignTicketForm.controls.priorityId.value) }}
+                </mat-select-trigger>
+                <mat-option #allPriority *ngIf="priorityList.length > 0" (click)="onChangePriorityAll()" [value]="-1">
+                  {{ 'common.all' | translate }}
+                </mat-option>
+                <mat-option *ngFor="let priority of priorityList" [value]="priority" (click)="onChangePriorityOne()">
+                  {{ priority.label }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="assignTicketForm.controls.priorityId.value?.length > 0" matSuffix mat-icon-button
+                type="button" class="btn-clear-drop"
+                (click)="assignTicketForm.controls.priorityId.setValue(null); $event.stopPropagation();">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-card>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: right;">
+            <button mat-raised-button color="primary" style="margin-right: 8px;" (click)="onSearch()">
+              {{ 'common.button.search' | translate }}
+            </button>
+            <button mat-raised-button color="primary" style="margin-right: 8px;" (click)="exportExcelTicketNotAssign()">
+              {{ 'common.exportExcel' | translate }}
+            </button>
+          </div>
+        </div>
+        <crm-table [isLoading]="isLoading" [headerTable]="'customer-care.search-cc.ticketList'"
+          [totalRecord]="totalRecord" [showHeader]="true" [isPaging]="true" [dataSource]="dataModel.dataSource"
+          [isLoading]="isLoading" (onPage)="onPageChange($event)" [displayedColumns]="displayedColumns"
+          [pageIndex]="pageIndex" [startRecord]="assignTicketForm.controls.startrecord.value" #assignTicket>
+          <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+              <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let row;">
+                {{row[item.field]}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'">
+              <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let row;let i = dataIndex" class="ui-text-center">
+                {{i+1 + assignTicketForm.value.startrecord}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'priorityId'">
+              <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center">
+                <span *ngIf="row.priorityId == statusPriorty.NORMAL">{{ 'customer-care.dropdown.priority.normal' |
+                  translate
+                  }}</span>
+                <span *ngIf="row.priorityId == statusPriorty.HOT">{{ 'customer-care.dropdown.priority.hot' | translate
+                  }}</span>
+                <span *ngIf="row.priorityId == statusPriorty.VIP">{{ 'customer-care.dropdown.priority.vip' | translate
+                  }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'status'">
+              <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center">
+                <span *ngIf="row.status == statusTicket.TAO_MOI">{{ 'customer-care.dropdown.ticketStatus.new' |
+                  translate
+                  }}</span>
+                <span *ngIf="row.status == statusTicket.DANG_XU_LY">{{ 'customer-care.dropdown.ticketStatus.process' |
+                  translate
+                  }}</span>
+                <span *ngIf="row.status == statusTicket.XU_LY_XONG">{{
+                  'customer-care.dropdown.ticketStatus.doneProcess' |
+                  translate
+                  }}</span>
+                <span *ngIf="row.status == statusTicket.DONG">{{ 'customer-care.dropdown.ticketStatus.close' |
+                  translate
+                  }}</span>
+                <span *ngIf="row.status == statusTicket.HUY">{{ 'customer-care.dropdown.ticketStatus.cancel' |
+                  translate
+                  }}</span>
+                <span *ngIf="row.status == statusTicket.THEO_DOI">{{ 'customer-care.dropdown.ticketStatus.follow' |
+                  translate
+                  }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()" [disabled]="checkCheckBox"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row;" class="ui-text-center">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? checkChange(row) : null"
+                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)" [disabled]="checkCheckBox">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+          </ng-container>
+        </crm-table>
+        <b>
+          <div
+            innerHTML="{{ 'customer-management.total-ticket-assign-handle' | translate }} {{this.selection.selected?.length}}">
+          </div>
+        </b>
+      </mat-card>
+    </mat-accordion>
+  </form>
+  <form [formGroup]="userHandleForm" class="form-field-full">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true"><br>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-management.account-email-phone' | translate }}</mat-label>
+              <input matInput [matAutocomplete]="auto" formControlName='keySearch'
+                placeholder="{{ 'customer-management.enter-account-email-phone' | translate }}">
+              <button mat-button *ngIf="userHandleForm.controls.keySearch.value" class="showclear" matSuffix
+                mat-icon-button (click)="userHandleForm.controls.keySearch.setValue(null); $event.stopPropagation()"
+                type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error>{{ 'support-after-sale.transfer-own-vehicle.paper-or-phone' | translate }} </mat-error>
+            </mat-form-field>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="getOptionText"
+              (optionSelected)="onSelectedUser($event)">
+              <mat-option *ngIf="isLoadingAuto">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </mat-option>
+              <ng-container *ngIf="!isLoadingAuto">
+                <mat-option *ngFor="let state of filterUserHandle" [value]="state">
+                  <div innerHTML="{{ state?.staffName | highlight: userHandleForm.controls.keySearch.value }}
+                {{state.siteName| highlight: userHandleForm.controls.keySearch.value }}">
+                  </div>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </div>
+        </div>
+        <crm-table #userHandle [isLoading]="isLoading" [headerTable]="'customer-management.list-user-handle'"
+          [dataSource]="listUserHandle" [displayedColumns]="displayedColumnsUserHandle" [isPaging]="true"
+          (onPage)="onPageChangeUserHandle($event)" [showHeader]="true" [pageIndex]="pageIndex"
+          [totalRecord]="totalRecordUserHandle">
+          <ng-container *ngFor="let item of columnsUserHandle; let rowIndex = dataIndex" [ngSwitch]="item.field">
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+              <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let row;">
+                {{row[item.field]}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumberUserHandle'">
+              <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let row;let i = dataIndex" class="ui-text-center">
+                {{i+1}}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+              <th mat-header-cell *matHeaderCellDef>{{item.i18n | translate}}</th>
+              <td mat-cell *matCellDef="let i = dataIndex" class="ui-text-center">
+                <button mat-icon-button color="primary" (click)="deleteUserHandle(i)">
+                  <mat-icon class="mat-18">delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+          </ng-container>
+        </crm-table>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+  <form [formGroup]="assignReflectForm" class="form-field-full">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'customer-management.assign-ticket' | translate | uppercase}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-management.choose-record' | translate}}</mat-label>
+              <input matInput formControlName="sttTo" type="number" (input)="validCheckbox($event.target.value)" />
+              <button mat-button *ngIf="assignReflectForm.controls.sttTo.value" class="showclear" matSuffix
+                mat-icon-button type="button"
+                (click)="assignReflectForm.controls.sttTo.setValue(null); $event.stopPropagation(); validCheckbox($event.target.value)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-management.choose-next-record' | translate}}</mat-label>
+              <input matInput formControlName="sttFrom" type="number" (input)="validCheckbox($event.target.value)" />
+              <button mat-button *ngIf="assignReflectForm.controls.sttFrom.value" class="showclear" matSuffix
+                mat-icon-button type="button"
+                (click)="assignReflectForm.controls.sttFrom.setValue(null); $event.stopPropagation(); validCheckbox($event.target.value)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div fxFlex=" 25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-information-customer.action' | translate}}</mat-label>
+              <mtx-select formControlName="action" [items]="actionList" bindLabel="label" bindValue="value"
+                [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                [searchable]="actionList?.length>10">
+              </mtx-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-management.work-division' | translate }} <span class="required">*</span>
+              </mat-label>
+              <mtx-select formControlName="assignType" [items]="assignType" bindLabel="label" bindValue="value"
+                [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                [searchable]="assignType?.length>10">
+              </mtx-select>
+              <mat-error *ngIf="assignReflectForm.get('assignType').errors?.required">
+                {{'customer-management.valid-select-assign-type' | translate}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-checkbox formControlName="isSms">{{ 'customer-management.send-sms-assign' | translate }}
+            </mat-checkbox>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: center;">
+        <button mat-raised-button color="primary" style="margin-right: 8px;" (click)="assignHandleReflect()"
+          [disabled]="assignReflectForm.invalid">
+          <!-- selection.selected.length == 0 -->
+          {{ 'customer-management.assign-perform' | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

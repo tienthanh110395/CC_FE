@@ -1,0 +1,83 @@
+<div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+       <form [formGroup]="formSearchAccountHistory" class="form-field-full">
+          <br>
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+             <div fxFlex="33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                   <mat-label>{{ 'customer-care.search-information-customer.date_update_start_end' | translate }}
+                   </mat-label>
+                   <mat-date-range-input [rangePicker]="picker4"
+                   (click)="picker4.open()">
+                   <input matStartDate formControlName="startDate"
+                      #fromDateId maskDate
+                      placeholder="{{ 'common.fromDate' | translate }}">
+                   <input matEndDate formControlName="endDate"
+                      maskDate
+                      placeholder="{{ 'common.endDate' | translate }}"
+                      #endDateId>
+                   </mat-date-range-input>
+                   <mat-datepicker-toggle matSuffix
+                   *ngIf="fromDateId.value || endDateId.value"
+                   class="showclearDatePopup"
+                   (click)="formSearchAccountHistory.controls.startDate.setValue(null);formSearchAccountHistory.controls.endDate.setValue(null); $event.stopPropagation()">
+                   <mat-icon matDatepickerToggleIcon>close
+                   </mat-icon>
+                   </mat-datepicker-toggle>
+                   <mat-datepicker-toggle matSuffix [for]="picker4">
+                   </mat-datepicker-toggle>
+                   <mat-date-range-picker #picker4>
+                   </mat-date-range-picker>
+                   <mat-error
+                      *ngIf="formSearchAccountHistory.get('startDate').errors?.required && formSearchAccountHistory.get('endDate').errors?.required">
+                      {{ 'briefcase.err-create-date-requied' |
+                      translate }}
+                   </mat-error>
+                   <mat-error
+                      *ngIf="formSearchAccountHistory.get('startDate').errors?.required && !formSearchAccountHistory.get('endDate').errors?.required">
+                      {{ 'briefcase.selectStartDate' | translate }}
+                   </mat-error>
+                   <mat-error
+                      *ngIf="!formSearchAccountHistory.get('startDate').errors?.required && formSearchAccountHistory.get('endDate').errors?.required">
+                      {{ 'briefcase.selectEndDate' | translate }}
+                   </mat-error>
+                   <mat-error
+                      *ngIf="formSearchAccountHistory.get('startDate').errors?.matStartDateInvalid">
+                            {{ 'customer-care.search-information-customer.error_date' | translate
+                      }}
+                   </mat-error>
+                </mat-form-field>
+             </div>
+             <div fxFlex="33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                   <mat-label>{{ 'customer-care.search-information-customer.type_update' | translate }}</mat-label>
+                   <mat-select formControlName="typeAccount">
+                     
+                   </mat-select>
+                </mat-form-field>
+             </div>
+             <div fxFlex="33" fxFlex.lt-sm="100">
+                <button  style="float: right; " mat-raised-button
+                   color="primary">
+                   {{ 'common.button.search' | translate }}
+                </button>
+                <button style="float: right; margin-right: 5px;"
+                   mat-raised-button color="secondary">
+                   {{ 'common.exportExcel' | translate }}
+                </button>
+             </div>
+             <div fxFlex="100" fxFlex.lt-sm="100">
+                <common-list
+                [headerTable]="'customer-care.search-information-customer.history_account'"
+                [dataSource]="dataModel.dataSource"
+                [isLoading]="isLoading" [isPaging]="true"
+                [totalRecord]="totalRecord" [columns]="columns4"
+                [selectionMode]="selectionMode"
+                (page)="onPageChange($event)"
+                [pageIndex]="pageIndex">
+                </common-list>
+             </div>
+          </div>
+       </form>
+    </div>
+ </div>

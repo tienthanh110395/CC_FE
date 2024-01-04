@@ -1,0 +1,9 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>
+  {{ documentName | translate }}
+</h2>
+<mat-dialog-content class="mat-typography">
+  <img [src]="fileView" class="autofit" />
+</mat-dialog-content>

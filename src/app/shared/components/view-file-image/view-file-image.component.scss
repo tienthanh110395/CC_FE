@@ -1,0 +1,18 @@
+.lbl-style {
+  position: relative;
+  bottom: 10px;
+}
+
+.icon-close {
+  color: red;
+  float: right;
+  cursor: pointer;
+  position: relative;
+  bottom: 10px;
+  left: 10px;
+}
+.autofit {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}

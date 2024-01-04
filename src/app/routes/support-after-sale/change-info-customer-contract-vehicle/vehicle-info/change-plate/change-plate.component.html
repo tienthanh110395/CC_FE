@@ -1,0 +1,108 @@
+<div class="form-field-full">
+  <form [formGroup]="formChangePlate" class="form-field-full">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field required appearance="outline">
+          <mat-label>{{'customer-management.newVehicleForm.new-licensePlateType' | translate}} <span
+              class="required">*</span>
+          </mat-label>
+          <mat-select formControlName="plateType">
+            <ng-container *ngFor="let item of listOptionVehiclePlateTypes">
+              <mat-option [value]="item.id">{{item.value}}</mat-option>
+            </ng-container>
+          </mat-select>
+          <button *ngIf="formChangePlate.controls.plateType.value" matSuffix mat-icon-button type="button"
+            class="btn-clear-drop">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formChangePlate.get('plateType').errors?.required">
+            {{'customer-management.newVehicleForm.valid-licensePlateType' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field required appearance="outline">
+          <mat-label>{{'customer-management.newVehicleForm.new-licensePlates' | translate}} <span
+              class="required">*</span>
+          </mat-label>
+          <input matInput #plateNumber
+            placeholder="{{'customer-management.newVehicleForm.enter-new-licensePlates' | translate}}"
+            formControlName="plateNumber" maxlength="16" [value]="formChangePlate.value.plateNumber | uppercase" />
+          <button mat-button *ngIf="formChangePlate.controls.plateNumber.value" class="showclear" matSuffix
+            mat-icon-button (click)="formChangePlate.controls.plateNumber.setValue(null);onSearchVehicle()"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formChangePlate.get('plateNumber').errors?.required">
+            {{'customer-management.newVehicleForm.valid-new-licensePlates' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formChangePlate.get('plateNumber').errors?.pattern">
+            {{'common.format-plate-number' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formChangePlate.get('plateNumber').errors?.cannotWhiteSpace">
+            {{'common.format-plate-number' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formChangePlate.get('plateNumber').errors?.maxlength">
+            {{'common.validate.maxlength-16' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100" class="readonly">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'customer-management.newVehicleForm.staff' | translate }} <span class="required">*</span>
+          </mat-label>
+          <input matInput placeholder="{{ 'customer-management.newVehicleForm.staff' | translate }}"
+            formControlName="staff" [matAutocomplete]="autoStaff"
+            [readonly]="formChangePlate.value.typeChange=='2' || dataModel.isLoginToken" />
+          <button mat-button
+            *ngIf=" formChangePlate.controls.staff.value && formChangePlate.value.typeChange=='1' && !dataModel.isLoginToken"
+            matSuffix mat-icon-button type="button"
+            (click)="formChangePlate.controls.staff.setValue(''); $event.stopPropagation()" class="showclear">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formChangePlate.controls.staff.errors?.required">
+            {{ 'contractAdd.error-required-staff' | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-autocomplete #autoStaff="matAutocomplete" [displayWith]="displayFnStaff">
+          <mat-option *ngIf="isLoadingStaff">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </mat-option>
+          <ng-container *ngIf="!isLoadingStaff">
+            <mat-option *ngFor="let staff of listStaff" [value]="staff">
+              <div innerHTML="{{ staff?.username | highlight: formChangePlate.controls.staff.value}}"></div>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100" class="readonly">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'customer-management.changeLockModalForm.dateChange' | translate }}
+          </mat-label>
+          <input matInput placeholder="{{ 'customer-management.changeLockModalForm.dateChange' | translate }}"
+            formControlName="dateChange" readonly />
+        </mat-form-field>
+      </div>
+    </div>
+    <common-list #crmtable [headerTable]="'support-after-sale.transfer-own-vehicle.profile-vehicle-attach'"
+      [dataSource]="dataModel.dataSourceProfile" [isLoading]="isLoadingProfile" [isPaging]="false"
+      [stickyHeight]="getHeight(dataModel.dataSourceProfile)" [totalRecord]="totalRecord" [showHeader]="false"
+      [columns]="columnProfiles" [pageIndex]="pageIndex">
+      <custom-mat-column columnName="actions">
+        <ng-template let-item let-index="index">
+          <button mat-icon-button *ngIf="item.vehicleProfileId" type="button">
+            <mat-icon svgIcon="ic_download" matTooltip="{{ 'change_card.download' | translate }}"
+              (click)="downLoadFile(item)"></mat-icon>
+          </button>
+          <button mat-icon-button type="button">
+            <mat-icon svgIcon="ic_Delete" matTooltip="{{ 'change_card.delete' | translate }}"
+              (click)="removeSelectedFile(item, index)">
+            </mat-icon>
+          </button>
+        </ng-template>
+      </custom-mat-column>
+    </common-list>
+  </form>
+</div>

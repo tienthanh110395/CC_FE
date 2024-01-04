@@ -1,0 +1,28 @@
+
+ <mat-panel-title>
+  {{ 'special-vehicle.popupTitleDeny' | translate | uppercase }}
+</mat-panel-title>
+<form [formGroup]="formSave" class="form-field-full">
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="100" fxFlex.lt-sm="200" class="description-text-area">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'special-vehicle.note_deny' | translate }} <span class="required">*</span></mat-label>
+        <textarea matInput formControlName="description" rows="4" style="width: 100%; resize: none;"></textarea>
+        <mat-error *ngIf="formSave.get('description').errors?.cannotWhiteSpace">
+          {{'common.space_error' | translate}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+
+<mat-dialog-actions fxLayoutAlign="flex-end">
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="10px" fxLayoutGap.xs="0">
+    <div >
+      <button mat-raised-button color="secondary" style="margin-right: 8px;"  (click)="onClose()">{{
+        'common.button.close' | translate }}</button>
+      <button mat-raised-button type="submit" style="margin-right: 8px;" color="primary" (click)="onConfirm()"
+        [disabled]="formSave.invalid">{{ 'common.button.confirm' | translate }}</button>
+    </div>
+  </div>
+</mat-dialog-actions>

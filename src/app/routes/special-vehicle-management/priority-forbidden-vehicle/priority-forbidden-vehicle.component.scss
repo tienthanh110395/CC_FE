@@ -1,0 +1,44 @@
+.checkbox {
+  position: relative;
+  top: 10px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mt-25 {
+  margin-top: 25px;
+}
+
+.noRecored {
+  text-align: center;
+  padding: 10px;
+  display: block;
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
+  font-weight: 700;
+}
+
+.btnRight {
+  float: right;
+}
+
+.title-table {
+  position: relative;
+  top: 10px;
+}
+
+.radio-stl {
+  position: absolute;
+  top: -9px;
+  left: 5px;
+}
+
+.ml-70 {
+  margin-left: 70px;
+}
+#fix ::ng-deep .mat-paginator-page-size-select {
+  width: 60px !important;
+}

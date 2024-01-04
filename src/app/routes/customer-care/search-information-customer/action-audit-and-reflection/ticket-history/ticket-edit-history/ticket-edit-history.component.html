@@ -1,0 +1,455 @@
+<a class="close" (click)="onClosePopup()">
+  <mat-icon class="close-icon" color="warn" #enter_close autoFocus="enter_close">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{header}}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="processTicketForm">
+    <!-- thong tin khach hang -->
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header class="bg-white">
+          <div fxFlex="25" fxFlex.lt-sm="100">
+            <mat-panel-title>
+              {{ 'customer-care.search-process.custInfo' | translate | uppercase }}
+            </mat-panel-title>
+          </div>
+          <div fxFlex="75" fxFlex.lt-sm="100">
+            <label style="font-weight: 'bold';">
+              {{ 'customer-care.search-cc.ticketCode' | translate }}: {{ dataDialog.ticketId }}
+            </label>
+          </div>
+        </mat-expansion-panel-header>
+        <div class="form-field-full">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <!-- row 1 -->
+            <div fxFlex="25" fxFlex.lt-sm="100" class="readonly">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.contractNo' | translate}}</mat-label>
+                <input matInput formControlName="contractNo" autocomplete="off" readonly />
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100" class="readonly">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.custType' | translate}}</mat-label>
+                <mtx-select [items]="customerTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="custTypeId" [disabled]="true"
+                  [notFoundText]="'common.notFound' | translate" [searchable]="customerTypeList?.length>10">
+                </mtx-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.plateNumber' | translate}} <span class="required" *ngIf="processTicketForm.value.l2TicketTypeId == 24 || processTicketForm.value.l2TicketTypeId == 25 ||
+                    processTicketForm.value.l2TicketTypeId == 31">*</span></mat-label>
+                <input matInput formControlName="plateNumber" autocomplete="off" autoFocus="plateNumber" maxlength="16"
+                  [value]="processTicketForm.value.plateNumber | uppercase" />
+                <button mat-button *ngIf="processTicketForm.controls.plateNumber.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.plateNumber.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="processTicketForm.get('plateNumber').errors?.required">
+                  {{'Biển số xe không được để trống' | translate}}
+                </mat-error>
+                <mat-error *ngIf="processTicketForm.get('plateNumber').errors?.pattern">
+                  {{'common.format-plate-number' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100" class="readonly">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-process.phone-contract' | translate}}
+                  <span class="required">*</span>
+                </mat-label>
+                <input matInput formControlName="phoneNumber" autocomplete="off" readonly />
+                <mat-error *ngIf="processTicketForm.get('phoneNumber').errors?.required">
+                  {{'customer-care.search-process.errorMessage.contactNumber' | translate}}
+                </mat-error>
+                <mat-error *ngIf="processTicketForm.get('phoneNumber').errors?.pattern">
+                  {{'common.numberPhoneRegex' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- row 1 -->
+            <!-- row 2 -->
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.custName' | translate}}
+                  <span class="required">*</span>
+                </mat-label>
+                <input matInput formControlName="custName" autocomplete="off" maxlength="510" />
+                <button mat-button *ngIf="processTicketForm.controls.custName.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.custName.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="processTicketForm.get('custName').errors?.required">
+                  {{'customer-care.search-process.errorMessage.custName' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-process.email' | translate}}</mat-label>
+                <input matInput formControlName="email" autocomplete="off" maxlength="255" />
+                <button mat-button *ngIf="processTicketForm.controls.email.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.email.setValue(null); $event.stopPropagation()" class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="processTicketForm.get('email').errors?.pattern">
+                  {{'common.emailRegex' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.address' | translate}}</mat-label>
+                <input matInput formControlName="custAddress" autocomplete="off" maxlength="510" />
+                <button mat-button *ngIf="processTicketForm.controls.custAddress.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.custAddress.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <!-- row 2 -->
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <!-- thong tin khach hang -->
+    <!-- thong tin phan anh -->
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header class="bg-white">
+          <mat-panel-title>
+            {{ 'customer-care.search-process.ticketInfo' | translate | uppercase }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="form-field-full">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <!-- row 1 -->
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.priority' | translate }}
+                  <span class="required">*</span>
+                </mat-label>
+                <mtx-select [items]="priorityList" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="priorityId" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="priorityList?.length>10" (change)="onChangePriority($event)">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('priorityId').errors?.required">
+                  {{'customer-care.search-process.errorMessage.priority' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.ticketSource' | translate }}
+                  <span class="required">*</span>
+                </mat-label>
+                <mtx-select [items]="ticketSourceList" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="sourceId" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="ticketSourceList?.length>10">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('sourceId').errors?.required">
+                  {{'customer-care.search-process.errorMessage.ticketSource' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.ticketTypeLv1' | translate }}
+                  <span class="required">*</span>
+                </mat-label>
+                <mtx-select [items]="ticketTypeLv1List" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="l1TicketTypeId" [notFoundText]="'common.notFound' | translate"
+                  (change)="onChangeTicketTypeLv1($event)" [searchable]="ticketTypeLv1List?.length>10">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('l1TicketTypeId').errors?.required">
+                  {{'customer-care.search-cc.ticketTypeLv1' | translate}}
+                  {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.ticketTypeLv2' | translate }}
+                  <span class="required">*</span>
+                </mat-label>
+                <mtx-select [items]="ticketTypeLv2List" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="l2TicketTypeId" [notFoundText]="'common.notFound' | translate"
+                  (change)="onChangeTicketTypeLv2($event)" [searchable]="ticketTypeLv2List?.length>10">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('l2TicketTypeId').errors?.required">
+                  {{'customer-care.search-process.errorMessage.ticketTypeLv2' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <!-- row 1 -->
+            <!-- row 2 -->
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.ticketTypeLv3' | translate }}
+                  <span class="required">*</span>
+                </mat-label>
+                <mtx-select [items]="ticketTypeLv3List" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="l3TicketTypeId" [notFoundText]="'common.notFound' | translate"
+                  (change)="onChangeTicketTypeLv3($event)" [searchable]="ticketTypeLv3List?.length>10">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('l3TicketTypeId').errors?.required">
+                  {{'customer-care.search-process.errorMessage.ticketTypeLv3' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-process.location' | translate}}</mat-label>
+                <input matInput formControlName="location" autocomplete="off" maxlength="510" />
+                <button mat-button *ngIf="processTicketForm.controls.location.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.location.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.province' | translate }}
+                  <span class="required">*</span>
+                </mat-label>
+                <mtx-select [items]="provinceList" bindLabel="label" [multiple]="false" appendTo="body"
+                  formControlName="province" (change)="onChangeProvince($event)"
+                  [notFoundText]="'common.notFound' | translate" [searchable]="provinceList?.length>10">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('province').errors?.required">
+                  {{'customer-care.search-process.errorMessage.province' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.district' | translate }}</mat-label>
+                <mtx-select [items]="districtList" bindLabel="label" [multiple]="false" appendTo="body"
+                  formControlName="district" (change)="onChangeDistrict($event)"
+                  [notFoundText]="'common.notFound' | translate" [searchable]="districtList?.length>10">
+                </mtx-select>
+              </mat-form-field>
+            </div>
+            <!-- row 2 -->
+            <!-- row 3 -->
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.commune' | translate }}</mat-label>
+                <mtx-select [items]="communeList" bindLabel="label" [multiple]="false" appendTo="body"
+                  formControlName="commune" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="communeList?.length>10">
+                </mtx-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-information-customer.stage_station' | translate }} <span
+                    class="required" *ngIf="processTicketForm.value.l2TicketTypeId == 24 || processTicketForm.value.l2TicketTypeId == 25 ||
+                    processTicketForm.value.l2TicketTypeId == 31">*</span></mat-label>
+                <mtx-select [items]="stationList" bindLabel="name" bindValue="id" [multiple]="false" appendTo="body"
+                  formControlName="stationId" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="stationList?.length>10">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('stationId').errors?.required">
+                  {{'Trạm/đoạn không được để trống' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-process.errorType' | translate }}</mat-label>
+                <mtx-select [items]="errorTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="ticketKind" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="errorTypeList?.length>10">
+                </mtx-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-process.requestDate' | translate}}</mat-label>
+                <input matInput placeholder="dd/mm/yyyy" maskDate [matDatepicker]="request_date"
+                  formControlName="requestDate" (click)="request_date.open()" #requestDateId />
+                <mat-datepicker-toggle matSuffix *ngIf="requestDateId.value" class="showclearDatePopup"
+                  (click)="processTicketForm.controls.requestDate.setValue(null); $event.stopPropagation()">
+                  <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="request_date"></mat-datepicker-toggle>
+                <mat-datepicker #request_date></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'customer-care.search-cc.ticketStatus' | translate }}
+                  <span class="required">*</span>
+                </mat-label>
+                <mtx-select [items]="ticketStatusList" bindLabel="label" bindValue="value" [multiple]="false"
+                  appendTo="body" formControlName="status" [notFoundText]="'common.notFound' | translate"
+                  [searchable]="ticketStatusList?.length>10">
+                </mtx-select>
+                <mat-error *ngIf="processTicketForm.get('status').errors?.required">
+                  {{'customer-care.search-process.errorMessage.ticketStatus' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100" class="readonly">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.processTimeKPI' | translate}}
+                  <span class="required">*</span>
+                </mat-label>
+                <input matInput formControlName="slaDate" readonly>
+                <mat-error *ngIf="processTicketForm.get('slaDate').errors?.required">
+                  {{ 'customer-care.search-cc.processTimeKPI' | translate }}
+                  {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-process.contactNumber' | translate}}
+                  <span class="required">*</span>
+                </mat-label>
+                <input matInput formControlName="phoneContact" autocomplete="off" />
+                <button mat-button *ngIf="processTicketForm.controls.phoneContact.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.phoneContact.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="processTicketForm.get('phoneContact').errors?.required">
+                  {{'customer-care.search-process.errorMessage.contactNumber' | translate}}
+                </mat-error>
+                <mat-error *ngIf="processTicketForm.get('phoneContact').errors?.pattern">
+                  {{'common.numberPhoneRegex' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.additionalInfo' | translate}}</mat-label>
+                <input matInput formControlName="supportInfo" autocomplete="off" maxlength="510" />
+                <button mat-button *ngIf="processTicketForm.controls.supportInfo.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.supportInfo.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-process.note' | translate}}</mat-label>
+                <input matInput formControlName="note" autocomplete="off" maxlength="510" />
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'customer-care.search-cc.ticketContent' | translate}}
+                  <span class="required">*</span>
+                </mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+                  cdkAutosizeMaxRows="50" matInput formControlName="contentReceive" autocomplete="off"
+                  maxlength="4000"></textarea>
+                <button mat-button *ngIf="processTicketForm.controls.contentReceive.value" matSuffix mat-icon-button
+                  (click)="processTicketForm.controls.contentReceive.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-error *ngIf="processTicketForm.get('contentReceive').errors?.required">
+                  {{'customer-care.search-process.errorMessage.ticketContent' | translate}}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                <div fxFlex="100" fxFlex.lt-sm="100" style="display: contents;">
+                  <label>{{ 'customer-care.search-process.file' | translate }}</label>
+                </div>
+                <div fxFlex="100" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline" floatLabel="always" style="margin-bottom: -10px;">
+                    <input matInput style="height: 0px;" />
+                    <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+                      <input #chooseFile1 hidden="true" type="file" multiple onclick="this.value=null"
+                        (change)="chooseFileChange($event)"
+                        accept=".jpg, .png, .tiff, .bmp, .jpeg, .webp, .pdf, .doc, .docx, .xls, .xlsx"
+                        ngf-max-size="5MB" />
+                      <button (click)="chooseFile1.click()" class="btn-file">{{'customer-care.search-process.chooseFile' |
+                          translate}}</button>
+                    </div>
+                  </mat-form-field>
+                  <label class="lbl-style">{{'common.format-cc-notify' | translate}}</label>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="100" fxFlex.lt-sm="100" style="margin-top: -20px;"
+              [hidden]="!listFile || listFile?.data?.length === 0">
+              <div class="crm__table">
+                <table mat-table [dataSource]="listFile">
+                  <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                      <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 80px;">
+                        {{(i+1) + (paginator.pageIndex * paginator.pageSize)}}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                      <th mat-header-cell *matHeaderCellDef style="width: 120px;">{{item.i18n |
+                          translate}}</th>
+                      <td mat-cell *matCellDef="let row;" class="ui-text-center" style="width: 120px;">
+                        <mat-icon color="primary" *ngIf="row.fullBase64" style="margin-right: 5px;"
+                          class="delete-file btn-delete-file" (click)="onDownloadFile(row)"
+                          matTooltip="{{'common.downloadFile' | translate}}">
+                          download
+                        </mat-icon>
+                        <mat-icon color="primary" *ngIf="row.fullBase64" style="margin-right: 5px;"
+                          class="delete-file btn-delete-file" (click)="onViewFile(row)"
+                          matTooltip="{{'common.viewFile' | translate}}">
+                          visibility
+                        </mat-icon>
+                        <mat-icon color="warn" class="delete-file btn-delete-file" style="margin-left: 5px;"
+                          (click)="onDeleteFile(row)"
+                          matTooltip="{{'customer-care.search-process.deleteFile' | translate}}">
+                          close
+                        </mat-icon>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                      <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                        {{item.i18n | translate}}</th>
+                      <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                        {{row[item.field]}}
+                      </td>
+                    </ng-container>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <span class="noRecored" *ngIf="!listFile || listFile?.data?.length === 0">
+                  {{'common.noRecord' | translate}}
+                </span>
+              </div>
+              <div>
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons>
+                </mat-paginator>
+              </div>
+            </div>
+            <!-- row 7 -->
+            <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: center;">
+              <button mat-raised-button type="button" color="primary" (click)="onSubmit()"
+                [disabled]="processTicketForm.invalid">
+                {{ 'common.button.save' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <!-- thong tin phan anh -->
+  </form>
+</mat-dialog-content>

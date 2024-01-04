@@ -1,0 +1,38 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>
+  {{ 'briefcase.extend-approve' | translate }}
+</h2>
+<mat-dialog-content style="overflow: hidden;">
+  <div fxLayout="row wrap" fxLayoutGap="20px grid" class="form-field-full">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-form-field >
+        <mat-label>{{ 'briefcase.extend-date' | translate }} <span class="required">*</span></mat-label>
+        <input matInput placeholder="dd/mm/yyyy" [formControl]="extendDate" maskDate [matDatepicker]="pickerDS"
+          (click)="pickerDS.open()" autocomplete="off" [min]="minDate" />
+        <mat-datepicker-toggle matSuffix [for]="pickerDS"></mat-datepicker-toggle>
+        <mat-datepicker #pickerDS></mat-datepicker>
+        <mat-error *ngIf="extendDate?.errors?.required">
+          {{ 'briefcase.extend-date-required' | translate }}
+        </mat-error>
+        <mat-error *ngIf="extendDate?.errors?.matDatepickerMin">
+          {{ 'briefcase.extend-date-min-error' | translate }}
+        </mat-error>
+
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div fxLayout="row wrap" fxLayoutAlign="end" fxFlex="100">
+    <button mat-raised-button type="button" color="primary" (click)="extend()">
+      {{ 'briefcase.button.extend' | translate }}
+    </button>
+
+    <button mat-raised-button type="button" color="secondary" mat-dialog-close>
+      {{ 'common.button.close' | translate }}
+    </button>
+
+  </div>
+</mat-dialog-actions>

@@ -1,0 +1,28 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{ 'customer-care.search-cc.popup-title-noti' | translate}}</h2>
+<form [formGroup]="formGroupPopup">
+  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+    <div fxFlex="100" fxFlex.lt-sm="100" class="form-field-full">
+      <mat-form-field appearance="outline">
+        <mat-label>{{'customer-care.search-cc.popup-label-noti'| translate}} <span class="required">*</span></mat-label>
+        <textarea style="resize: none;" formControlName="content" matInput rows="4" [(ngModel)]="content"></textarea>
+        <mat-error *ngIf="formGroupPopup.get('content').errors?.required">
+          {{'customer-care.popup.errorMessage.content' | translate}}
+        </mat-error>
+        <mat-error *ngIf="formGroupPopup.get('content').errors?.maxlength">
+          {{'common.validate.maxlength-1000' | translate}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<mat-dialog-actions align="end">
+  <button class="ml-20" (click)="send()" mat-button mat-raised-button color="primary"
+    [disabled]="formGroupPopup.invalid">{{'common.button.send' |
+    translate}}</button>
+
+  <button class="ml-20" mat-dialog-close mat-button mat-raised-button color="secondary">{{'common.button.close' |
+    translate}}</button>
+</mat-dialog-actions>

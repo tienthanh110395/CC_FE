@@ -1,0 +1,62 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <form [formGroup]="formSearch" class="form-field-full">
+      <br>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'customer-care.search-information-customer.date_impact_start_end' | translate }}
+            </mat-label>
+            <mat-date-range-input [rangePicker]="picker3" (click)="picker3.open()">
+              <input matStartDate formControlName="startDate" #fromDateId maskDate
+                placeholder="{{ 'common.fromDate' | translate }}">
+              <input matEndDate formControlName="endDate" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                #endDateId>
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || endDateId.value" class="showclearDatePopup"
+              (click)="formSearch.controls.startDate.setValue(null);formSearch.controls.endDate.setValue(null); $event.stopPropagation()">
+              <mat-icon matDatepickerToggleIcon>close
+              </mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="picker3">
+            </mat-datepicker-toggle>
+            <mat-date-range-picker #picker3>
+            </mat-date-range-picker>
+            <mat-error
+              *ngIf="formSearch.get('startDate').errors?.required && formSearch.get('endDate').errors?.required">
+              {{ 'briefcase.err-create-date-requied' |
+              translate }}
+            </mat-error>
+            <mat-error
+              *ngIf="formSearch.get('startDate').errors?.required && !formSearch.get('endDate').errors?.required">
+              {{ 'briefcase.selectStartDate' | translate }}
+            </mat-error>
+            <mat-error
+              *ngIf="!formSearch.get('startDate').errors?.required && formSearch.get('endDate').errors?.required">
+              {{ 'briefcase.selectEndDate' | translate }}
+            </mat-error>
+            <mat-error *ngIf="formSearch.get('startDate').errors?.matStartDateInvalid">
+              {{ 'customer-care.search-information-customer.error_date' | translate
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="66" fxFlex.lt-sm="100">
+          <button (click)="onSearch()" style="float: right; " mat-raised-button color="primary">
+            {{ 'common.button.search' | translate }}
+          </button>
+          <button (click)="exportExcel()" style="float: right; margin-right: 5px;" mat-raised-button color="secondary">
+            {{ 'common.exportExcel' | translate }}
+          </button>
+        </div>
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <common-list [headerTable]="'customer-care.search-information-customer.impact_history'"
+            [dataSource]="dataModel.dataSource" [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord"
+            [columns]="columns" (page)="onPageChange($event)" [pageIndex]="pageIndex"
+            [startRecord]="searchModel.startrecord">
+          </common-list>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

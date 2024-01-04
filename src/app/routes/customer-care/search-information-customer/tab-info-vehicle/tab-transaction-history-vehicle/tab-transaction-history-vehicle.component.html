@@ -1,0 +1,31 @@
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <div fxLayout="row wrap">
+          <div fxFlex="100" fxFlex.lt-sm="100">
+            <br>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <mat-tab-group (selectedTabChange)="onTabHistory($event)">
+                <mat-tab label="{{ 'customer-care.search-information-customer.ticket_purchase_history' | translate }}">
+                  <app-tab-ticket-purchase-history [vehicleId]="vehicleId"></app-tab-ticket-purchase-history>
+                </mat-tab>
+                <mat-tab
+                  label="{{ 'customer-care.search-information-customer.vehicle_history_through_the_station' | translate }}">
+                  <app-tab-history-vehicle-station [plateNumber]="plateNumber" [listMedia]="listMedia"
+                    [contractId]="contractId">
+                  </app-tab-history-vehicle-station>
+                </mat-tab>
+                <mat-tab
+                  label="{{ 'customer-care.search-information-customer.history_transactions_other' | translate }}">
+                  <app-tab-history-transaction-other [vehicleId]="vehicleId" [contractId]="contractId">
+                  </app-tab-history-transaction-other>
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

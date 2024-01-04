@@ -1,0 +1,120 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ 'customer-care.search-information-customer.list_of_untagged_media' | translate | uppercase }}&nbsp;<span
+          class="total-record">
+          ({{totalRecord}})</span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid" class="form-field-full">
+      <div fxFlex="100" fxFlex.lt-sm="100"></div>
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'support-after-sale.detach-contract.register_Date' | translate }}</mat-label>
+          <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+            <input matStartDate [formControl]="startFrom" #fromDateId maskDate
+              placeholder="{{ 'common.fromDate' | translate }}">
+            <input matEndDate [formControl]="endFrom" maskDate placeholder="{{ 'common.endDate' | translate }}"
+              #endDateId>
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || endDateId.value" class="showclearDatePopup"
+            (click)="startFrom.setValue(null);endFrom.setValue(null); $event.stopPropagation()">
+            <mat-icon matDatepickerToggleIcon>close</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-error *ngIf="startFrom.hasError('matStartDateInvalid')">
+            {{ 'customer.err_ResgiterFromDate' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{
+            'vehicle.plateNumber' | translate
+            }}</mat-label>
+          <input matInput [(ngModel)]="searchModel.plateNumber" (keyup.enter)="onSearch()" />
+          <button mat-button *ngIf="searchModel.plateNumber" matSuffix mat-icon-button
+            (click)="searchModel.plateNumber = null" class="showclear">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div fxFlex="33.33" fxFlex.lt-sm="100">
+        <button mat-raised-button color="primary" style="margin-right: 8px;" type="submit"
+          [disabled]="startFrom.hasError('matDatepickerMax')" (click)="onSearch()">
+          {{ 'common.button.search' | translate }}
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <common-list [headerTable]="'vehicle.title_list_no_rfid'" [dataSource]="dataModel.dataSourceNotRFID"
+          [showHeader]="false" [isLoading]="isLoading" [isPaging]="true" [columns]="columns"
+          (page)="onPageChange($event)" [totalRecord]="totalRecord" [pageIndex]="pageIndex"
+          [startRecord]="searchModel.startrecord">
+          <ng-template vtsTemplate="customStatus" let-item>
+            <span>
+              {{item.status| vehicleCheck | translate}}
+            </span>
+          </ng-template>
+        </common-list>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ 'customer-care.search-information-customer.list_of_tagged_media_rfid' | translate | uppercase }} &nbsp;<span
+          class="total-record">
+          ({{dataModel?.totalRecordRFID}})</span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid" class="form-field-full">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100" style="margin-top:2px;">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'vehicle.active-date' | translate }}</mat-label>
+              <mat-date-range-input [rangePicker]="pickerActive" (click)="pickerActive.open()">
+                <input matStartDate [formControl]="startRFIDFrom" #fromDateActiveId maskDate
+                  placeholder="{{ 'common.fromDate' | translate }}">
+                <input matEndDate [formControl]="endRFIDFrom" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                  #endDateActiveId>
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix *ngIf="fromDateActiveId.value || endDateActiveId.value"
+                class="showclearDatePopup"
+                (click)="startRFIDFrom.setValue(null);endRFIDFrom.setValue(null); $event.stopPropagation()">
+                <mat-icon matDatepickerToggleIcon>close</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="pickerActive"></mat-datepicker-toggle>
+              <mat-date-range-picker #pickerActive></mat-date-range-picker>
+              <mat-error *ngIf="startRFIDFrom.hasError('matStartDateInvalid')">
+                {{ 'customer.err_ResgiterFromDate' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <button mat-raised-button color="primary" style="margin-bottom: 8px;" type="submit"
+              [disabled]="startRFIDFrom.hasError('matDatepickerMax')" class="mt15" (click)="onSearchRFID()">
+              {{ 'common.button.search' | translate }}
+            </button>
+          </div>
+        </div>
+        <common-list [showHeader]="false" [dataSource]="dataModel.dataSourceWithRFID" [isLoading]="isLoadingRFID"
+          [isPaging]="true" [totalRecord]="dataModel.totalRecordRFID" [columns]="columnsWithRFID"
+          [pageIndex]="indexRFID" (page)="onPageChangeRFID($event)" [startRecord]="startRecordRFID">
+          <ng-template vtsTemplate="activeStatus" let-item let-index="index">
+            <span>{{item.activeStatus | rfidStatus | translate}}</span>
+          </ng-template>
+          <ng-template vtsTemplate="customDeptId" let-item let-index="index">
+            <span>{{(item.deptId && +item.deptId === 1) ? ('customer-care.search-information-customer.tagged' | translate) : ('customer-care.search-information-customer.not_tagged' | translate)}}</span>
+          </ng-template>
+        </common-list>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

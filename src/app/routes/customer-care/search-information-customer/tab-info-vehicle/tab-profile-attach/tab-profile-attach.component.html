@@ -1,0 +1,20 @@
+<br>
+<common-list [headerTable]="'customer-care.search-information-customer.attached_file'" [dataSource]="listFileAttach"
+  [isLoading]="isLoading" [isPaging]="true" [totalRecord]="listFileAttach.length" [columns]="columns"
+  [selectionMode]="selectionMode" (page)="onPageChange($event)" [pageIndex]="pageIndex">
+  <ng-template vtsTemplate="orderNumber" let-row let-index="index">
+    {{index+1}}
+  </ng-template>
+  <ng-template vtsTemplate="actionFileAttach" let-row let-index="index">
+    <button mat-icon-button>
+      <mat-icon svgIcon="ic_download" (click)="downloadFile(row)"
+        matTooltip="{{'customer-management.updateProfileTable.fileDownload' | translate}}"></mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon svgIcon="ic_xem" (click)="viewProfile(row)" matTooltip="{{'common.viewFile' | translate}}"></mat-icon>
+    </button>
+  </ng-template>
+  <ng-template vtsTemplate="documentTypeName-custom" let-row let-index="index">
+    {{row.documentTypeName}} <span *ngIf='+profileStatus === 3 && row.isDocumentError' style='color: red'><i>(Hồ sơ chưa hợp lệ)</i></span>
+  </ng-template>
+</common-list>

@@ -1,0 +1,441 @@
+<page-header></page-header>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <!-- Điều kiện tìm kiếm -->
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'common.title' | translate | uppercase}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <!-- Form tìm kiếm -->
+        <form class="form-field-full" [formGroup]="formSearch">
+          <!-- Row 1 -->
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <!-- Nguyên nhân lỗi cấp 1 -->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticketReflectiveStatistics.StatisticLv1' | translate }}
+                </mat-label>
+                <mat-select formControlName="ticketCateStatisticNameLv1" multiple>
+                  <mat-select-trigger>
+                    {{ getLabelInList(formSearch.controls.ticketCateStatisticNameLv1.value) }}
+                  </mat-select-trigger>
+                  <mat-option *ngIf="lstCateStatisticsLv1.length > 0">
+                    <ngx-mat-select-search noEntriesFoundLabel="{{'ticketReflectiveStatistics.noItem' | translate}}"
+                      formControlName="ticketCateStatisticLv1Filter"
+                      placeholderLabel="{{'ticketReflectiveStatistics.placeholderStatisticsLv1' | translate}}"
+                      [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isCheckedLv1" (toggleAll)="selectAll($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let item of filteredTicketStatisticLv1 | async" [value]="item"
+                    (click)="onChangeTicketCateStatisticLv1()">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formSearch.controls.ticketCateStatisticNameLv1.value" matSuffix mat-icon-button
+                  type="button" class="btn-clear-drop"
+                  (click)="formSearch.controls.ticketCateStatisticNameLv1.setValue(null); $event.stopPropagation(); btnClearLv1()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <!-- Nguyên nhân lỗi cấp 2 -->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticketReflectiveStatistics.StatisticLv2' | translate }}
+                </mat-label>
+                <mat-select formControlName="ticketCateStatisticNameLv2" multiple>
+                  <mat-select-trigger>
+                    {{ getLabelInList(formSearch.controls.ticketCateStatisticNameLv2.value) }}
+                  </mat-select-trigger>
+                  <mat-option *ngIf="lstCateStatisticsLv2.length > 0">
+                    <ngx-mat-select-search noEntriesFoundLabel="{{'ticketReflectiveStatistics.noItem' | translate}}"
+                      formControlName="ticketCateStatisticLv2Filter"
+                      placeholderLabel="{{'ticketReflectiveStatistics.placeholderStatisticsLv2' | translate}}"
+                      [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isCheckedLv2" (toggleAll)="selectAllTicketStatisticLv2($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let item of filteredTicketStatisticLv2 | async" [value]="item"
+                    (click)="onChangeTicketCateStatisticLv2()">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formSearch.controls.ticketCateStatisticNameLv2.value" matSuffix mat-icon-button
+                  type="button" class="btn-clear-drop"
+                  (click)="formSearch.controls.ticketCateStatisticNameLv2.setValue(null); $event.stopPropagation(); btnClearLv2()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <!--Nguyên nhân lỗi cấp 3-->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticketReflectiveStatistics.StatisticLv3' | translate }}
+                </mat-label>
+                <mat-select formControlName="ticketCateStatisticNameLv3" multiple>
+                  <mat-select-trigger>
+                    {{ getLabelInList(formSearch.controls.ticketCateStatisticNameLv3.value) }}
+                  </mat-select-trigger>
+                  <mat-option *ngIf="lstCateStatisticsLv3.length > 0">
+                    <ngx-mat-select-search noEntriesFoundLabel="{{'ticketReflectiveStatistics.noItem' | translate}}"
+                      formControlName="ticketCateStatisticLv3Filter"
+                      placeholderLabel="{{'ticketReflectiveStatistics.placeholderStatisticsLv3' | translate}}"
+                      [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isCheckedLv3" (toggleAll)="selectAllTicketStatisticLv3($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let item of filteredTicketStatisticLv3 | async" [value]="item"
+                    (click)="onChangeTicketCateStatisticLv3()">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formSearch.controls.ticketCateStatisticNameLv3.value" matSuffix mat-icon-button
+                  type="button" class="btn-clear-drop"
+                  (click)="formSearch.controls.ticketCateStatisticNameLv3.setValue(null); $event.stopPropagation(); btnClearLv3()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- Row 2-->
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <!--          Thống kê cấp 4-->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticketReflectiveStatistics.StatisticLv4' | translate }}
+                </mat-label>
+                <mat-select formControlName="ticketCateStatisticNameLv4" multiple>
+                  <mat-select-trigger>
+                    {{ getLabelInList(formSearch.controls.ticketCateStatisticNameLv4.value) }}
+                  </mat-select-trigger>
+                  <mat-option *ngIf="lstCateStatisticsLv4.length > 0">
+                    <ngx-mat-select-search noEntriesFoundLabel="{{'ticketReflectiveStatistics.noItem' | translate}}"
+                      formControlName="ticketCateStatisticLv4Filter"
+                      placeholderLabel="{{'ticketReflectiveStatistics.placeholderStatisticsLv4' | translate}}"
+                      [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isCheckedLv4" (toggleAll)="selectAllTicketStatisticLv4($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let item of filteredTicketStatisticLv4 | async" [value]="item"
+                    (click)="onChangeTicketCateStatisticLv4()">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formSearch.controls.ticketCateStatisticNameLv4.value" matSuffix mat-icon-button
+                  type="button" class="btn-clear-drop"
+                  (click)="formSearch.controls.ticketCateStatisticNameLv4.setValue(null); $event.stopPropagation(); btnClearLv4()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <!--          Thống kê cấp 5-->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticketReflectiveStatistics.StatisticLv5' | translate }}
+                </mat-label>
+                <mat-select formControlName="ticketCateStatisticNameLv5" multiple>
+                  <mat-select-trigger>
+                    {{ getLabelInList(formSearch.controls.ticketCateStatisticNameLv5.value) }}
+                  </mat-select-trigger>
+                  <mat-option *ngIf="lstCateStatisticsLv5.length > 0">
+                    <ngx-mat-select-search noEntriesFoundLabel="{{'ticketReflectiveStatistics.noItem' | translate}}"
+                      formControlName="ticketCateStatisticLv5Filter"
+                      placeholderLabel="{{'ticketReflectiveStatistics.placeholderStatisticsLv5' | translate}}"
+                      [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isCheckedLv5" (toggleAll)="selectAllTicketStatisticLv5($event)">
+                    </ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option *ngFor="let item of filteredTicketStatisticLv5 | async" [value]="item" (click)='onChangeTicketCateStatisticLv5()'>
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button *ngIf="formSearch.controls.ticketCateStatisticNameLv5.value" matSuffix mat-icon-button
+                  type="button" class="btn-clear-drop"
+                  (click)="formSearch.controls.ticketCateStatisticNameLv5.setValue(null); $event.stopPropagation();btnClearLv5();">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <!-- Người  tạo -->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticketReflectiveStatistics.createUser' | translate }}</mat-label>
+                <input matInput formControlName="createUser" autocomplete="off" />
+                <button mat-button *ngIf="formSearch.controls.createUser.value" matSuffix mat-icon-button
+                        aria-label="Clear" type="button"
+                        (click)="formSearch.controls.createUser.setValue(null); $event.stopPropagation()" class="showclear">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+
+          </div>
+          <!--          row 3-->
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <!--cap thong ke-->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ticketError.search.levelStatistic' | translate }}
+                </mat-label>
+                <mat-select formControlName="levelStatistic" multiple>
+                  <mat-select-trigger>
+                    {{ getLabelInList(formSearch.controls.levelStatistic.value) }}
+                  </mat-select-trigger>
+                  <mat-option #levelStatistic *ngIf='lstLevelStatistics.length > 0' (click)='onChangeLevelStatisticAll()'
+                              [value]='-1'>
+                    {{ 'common.all' | translate }}
+                  </mat-option>
+                  <mat-option *ngFor="let item of lstLevelStatistics" [value]="item" (click)="onChangeLevelStatistic()">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button matSuffix mat-icon-button type='button' class='btn-clear-drop'
+                        *ngIf='formSearch.controls.levelStatistic.value'
+                        (click)='formSearch.controls.levelStatistic.setValue(null); $event.stopPropagation();'>
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <!-- Trạng thái -->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'common.status' | translate }}
+                </mat-label>
+                <mat-select formControlName="status" multiple>
+                  <mat-select-trigger>
+                    {{ getLabelInList(formSearch.controls.status.value) }}
+                  </mat-select-trigger>
+                  <mat-option #allStatus *ngIf='statuses.length > 0' (click)='onChangeStatusAll()'
+                              [value]='-1'>
+                    {{ 'common.all' | translate }}
+                  </mat-option>
+                  <mat-option *ngFor="let item of statuses" [value]="item" (click)="onChangeStatusOne()">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-select>
+                <button matSuffix mat-icon-button type='button' class='btn-clear-drop'
+                        *ngIf='formSearch.controls.status.value'
+                        (click)='formSearch.controls.status.setValue(null); $event.stopPropagation();'>
+                  <mat-icon>close</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <!-- Ngày tạo -->
+            <div fxFlex="33.33" fxFlex.lt-sm="100">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'ticketReflectiveStatistics.createDateFrom'| translate}}</mat-label>
+                <mat-date-range-input [rangePicker]="createDatePicker" (click)="createDatePicker.open()"
+                  [comparisonStart]="formSearch.value.fromDate" [comparisonEnd]="formSearch.value.toDate">
+                  <input matStartDate maskDate placeholder="dd/mm/yyyy" formControlName="fromDate" #formDateId>
+                  <input matEndDate maskDate placeholder="dd/mm/yyyy" formControlName="toDate" #toDateId>
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix *ngIf="formDateId.value || toDateId.value" class="showclearDatePopup"
+                  (click)="formSearch.controls.fromDate.setValue(null);formSearch.controls.toDate.setValue(null); $event.stopPropagation()">
+                  <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                </mat-datepicker-toggle>
+                <mat-datepicker-toggle matSuffix [for]="createDatePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #createDatePicker></mat-date-range-picker>
+                <mat-error *ngIf="formSearch.controls.fromDate.hasError('matStartDateInvalid')">
+                  {{ 'ticketReflectiveStatistics.err_ResgiterFromDate' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+          </div>
+          <!-- Form action -->
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <button type="submit" class="float-right ml-20" mat-button mat-raised-button color="primary"
+                (click)="doSearch()">
+                {{ 'ticketReflectiveStatistics.button.search' | translate }}
+              </button>
+              <button type="submit" class="float-right ml-20" mat-button mat-raised-button color="primary"
+                (click)="onClickInsertCateStatistic()">
+                {{ 'ticketReflectiveStatistics.button.insert' | translate }}
+              </button>
+              <button type="submit" class="float-right ml-20 " mat-button mat-raised-button color="primary"
+                (click)="onChangeStatusMultiple()">
+                {{ 'ticketReflectiveStatistics.button.changeStatus' | translate }}
+              </button>
+              <button type="submit" class="float-right" mat-button mat-raised-button color="primary"
+                (click)="exportFile()">
+                {{'ticketReflectiveStatistics.button.exportFile' |translate}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <!-- Danh sách nguyên nhân lỗi -->
+    <mat-card>
+      <crm-table [headerTable]="'DANH SÁCH THỐNG KÊ'" [isLoading]="isLoading" [showHeader]="true" [isPaging]="true"
+        [dataSource]="lstDataTicketCateStatistic" (onPage)="onPageChange($event)"
+        [displayedColumns]="displayedColumnsTypeStatistic" [pageIndex]="pageIndex"
+        [totalRecord]="countTableTicketCateStatistic" [widthTable]="'2300px'"
+        [stickyHeader]="true" [stickyHeight]="getHeightTable(lstDataTicketCateStatistic)">
+        <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+          <ng-container matColumnDef="{{ item.field }}" *ngSwitchDefault>
+            <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row[item.field] }}
+            </td>
+          </ng-container>
+
+          <!-- STT -->
+          <ng-container matColumnDef="{{ item.field }}" *ngSwitchCase="'orderNumber'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">{{ item.i18n | translate }}</th>
+            <td mat-cell *matCellDef="let row; let i = dataIndex" class="ui-text-center">
+              {{ i + 1 + (formSearch.value.startRecord * formSearch.value.pageSize)}}
+            </td>
+          </ng-container>
+
+          <!-- Checkbox Select -->
+
+          <ng-container matColumnDef="{{ item.field }}" *ngSwitchCase="'select'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }"
+              style="text-align: center !important;">
+              <mat-checkbox [(ngModel)]="checkAll" (change)="onCheckAll($event)"></mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row" class="ui-text-center">
+              <mat-checkbox [(ngModel)]="row.checked" (change)="onCheckItem($event)"></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Action -->
+          <ng-container matColumnDef="action" *ngSwitchCase="'action'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'common.action' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index" class="ui-text-center" style="padding-right: 0px;">
+              <button mat-icon-button>
+                <mat-icon svgIcon="ic_edit" type="submit" (click)="onClickEditCateStatistic(row)"
+                  matTooltip="{{'ticketReflectiveStatistics.action.edit' | translate}}">
+                </mat-icon>
+              </button>
+              <button mat-icon-button>
+                <mat-icon class='toggle_on toggle-size' color='warn' *ngIf='row.status === 0'
+                  matTooltip="{{'cateConfig.ticket-genre.table.icon.changestatus' | translate}}"
+                  (click)="doChangeStatus(row)">
+                  toggle_off
+                </mat-icon>
+                <mat-icon class='toggle-off-color toggle-size' *ngIf='row.status === 1'
+                  matTooltip="{{'cateConfig.ticket-genre.table.icon.changestatus' | translate}}"
+                  (click)="doChangeStatus(row)">
+                  toggle_on
+                </mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <!--Tên loại thống kê cha-->
+          <ng-container matColumnDef="cateStatisticNameParent" *ngSwitchCase="'cateStatisticNameParent'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.statisticParentTypeName' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <span [innerHtml]="customViewDescription(row.cateStatisticNameParent)"
+                matTooltip="{{row.cateStatisticNameParent}}"></span>
+            </td>
+          </ng-container>
+
+          <!--Cấp thống kê-->
+          <ng-container matColumnDef="levelStatistic" *ngSwitchCase="'levelStatistic'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.statisticLevel' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index"> {{row.levelStatistic}} </td>
+          </ng-container>
+
+          <!--Mã nguyên nhân-->
+          <ng-container matColumnDef="ticketCateStatisticsCode" *ngSwitchCase="'ticketCateStatisticsCode'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.statisticsCode' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index"> {{row.ticketCateStatisticsCode}} </td>
+          </ng-container>
+
+          <!--Tên nguyên nhân lỗi-->
+          <ng-container matColumnDef="ticketCateStatisticsName" *ngSwitchCase="'ticketCateStatisticsName'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.statisticsName' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <span [innerHtml]="customViewName(row.ticketCateStatisticsName)"
+                matTooltip="{{row.ticketCateStatisticsName}}"></span>
+            </td>
+          </ng-container>
+
+          <!--Ngày tạo -->
+          <ng-container matColumnDef="createDate" *ngSwitchCase="'createDate'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.createDate' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              {{row.createDate}}
+            </td>
+          </ng-container>
+
+          <!-- Người tạo -->
+          <ng-container matColumnDef="createUser" *ngSwitchCase="'createUser'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.createUser' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              {{row.createUser}}
+            </td>
+          </ng-container>
+
+          <!-- Người cập nhật cuối-->
+          <ng-container matColumnDef="updateUser" *ngSwitchCase="'updateUser'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.updateUser' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              {{row.updateUser}}
+            </td>
+          </ng-container>
+
+          <!-- Ngày cập nhật cuối-->
+          <ng-container matColumnDef="updateDate" *ngSwitchCase="'updateDate'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.updateDate' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              {{row.updateDate}}
+            </td>
+          </ng-container>
+
+          <!--Mô tả-->
+          <ng-container matColumnDef="template" *ngSwitchCase="'template'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'cateConfig.ticketType.ticketTemplate' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <span [innerHtml]="customViewDescription(row.template)" matTooltip="{{row.template}}"></span>
+            </td>
+          </ng-container>
+
+          <!-- Trạng thái -->
+          <ng-container matColumnDef="status" *ngSwitchCase="'status'">
+            <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+              {{'ticketReflectiveStatistics.table.status' | translate}}
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <!-- {{row.status}} -->
+              <div *ngIf="row.status === 1">
+                {{'ticketReflectiveStatistics.Effect' | translate}}
+              </div>
+              <div *ngIf="row.status === 0">
+                {{'ticketReflectiveStatistics.Expire' | translate}}
+              </div>
+            </td>
+          </ng-container>
+
+          <th mat-header-row
+            *matHeaderRowDef="['orderNumber', 'select', 'action', 'statisticParentTypeName', 'statisticLevel','statisticsCode','statisticsName', 'createDate', 'createUser','updateDate', 'updateUser', 'description', 'status']">
+          </th>
+        </ng-container>
+      </crm-table>
+    </mat-card>
+  </div>
+</div>

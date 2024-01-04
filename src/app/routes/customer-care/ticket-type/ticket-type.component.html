@@ -1,0 +1,143 @@
+<page-header></page-header>
+<form [formGroup]="formSearch">
+  <div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ 'common.title' | translate | uppercase }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="form-field-full">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <!-- row 1 start -->
+              <div fxFlex="50" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline" class="common-field">
+                  <mat-label>{{ 'ticket-extend.ticketId' | translate }}
+                  </mat-label>
+                  <textarea matInput formControlName="detailPA" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2" cdkAutosizeMaxRows="50" autocomplete="off" maxlength="4000"></textarea>
+                  <button mat-button *ngIf="formSearch.controls.detailPA.value" class="showclear" matSuffix
+                    mat-icon-button (click)="formSearch.controls.detailPA.setValue(''); $event.stopPropagation()"
+                    type="button">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="50" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'customer-care.search-cc.ticketCode' | translate}}</mat-label>
+                  <textarea matInput formControlName="ticketTypeIdLv3" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="50" autocomplete="off"
+                    maxlength="4000"></textarea>
+                  <button mat-button *ngIf="formSearch.controls.ticketTypeIdLv3.value" class="showclear" matSuffix
+                    mat-icon-button (click)="formSearch.controls.ticketTypeIdLv3.setValue(''); $event.stopPropagation()"
+                    type="button">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'customer-care.search-cc.ticketTypeLv1' | translate }}</mat-label>
+                  <mat-select formControlName="l1TicketTypeId" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formSearch.controls.l1TicketTypeId.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allTicketTypeLv1 *ngIf="ticketTypeLv1List.length > 0"
+                      (click)="onChangeTicketTypeLv1All()" [value]="-1">
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let ticketTypeLv1 of ticketTypeLv1List" [value]="ticketTypeLv1"
+                      (click)="onChangeTicketTypeLv1One()">
+                      {{ ticketTypeLv1.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="formSearch.controls.l1TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                    type="button" class="btn-clear-drop"
+                    (click)="formSearch.controls.l1TicketTypeId.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv1();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'customer-care.search-cc.ticketTypeLv2' | translate }}</mat-label>
+                  <mat-select formControlName="l2TicketTypeId" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formSearch.controls.l2TicketTypeId.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allTicketTypeLv2 *ngIf="ticketTypeLv2List.length > 0"
+                      (click)="onChangeTicketTypeLv2All()" [value]="-1">
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let ticketTypeLv2 of ticketTypeLv2List" [value]="ticketTypeLv2"
+                      (click)="onChangeTicketTypeLv2One()">
+                      {{ ticketTypeLv2.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="formSearch.controls.l2TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                    type="button" class="btn-clear-drop"
+                    (click)="formSearch.controls.l2TicketTypeId.setValue(null); $event.stopPropagation();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100" style="margin-bottom:20px">
+                <mat-form-field appearance="outline" floatLabel="always">
+                  <mat-label>{{'ticket-statistic.react-customer' | translate}}
+                  </mat-label>
+                  <input matInput formControlName="statusReac" readonly />
+                  <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl font-register-service">
+                    <mat-checkbox class="checkbox" value="1" [(ngModel)]="dataModel.effect"
+                      [ngModelOptions]="{standalone: true}">
+                      {{'customer-care.search-information-customer.effect' | translate}}</mat-checkbox>
+                    <mat-checkbox class="checkbox ml-70" value="0" [(ngModel)]="dataModel.expire"
+                      [ngModelOptions]="{standalone: true}">
+                      {{'customer-care.search-information-customer.expire' | translate}}</mat-checkbox>
+                  </div>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+              fxLayoutGap.xs="0" style="margin-right: 8px;">
+              <button mat-raised-button color="primary" type="submit" (click)="onSearch()">
+                {{ 'common.button.search' | translate }}
+              </button>
+              <button mat-raised-button color="primary" type="submit" (click)="performAddTicketType()">
+                {{ 'common.button.insert' | translate }}
+              </button>
+              <!-- <button mat-raised-button color="primary" type="submit">
+                {{ 'common.exportExcel' | translate }}
+              </button> -->
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <mat-accordion>
+        <mat-card>
+          <common-list [headerTable]="'customer-care.search-cc.ticketList'" [dataSource]="dataModel.dataSource"
+            [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns"
+            (page)="onPageChange($event)" [pageIndex]="pageIndex" [startRecord]="formSearch.controls.startrecord.value"
+            [widthTable]="'2000px'">
+            <ng-template vtsTemplate='actionCustom' let-row>
+              <button mat-icon-button color="primary" (click)="viewTicket(row)"
+                matTooltip="{{'common.viewDetail'| translate}}">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="{{'common.button.edit'| translate}}"
+                (click)="performEditTicketType(row)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" matTooltip="{{'common.button.delete'| translate}}"
+                (click)="deleteTicketType(row)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ng-template>
+          </common-list>
+        </mat-card>
+      </mat-accordion>
+    </div>
+  </div>
+</form>

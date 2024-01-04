@@ -1,0 +1,64 @@
+<!-- Thông tin chi tiết mức độ ưu tiên -->
+<h2 mat-dialog-title>{{ 'THÊM MỚI MỨC ĐỘ ƯU TIÊN' | translate }}</h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class="view-detail">
+  <form [formGroup]="form" class="form-field-full">
+    <!-- Row 1 -->
+    <!--    ma muc do-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>Tên mức độ ưu tiên
+          </mat-label>
+          <input matInput required maxlength="255" placeholder="{{'Tên mức độ ưu tiên' |
+                            translate}}" formControlName="ticketLevelCateName" autocomplete="off" />
+          <mat-error *ngIf="form.get('ticketLevelCateName').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketLevelCateName').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <button mat-button *ngIf="form.controls.ticketLevelCateName.value" matSuffix mat-icon-button
+                  aria-label="Clear" type="button"
+                  (click)="form.controls.ticketLevelCateName.setValue(null); $event.stopPropagation()"
+                  class="showclear">
+            <mat-icon>close</mat-icon>
+          </button>
+
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    mo ta-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Mô tả</mat-label>
+        <textarea maxlength="1024" formControlName="description" type="text" matInput placeholder="Mô tả"></textarea>
+        <mat-error *ngIf="form.get('description').errors?.maxlength">
+          {{'cateConfig.validators.maxLength-1024' | translate}}
+        </mat-error>
+        <button mat-button *ngIf="form.controls.description.value" matSuffix mat-icon-button
+                aria-label="Clear" type="button"
+                (click)="form.controls.description.setValue(null); $event.stopPropagation()"
+                class="showclear">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <!-- Form Action -->
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px" fxLayoutGap.xs="0"
+       style="margin-right: 8px;">
+
+    <!-- Button Lưu -->
+    <button [disabled] = "isLoading" type="submit" (click)="doSave()" class="float-right ml-20" mat-button mat-raised-button color="primary">Lưu
+    </button>
+
+    <!-- Button Đóng -->
+    <button  class="float-right ml-20" mat-button mat-raised-button color="secondary" mat-dialog-close>Đóng
+    </button>
+
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,46 @@
+<page-header></page-header>
+<div fxLayout="row wrap">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'common.title' | translate | uppercase}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form [formGroup]="extentProcessForm" class="form-field-full">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'info.action_date' | translate }}
+              </mat-label>
+              <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+                <input matStartDate formControlName="fromDate" #fromDateId maskDate
+                  placeholder="{{ 'common.fromDate' | translate }}">
+                <input matEndDate formControlName="toDate" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                  #endDateId>
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix *ngIf="fromDateId.value || endDateId.value" class="showclearDatePopup"
+                (click)="extentProcessForm.controls.fromDate.setValue(null);extentProcessForm.controls.toDate.setValue(null); $event.stopPropagation()">
+                <mat-icon matDatepickerToggleIcon>close</mat-icon>
+              </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-management.request-combination-support' | translate }}</mat-label>
+              <input matInput formControlName="contractNo" (keyup.enter)="onSearch()" />
+              <button mat-button *ngIf="extentProcessForm.controls.contractNo.value" matSuffix mat-icon-button
+                class="showclear" type="button"
+                (click)="extentProcessForm.controls.contractNo.setValue(''); $event.stopPropagation()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

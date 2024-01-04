@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>
+  {{title}}
+</h1>
+
+<div mat-dialog-content>
+  <mat-label>{{message}} <b>{{messageBold}}</b></mat-label> ?
+</div>
+
+<div mat-dialog-actions style="justify-content: center;">
+  <button mat-raised-button color="secondary" (click)="onDismiss()">{{'common.button.cancel' | translate}}</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()">{{btnConfirm}}</button>
+</div>

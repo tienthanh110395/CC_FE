@@ -1,0 +1,48 @@
+<a class="close-popup" mat-dialog-close>
+    <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h1 mat-dialog-title>
+    {{ data.ticketAssignLogId ? 'Chi tiết nội dung làm việc' : 'Thêm mới nội dung làm việc' | translate }}
+</h1>
+<div mat-dialog-content>
+    <form [formGroup]="formGroup">
+        <div class="form-field-full">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                        <mat-label>{{ 'customer-care.search-process.commentType' | translate }}
+                            <span class="required">*</span>
+                        </mat-label>
+                        <mtx-select [items]="commentTypeList" bindLabel="label" bindValue="value" [multiple]="false"
+                            appendTo="body" formControlName="logType" [notFoundText]="'common.notFound' | translate"
+                            [searchable]="commentTypeList?.length>10" [disabled]="data.ticketAssignLogId">
+                        </mtx-select>
+                        <mat-error *ngIf="formGroup.get('logType').errors?.required">
+                            {{'customer-care.search-process.errorMessage.commentType' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                <div fxFlex="100" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                        <mat-label>{{'customer-care.search-process.comment' | translate}}
+                            <span class="required">*</span>
+                        </mat-label>
+                        <textarea rows="3" matInput maxlength="1024" formControlName="logContent" autocomplete="off"
+                            [readonly]="data.ticketAssignLogId"></textarea>
+                        <mat-error *ngIf="formGroup.get('logContent').errors?.required">
+                            {{'customer-care.search-process.comment' | translate}}
+                            {{'customer-care.search-process.errorMessage.notEmpty' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions align="center">
+    <button mat-raised-button color="secondary" (click)="onDismiss()">{{'common.button.cancel' | translate}}</button>
+    <button mat-raised-button color="primary" [disabled]="formGroup.invalid || data.ticketAssignLogId"
+        (click)="onConfirm()">{{'common.button.save' | translate}}</button>
+</div>

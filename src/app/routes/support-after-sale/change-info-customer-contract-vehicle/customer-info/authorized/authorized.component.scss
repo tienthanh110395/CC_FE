@@ -1,0 +1,11 @@
+.documentTypeName,
+.documentNumber {
+    ::ng-deep .mat-form-field-appearance-outline  {
+        .mat-form-field-outline-gap,
+        .mat-form-field-outline-end,
+        .mat-form-field-outline-start {
+            border-width: 1px !important;
+            color: #e0e0e0;
+        }
+    }
+}

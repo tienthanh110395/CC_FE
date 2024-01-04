@@ -1,0 +1,107 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header class="bg-white">
+      <mat-panel-title>
+        {{ 'customer.info' | translate | uppercase }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="form-field-full readonly">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'customer.fullName' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.custName" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'customer.code' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.custId" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'customer.dob' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.birthDate" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'customer.gender' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.gender" readonly />
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'customer.custType' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.custTypeName" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'customer.address' | translate }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.areaName" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'document.type' | translate }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.documentTypeName" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'info.documentNumber' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.documentNumber" readonly />
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'document.createDate' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.dateOfIssue" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'document.place' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.placeOfIssue" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{
+              'info.phoneNumber' | translate
+              }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.phoneNumber" readonly />
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'Email' | translate }}</mat-label>
+            <input matInput [(ngModel)]="dataModel.email" readonly />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

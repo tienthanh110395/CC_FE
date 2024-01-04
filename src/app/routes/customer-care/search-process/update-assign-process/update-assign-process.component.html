@@ -1,0 +1,30 @@
+<mat-accordion>
+  <mat-expansion-panel hideToggle disabled>
+    <mat-expansion-panel-header>
+      <mat-panel-title style="font-weight: bold; color: black; align-items: center;">
+        <span class="material-icons">qr_code_2</span>&nbsp;{{ data.ticketId || '' }}
+      </mat-panel-title>
+      <button mat-raised-button color="secondary" (click)="setIsEdit(false)"
+        style="margin: 3px; min-width: 0; min-height: 0;">
+        <mat-icon>west</mat-icon>
+        <span>&nbsp;{{ 'common.button.back' | translate }}</span>
+      </button>
+    </mat-expansion-panel-header>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-tab-group animationDuration="0ms" class="heading left" (selectedTabChange)="onTabChange($event)"
+  [(selectedIndex)]="tabIndex">
+  <mat-tab label="{{ 'customer-care.search-process.ticketAssignInfo' | translate }}">
+    <app-ticket-assign-info-tab [data]="data" (onChangeIsEdit)="setIsEdit($event)" (onSearch)="onSearch.emit()">
+    </app-ticket-assign-info-tab>
+  </mat-tab>
+  <mat-tab label="{{ 'customer-care.search-process.ticketAssignAttachments' | translate }}">
+    <app-attachments-tab [data]="data"></app-attachments-tab>
+  </mat-tab>
+  <mat-tab label="{{ 'customer-care.search-process.ticketAssignHistory' | translate }}">
+    <app-ticket-history-tab [data]="data"></app-ticket-history-tab>
+  </mat-tab>
+  <mat-tab label="{{ 'customer-care.search-process.ticketAssignComments' | translate }}">
+    <app-comments-tab [data]="data"></app-comments-tab>
+  </mat-tab>
+</mat-tab-group>

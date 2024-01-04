@@ -1,0 +1,87 @@
+<a class="close" (click)="onClosePopup()">
+  <mat-icon class="close-icon" color="warn" #enter_close autoFocus="enter_close">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{header}}
+</h2>
+
+<form [formGroup]="formSearch">
+  <div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <div class="form-field-full">
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <!-- row 1 start -->
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'ticket-extend.ticketId' | translate }}
+              </mat-label>
+              <input matInput formControlName="name" autocomplete="off" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-cc.ticketCode' | translate}}</mat-label>
+              <input matInput formControlName="ticketTypeId" autocomplete="off" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv1' | translate }}</mat-label>
+              <input matInput formControlName="l1TicketTypeId" autocomplete="off" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-cc.ticketTypeLv2' | translate }}</mat-label>
+              <input matInput formControlName="l2TicketTypeId" autocomplete="off" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100" style="margin-bottom:20px">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>{{'ticket-extend.isCpt' | translate}}
+              </mat-label>
+              <input matInput readonly />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl">
+                <mat-radio-group class="font-register-service" formControlName="isCpt">
+                  <mat-radio-button value="1" [disabled]="true">
+                    {{'common.yes' | translate}}</mat-radio-button>
+                  <mat-radio-button class="ml-102" value="0" [disabled]="true">
+                    {{'common.no' | translate}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'search-bot.note' | translate }}</mat-label>
+              <input matInput formControlName="description" autocomplete="off" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100" style="margin-bottom:20px">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>{{'ticket-extend.use-status' | translate}}
+              </mat-label>
+              <input matInput readonly />
+              <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl">
+                <mat-radio-group class="font-register-service" formControlName="status">
+                  <mat-radio-button value="1" [disabled]="true">
+                    {{'customer-care.search-information-customer.effect' | translate}}</mat-radio-button>
+                  <mat-radio-button class="ml-102" value="0" [disabled]="true">
+                    {{'customer-care.search-information-customer.expire' | translate}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </mat-form-field>
+          </div>
+          <div fxFlex="66.66" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'ticket-extend.ticketTemplate' | translate}}</mat-label>
+              <textarea matInput formControlName="ticketTemplate" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="2" cdkAutosizeMaxRows="50" autocomplete="off" readonly></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

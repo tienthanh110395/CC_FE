@@ -1,0 +1,24 @@
+.radio-stl {
+  position: absolute;
+  top: -9px;
+  left: 5px;
+}
+
+.ml-70 {
+  margin-left: 70px;
+}
+
+#fix ::ng-deep .mat-paginator-page-size-select {
+  width: 60px !important;
+}
+
+.checkbox {
+  position: relative;
+  top: 10px;
+}
+
+::ng-deep .mat-tooltip {
+  height: inherit;
+  font-size: 13px;
+  width: 95%;
+}

@@ -1,0 +1,118 @@
+<a class="close-popup" mat-dialog-close>
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</a>
+<h2 mat-dialog-title>{{ 'customer-care.search-cc.popup-title-noti' | translate}}</h2>
+<mat-dialog-content class="view-detail">
+  <form [formGroup]="formGroupPopup">
+    <div class="form-field-full">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'customer-care.popup-email.title' | translate}} <span class="required">*</span></mat-label>
+            <input matInput formControlName="title" [(ngModel)]="popupModel.title" autocomplete="off"/>
+            <button mat-button *ngIf="formGroupPopup.controls.title.value" matSuffix mat-icon-button
+              (click)="formGroupPopup.controls.title.setValue(null); $event.stopPropagation()" class="showclear">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="formGroupPopup.get('title').errors?.required">
+              {{'customer-care.popup-email.errorMessage.title' | translate}}
+            </mat-error>
+            <mat-error *ngIf="formGroupPopup.get('title').errors?.maxlength">
+              {{'common.validate.maxlength-100' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'customer-care.popup-email.content'| translate}} <span class="required">*</span></mat-label>
+            <textarea style="resize: none;" formControlName="content" matInput rows="4" [(ngModel)]="popupModel.content"></textarea>
+            <mat-error *ngIf="formGroupPopup.get('content').errors?.required">
+              {{'customer-care.popup-email.errorMessage.content' | translate}}
+            </mat-error>
+            <mat-error *ngIf="formGroupPopup.get('content').errors?.maxlength">
+              {{'common.validate.maxlength-1000' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="100" fxFlex.lt-sm="100" style="display: contents;">
+          <label>{{ 'customer-care.popup-email.file' | translate }}</label>
+        </div>
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline" floatLabel="always" style="margin-bottom: -10px;">
+            <input matInput style="height: 0px;" autocomplete="off" />
+            <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+              <input #chooseFileDetail hidden="true" type="file" multiple onclick="this.value=null"
+                (change)="chooseFileChange($event, 'detail')"
+                accept=".jpg, .png, .tiff, .bmp, .jpeg, .webp, .pdf, .doc, .docx, .xls, .xlsx" ngf-max-size="5MB" />
+              <button (click)="chooseFileDetail.click()" class="btn-file">{{'customer-care.search-process.chooseFile'
+                |
+                translate}}</button>
+            </div>
+          </mat-form-field>
+          <label class="lbl-style">{{'common.format-cc-notify' | translate}}</label>
+        </div>
+        <div fxFlex="100" fxFlex.lt-sm="100" style="margin-top: -20px;"
+          [hidden]="!listFileDetail || listFileDetail?.data?.length === 0">
+          <div class="crm__table">
+            <table mat-table [dataSource]="listFileDetail">
+              <ng-container *ngFor="let item of columnsFile" [ngSwitch]="item.field">
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'orderNumber'" sticky>
+                  <th mat-header-cell *matHeaderCellDef style="width: 80px;">
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let row;let i = index" class="ui-text-center" style="width: 80px;">
+                    {{(i+1) + (paginatorDetail.pageIndex * paginatorDetail.pageSize)}}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchCase="'action'">
+                  <th mat-header-cell *matHeaderCellDef style="width: 120px;">{{item.i18n |
+                    translate}}</th>
+                  <td mat-cell *matCellDef="let row;" class="ui-text-center" style="width: 120px;">
+                    <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                      (click)="onDownloadFile(row)" matTooltip="{{'common.downloadFile' | translate}}">
+                      download
+                    </mat-icon>
+                    <mat-icon color="primary" style="margin-right: 5px;" class="delete-file btn-delete-file"
+                      (click)="onViewFile(row)" matTooltip="{{'common.viewFile' | translate}}">
+                      visibility
+                    </mat-icon>
+                    <mat-icon color="warn" class="delete-file btn-delete-file" style="margin-left: 5px;"
+                      (click)="onDeleteFile(row, 'detail')"
+                      matTooltip="{{'customer-care.search-process.deleteFile' | translate}}">
+                      close
+                    </mat-icon>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="{{item.field}}" *ngSwitchDefault>
+                  <th mat-header-cell *matHeaderCellDef [ngStyle]="{ 'min-width': item.width }">
+                    {{item.i18n | translate}}</th>
+                  <td mat-cell *matCellDef="let row;" [ngStyle]="{ 'min-width': item.width }">
+                    {{row[item.field]}}
+                  </td>
+                </ng-container>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsFile"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsFile;"></tr>
+            </table>
+            <span class="noRecored" *ngIf="!listFileDetail || listFileDetail?.data?.length === 0">
+              {{'common.noRecord' | translate}}
+            </span>
+          </div>
+          <div>
+            <mat-paginator #paginatorDetail [pageSizeOptions]="[5, 10, 20, 50]" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="ml-20" (click)="send()" mat-button mat-raised-button color="primary"
+    [disabled]="formGroupPopup.invalid">{{'common.button.send' |
+    translate}}</button>
+
+  <button class="ml-20" mat-dialog-close mat-button mat-raised-button color="secondary">{{'common.button.close' |
+    translate}}</button>
+</mat-dialog-actions>

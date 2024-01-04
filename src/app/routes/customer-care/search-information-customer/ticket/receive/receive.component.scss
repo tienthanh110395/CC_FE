@@ -1,0 +1,25 @@
+.btn-delete-file {
+    vertical-align: middle;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.lbl-style {
+    font-size: 9pt;
+    position: relative;
+    bottom: 8px;
+    color: #666;
+}
+.noRecored {
+    text-align: center;
+    padding: 10px;
+    display: block;
+    border-bottom: 1px solid #c9cdd2;
+    border-right: 1px solid #c9cdd2;
+    border-left: 1px solid #c9cdd2;
+    font-weight: 700;
+}
+
+textarea {
+    resize: none;
+    overflow: hidden;
+}

@@ -1,0 +1,222 @@
+<form [formGroup]="inforForm">
+  <div class="form-field-full">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>{{ 'customer.info' | translate}}</h3>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="row wrap" fxLayoutGap="20px grid" class="">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-management.formCustomerRegister.customerType'
+                | translate}}</mat-label>
+              <input matInput formControlName="customerType" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer.code' | translate}} </mat-label>
+              <input matInput formControlName="customerCode" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-information-customer.user_connector' | translate}} </mat-label>
+              <input matInput formControlName="username" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-information-customer.name_customer' | translate}}</mat-label>
+              <input matInput formControlName="fullName" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer.dob' | translate}}</mat-label>
+              <input matInput formControlName="dateOfBirth" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100" class="readonly">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer.gender' | translate}}</mat-label>
+              <input matInput formControlName="gender" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'info.documentNumber' | translate}}</mat-label>
+              <input matInput formControlName="documentNumber" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'document.createDate' | translate}}</mat-label>
+              <input matInput formControlName="dateRange" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'document.place' | translate}}</mat-label>
+              <input matInput formControlName="placeOfIssue" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer.address' | translate}} </mat-label>
+              <input matInput formControlName="address" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-information-customer.phone' | translate}} </mat-label>
+              <input matInput formControlName="numberPhone" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.email' |
+                translate}}
+              </mat-label>
+              <input matInput formControlName="email" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="form-field-full">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>{{ 'contract.info' | translate}}</h3>
+        </mat-expansion-panel-header>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'contract.number' | translate }} </mat-label>
+              <input matInput formControlName="contractNo" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'common.status' | translate }} </mat-label>
+              <input matInput formControlName="status" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'customer-care.search-information-customer.effective_date' | translate }}</mat-label>
+              <input matInput readonly formControlName="effDate" />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'customer-care.search-information-customer.expiration_date' | translate }}</mat-label>
+              <input matInput formControlName="expDate" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-information-customer.classify' | translate }} </mat-label>
+              <input matInput formControlName="classify" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer-care.search-information-customer.user_sign' | translate }}</mat-label>
+              <input matInput formControlName="signName" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline" class="common-field">
+              <mat-label>{{ 'customer-care.search-information-customer.date_sign' | translate }}</mat-label>
+              <input matInput readonly formControlName="signDate" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'info.documentNumber' | translate}}</mat-label>
+              <input matInput formControlName="documentNumber" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'document.createDate' | translate}}</mat-label>
+              <input matInput formControlName="dateRange" readonly>
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer.address' | translate }}</mat-label>
+              <input matInput formControlName="address" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="form-field-full">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <h3>{{ 'customer-care.search-information-customer.charge_notice_address' | translate }}</h3>
+        </mat-expansion-panel-header>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-information-customer.name_customer' | translate}}</mat-label>
+              <input matInput formControlName="fullName" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-information-customer.phone' | translate}}</mat-label>
+              <input matInput formControlName="numberPhone" readonly />
+            </mat-form-field>
+          </div>
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'customer-care.search-process.email' | translate}}</mat-label>
+              <input matInput formControlName="email" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutGap="20px grid">
+          <div fxFlex="33.33" fxFlex.lt-sm="100">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'customer.address' | translate }}</mat-label>
+              <input matInput formControlName="address" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="form-field-full">
+    <div div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+      fxLayoutGap.xs="0" style="margin-right: 8px;">
+      <button mat-raised-button color="primary" (click)="resetPass()">{{'common.button.reset' | translate}}</button>
+      <button mat-raised-button color="primary" style="margin-right: 8px;"
+        (click)="lockAcc()">{{'reset-agency.lock-account'
+        |
+        translate}}</button>
+    </div>
+  </div>
+</form>

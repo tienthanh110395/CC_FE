@@ -1,0 +1,28 @@
+.font-register-service {
+  font-size: 12pt !important;
+}
+
+.ml-102 {
+  margin-left: 102px;
+}
+
+.ml-130 {
+  margin-left: 130px;
+}
+
+.radio-stl {
+  position: absolute;
+  top: 0;
+  left: 30px;
+}
+
+.mr-20{
+  margin-right: 20px;
+}
+
+::ng-deep .fix__disable.mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+  color: black;
+}
+::ng-deep .fix__disable.mat-checkbox-disabled .mat-checkbox-label {
+  color: black;
+}

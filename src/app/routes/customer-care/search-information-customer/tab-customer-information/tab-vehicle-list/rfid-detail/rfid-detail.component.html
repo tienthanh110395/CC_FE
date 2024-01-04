@@ -1,0 +1,82 @@
+<div fxLayout="row wrap" class="matero-row">
+  <div fxFlex="100" fxFlex.lt-sm="100" class="matero-col">
+    <h3>Danh sách vé tháng/quý đã mua</h3>
+    <hr>
+    <form [formGroup]="formSearch" class="form-field-full">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>Loại trạm</mat-label>
+            <mat-select (selectionChange)="onchangeStationType($event.value)" formControlName="stationType">
+              <mat-option [value]="food.code" *ngFor="let food of costTypeList">
+                {{food.val}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="this.formSearch.controls['stationType'].hasError('required')">
+              {{ 'customer-care.search-information-customer.requied' | translate }}
+            </mat-error>
+
+          </mat-form-field>
+        </div>
+        <div fxFlex="33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>Đoạn đường</mat-label>
+            <mat-select formControlName="stageId">
+              <mat-option [value]="food.code" *ngFor="let food of arrStation">
+                {{food.name}}
+              </mat-option>
+
+            </mat-select>
+            <mat-error *ngIf="this.formSearch.controls['stageId'].hasError('required')">
+              {{ 'customer-care.search-information-customer.requied' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>Loại vé</mat-label>
+            <mat-select formControlName="servicePlanTypeId">
+              <mat-option [value]="food.id" *ngFor="let food of arrTicketType">
+                {{food.val}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="this.formSearch.controls['servicePlanTypeId'].hasError('required')">
+              {{ 'customer-care.search-information-customer.requied' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <button (click)="searchForm()" style="float: right;" mat-raised-button color="primary">
+            {{ 'common.button.search' | translate }}
+          </button>
+          <button (click)="closePopup()" style="float: right; margin-right: 10px;" mat-raised-button color="secondary">
+            Đóng
+          </button>
+        </div>
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <common-list [headerTable]="'Lịch sử mua vé'" [dataSource]="dataModel.dataSource" [isLoading]="isLoading"
+            [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns" [selectionMode]="selectionMode"
+            (page)="onPageChange($event)" [pageIndex]="pageIndex">
+            <ng-template vtsTemplate="orderNumber" let-item let-index="index">
+              {{this.searchModel.startrecord + index+1}}
+            </ng-template>
+          </common-list>
+        </div>
+        <div fxFlex="33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>Tổng số vé</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+
+        <div fxFlex="33" fxFlex.lt-sm="100">
+          <mat-form-field appearance="outline">
+            <mat-label>Tổng số tiền vé ( Vnđ )</mat-label>
+            <input matInput>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>

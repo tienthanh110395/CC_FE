@@ -1,0 +1,107 @@
+<h2 mat-dialog-title [innerHTML]="title"></h2>
+<div class="loading-icon" *ngIf="isLoading">
+  <mat-spinner diameter="30" *ngIf="isLoading" mode="indeterminate" style="margin:0 auto;"></mat-spinner>
+</div>
+<mat-dialog-content class="view-detail">
+  <form [formGroup]="form" class="form-field-full">
+    <!--    Row 1-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cateConfig.ticketType.ticketGroup' | translate }}
+            <span class="required">*</span>
+          </mat-label>
+          <mtx-select formControlName="ticketGroup" [items]="lstTicketGroup" bindLabel="label" bindValue="value"
+            [multiple]="false" (change)="onGroupChange($event)" appendTo="body"
+            [notFoundText]="'common.notFound' | translate" [clearable]="isClear" >
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketGroup').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cateConfig.ticketType.ticketGenre' | translate }}
+            <span class="required"></span>
+          </mat-label>
+          <mtx-select required formControlName="ticketGenre" [items]="lstTicketGenre" bindLabel="label"
+            bindValue="value" [multiple]="false" appendTo="body" [notFoundText]="'common.notFound' | translate"
+                      [clearable]="isClear1" (change)="onChangeValue();">
+          </mtx-select>
+          <mat-error *ngIf="form.get('ticketGenre').errors?.required">
+            {{'cateConfig.validators.requiredSelect' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <!--    Row 2-->
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cateConfig.ticketType.ticketTypeName' | translate }}
+          </mat-label>
+          <input [readonly]="!isEdit" trim="blur" required maxlength="255" matInput
+            placeholder="{{ 'cateConfig.ticketType.ticketTypeName' | translate }}" formControlName="ticketTypeName"
+            autocomplete="off" />
+          <mat-error *ngIf="form.get('ticketTypeName').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketTypeName').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-255' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf="form.controls.ticketTypeName.value && isEdit==true"
+            (click)="form.controls.ticketTypeName.setValue(null); $event.stopPropagation()" class="showclear"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cateConfig.ticketType.ticketTemplate' | translate }}</mat-label>
+          <textarea required maxlength="2000" formControlName="ticketTemplate" type="text" trim="blur" matInput
+            placeholder="{{ 'cateConfig.ticketType.ticketTemplate' | translate }}"></textarea>
+          <mat-error *ngIf="form.get('ticketTemplate').errors?.required">
+            {{'cateConfig.validators.requiredInput' | translate}}
+          </mat-error>
+          <mat-error *ngIf="form.get('ticketTemplate').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-1024' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf="form.controls.ticketTemplate.value"
+            (click)="form.controls.ticketTemplate.setValue(null); $event.stopPropagation()" class="showclear"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'cateConfig.ticketType.description' | translate }}</mat-label>
+          <textarea maxlength="1024" formControlName="description" type="text" trim="blur" matInput
+            placeholder="{{ 'cateConfig.ticketType.description' | translate }}"></textarea>
+          <mat-error *ngIf="form.get('description').errors?.maxlength">
+            {{'cateConfig.validators.maxLength-1024' | translate}}
+          </mat-error>
+          <button mat-button matSuffix mat-icon-button *ngIf="form.controls.description.value"
+            (click)="form.controls.description.setValue(null); $event.stopPropagation()" class="showclear"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <button  class="float-right ml-20 m-10 mt-10" mat-button mat-raised-button color="secondary"
+          mat-dialog-close (click)="onClosePopup()">{{ 'cateConfig.ticketType.close' | translate }}
+        </button>
+        <button type="submit" class="float-right ml-20 mb-10 mt-10" mat-button mat-raised-button color="primary"
+          [disabled] = "isLoading" (click)="doSave()">{{ 'cateConfig.ticketType.save' | translate }}
+        </button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>

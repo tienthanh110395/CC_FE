@@ -1,0 +1,185 @@
+<div>
+  <page-header></page-header>
+  <div fxLayout='row wrap' class='  mt-15'>
+    <div fxFlex='100' fxFlex.lt-sm='100'>
+      <mat-accordion>
+        <mat-expansion-panel [expanded]='true'>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{'common.title' | translate | uppercase}}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]='form' class='form-field-full'>
+            <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'cateConfig.impactLog.cateType' | translate }}
+                  </mat-label>
+                  <mat-select formControlName='actType'>
+                    <mat-option *ngFor='let item of lstCateType' [value]='item.value'>
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button matSuffix mat-icon-button type='button' class='btn-clear-drop'
+                    *ngIf='form.controls.actType.value'
+                    (click)='form.controls.actType.setValue(null); $event.stopPropagation();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'cateConfig.impactLog.impactType' | translate }}
+                  </mat-label>
+                  <mat-select formControlName='impactType'>
+                    <mat-option *ngFor='let item of lstImpactType' [value]='item.value'>
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button matSuffix mat-icon-button type='button' class='btn-clear-drop'
+                    *ngIf='form.controls.impactType.value'
+                    (click)='form.controls.impactType.setValue(null); $event.stopPropagation();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'cateConfig.impactLog.dateTime' | translate }}</mat-label>
+                  <mat-date-range-input [rangePicker]='receiveTimePicker' (click)='receiveTimePicker.open()'>
+                    <input matStartDate formControlName='fromDate' #fromDate maskDate
+                      placeholder="{{ 'common.fromDate' | translate }}">
+                    <input matEndDate formControlName='toDate' maskDate placeholder="{{ 'common.endDate' | translate }}"
+                      #toDate>
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix *ngIf='fromDate.value || toDate.value' class='showclearDatePopup'
+                    (click)='form.controls.fromDate.setValue(null);
+                    form.controls.toDate.setValue(null); $event.stopPropagation()'>
+                    <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]='receiveTimePicker'></mat-datepicker-toggle>
+                  <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'cateConfig.impactLog.description' | translate }}
+                  </mat-label>
+                  <input matInput formControlName="description" autocomplete="off" (keyup.enter)="doSearch()" />
+                  <button matSuffix mat-icon-button type='button' class='btn-clear-drop'
+                    *ngIf='form.controls.description.value'
+                    (click)='form.controls.description.setValue(null); $event.stopPropagation();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+              <div fxFlex='100' fxFlex.lt-sm='100' class='mt-10'>
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button color='primary'
+                  (click)='doSearch()'>{{'common.button.search' | translate}}
+                </button>
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button color='primary'
+                  (click)='exportExcel()'>{{'ticketProcessConfig.button.Export' | translate}}
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>
+
+<div fxLayout='row wrap' class='mt-15'>
+  <div fxFlex='100' fxFlex.lt-sm='100'>
+    <mat-accordion>
+      <div class='form-field-full'>
+        <mat-card appearance='outline'>
+          <crm-table [headerTable]="'cateConfig.impactLog.listImpactLog'" [dataSource]='lstDataImpactLog'
+            [totalRecord]='countTableImpactLog' [isLoading]='isLoading' [isPaging]='true' [showHeader]='true'
+            [displayedColumns]='displayedColumnsImpact' [pageIndex]='pageIndex' (onPage)="onPageChange($event)"
+            [stickyHeader]="true" [stickyHeight]="getHeightTable(lstDataImpactLog)" [widthTable]="'1539px'">
+
+            <ng-container *ngFor='let item of columns' [ngSwitch]='item.field'>
+              <ng-container matColumnDef='{{ item.field }}' *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                <td mat-cell *matCellDef='let row'>
+                  {{ row[item.field] }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='{{ item.field }}' *ngSwitchCase="'orderNumber'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">{{ item.i18n | translate }}</th>
+                <td mat-cell *matCellDef='let row; let i = dataIndex' class='ui-text-center'>
+                  {{ i + 1 + (form.value.startRecord * form.value.pageSize) }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='action' *ngSwitchCase="'action'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.action' | translate}}</th>
+                <td mat-cell *matCellDef='let row; let i = index' class='ui-text-center'>
+                  <button mat-icon-button>
+                    <mat-icon svgIcon='ic_xem' (click)='doView(row)'
+                      matTooltip="{{'cateConfig.ticketType.actionView' | translate}}">
+                    </mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='actTypeName' *ngSwitchCase="'actTypeName'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.impactLog.cateType' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.actTypeName}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='description' *ngSwitchCase="'description'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.impactLog.description' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  <span [innerHtml]="customViewDescription(row.description)" matTooltip="{{row.description}}"></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='actionName' *ngSwitchCase="'actionName'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.impactLog.impactType' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  <div *ngIf='row.actionName === "UPDATE"'>
+                    {{'cateConfig.impactLog.update' | translate}}
+                  </div>
+                  <div *ngIf='row.actionName === "INSERT"'>
+                    {{'cateConfig.impactLog.insert' | translate}}
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='createDate' *ngSwitchCase="'createDate'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.impactLog.impactDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.createDate}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='createUser' *ngSwitchCase="'createUser'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.impactLog.impactUser' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.actionUserName}}
+                </td>
+              </ng-container>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+            <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
+            <span class='noRecored' *ngIf='!dataSource || dataSource?.data?.length === 0 '>
+              {{'common.noRecord' | translate}}
+            </span>
+          </crm-table>
+        </mat-card>
+      </div>
+    </mat-accordion>
+  </div>
+</div>

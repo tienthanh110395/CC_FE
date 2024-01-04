@@ -1,0 +1,10 @@
+<common-list [dataSource]="dataModel.dataSource" [columns]="columns" [totalRecord]="totalRecord" [isLoading]="isLoading"
+  [isPaging]="true" [showHeader]="false" (page)="onPageChange($event)" [pageIndex]="pageIndex"
+  [startRecord]="searchModel.startrecord">
+  <ng-template vtsTemplate="functions" let-item>
+    <button mat-icon-button color="primary" (click)="request(item)" *ngIf="item.booCode=='BOO2' && item.botStatus !=1"
+      type="button" matTooltip="{{'cancel-ticket-refund.ask-tooltip' | translate}}" matTooltipPosition="above">
+      <mat-icon>done</mat-icon>
+    </button>
+  </ng-template>
+</common-list>

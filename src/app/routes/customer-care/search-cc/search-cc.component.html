@@ -1,0 +1,374 @@
+<div *ngIf="hasPermission(permissionApp.CC_CUSTOMER_02)">
+  <page-header></page-header>
+  <form [formGroup]="formSearch">
+    <div fxLayout="row wrap">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ 'common.title' | translate | uppercase }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="form-field-full">
+              <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                <!-- row 1 start -->
+                <div fxFlex="50" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{'contract.number' | translate}}</mat-label>
+                    <textarea matInput formControlName="contractNo" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="2" cdkAutosizeMaxRows="50" autocomplete="off" maxlength="4000"></textarea>
+                    <button mat-button *ngIf="formSearch.controls.contractNo.value" class="showclear" matSuffix
+                      mat-icon-button (click)="formSearch.controls.contractNo.setValue(''); $event.stopPropagation()"
+                      type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="50" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline" class="common-field">
+                    <mat-label>{{ 'customer-care.search-cc.ticketCode' | translate }}
+                    </mat-label>
+                    <textarea matInput formControlName="ticketId" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="2" cdkAutosizeMaxRows="50" autocomplete="off" maxlength="4000"></textarea>
+                    <button mat-button *ngIf="formSearch.controls.ticketId.value" class="showclear" matSuffix
+                      mat-icon-button (click)="formSearch.controls.ticketId.setValue(''); $event.stopPropagation()"
+                      type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{'customer-care.search-cc.receiveTime' | translate}}</mat-label>
+                    <mat-date-range-input [rangePicker]="receiveTimePicker" (click)="receiveTimePicker.open()">
+                      <input matStartDate formControlName="startReceiveDate" #receiveTimeFromId maskDate
+                        placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+                      <input matEndDate formControlName="endReceiveDate" maskDate
+                        placeholder="{{ 'common.endDate' | translate }}" #receiveTimeToId (keyup.enter)="onSearch()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix *ngIf="receiveTimeFromId.value || receiveTimeToId.value"
+                      class="showclearDatePopup"
+                      (click)="formSearch.controls.startReceiveDate.setValue(null);formSearch.controls.endReceiveDate.setValue(null); $event.stopPropagation()">
+                      <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix [for]="receiveTimePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+                    <mat-error *ngIf="checkFormatDate(receiveTimeFromId.value)">
+                      {{ 'common.invalidStartDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="checkFormatDate(receiveTimeToId.value)">
+                      {{ 'common.invalidEndDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="formSearch.controls.startReceiveDate.hasError('matStartDateInvalid')">
+                      {{ 'common.invalidFromDate' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{'customer-care.search-cc.processTime' | translate}}</mat-label>
+                    <mat-date-range-input [rangePicker]="processTimePicker" (click)="processTimePicker.open()">
+                      <input matStartDate formControlName="startProcessDate" #processTimeFromId maskDate
+                        placeholder="{{ 'common.fromDate' | translate }}" (keyup.enter)="onSearch()">
+                      <input matEndDate formControlName="endProcessDate" maskDate
+                        placeholder="{{ 'common.endDate' | translate }}" #processTimeToId (keyup.enter)="onSearch()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix *ngIf="processTimeFromId.value || processTimeToId.value"
+                      class="showclearDatePopup"
+                      (click)="formSearch.controls.startProcessDate.setValue(null);formSearch.controls.endProcessDate.setValue(null); $event.stopPropagation()">
+                      <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker-toggle matSuffix [for]="processTimePicker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #processTimePicker></mat-date-range-picker>
+                    <mat-error *ngIf="checkFormatDate(processTimeFromId.value)">
+                      {{ 'common.invalidStartDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="checkFormatDate(processTimeToId.value)">
+                      {{ 'common.invalidEndDate' | translate }}
+                    </mat-error>
+                    <mat-error *ngIf="formSearch.controls.startProcessDate.hasError('matStartDateInvalid')">
+                      {{ 'common.invalidFromDate' | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline" class="common-field">
+                    <mat-label>{{ 'customer-care.search-cc.plateNumber' | translate }}
+                    </mat-label>
+                    <input matInput formControlName="plateNumber" autocomplete="off" />
+                    <button mat-button *ngIf="formSearch.controls.plateNumber.value" class="showclear" matSuffix
+                      mat-icon-button (click)="formSearch.controls.plateNumber.setValue(''); $event.stopPropagation()"
+                      type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <!-- row 1 end -->
+                <!-- row 2 start -->
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.priority' | translate }}</mat-label>
+                    <mat-select formControlName="priorityId" multiple>
+                      <mat-select-trigger>
+                        {{ getLabelInList(formSearch.controls.priorityId.value) }}
+                      </mat-select-trigger>
+                      <mat-option #allPriority *ngIf="priorityList.length > 0" (click)="onChangePriorityAll()"
+                        [value]="-1">
+                        {{ 'common.all' | translate }}
+                      </mat-option>
+                      <mat-option *ngFor="let priority of priorityList" [value]="priority"
+                        (click)="onChangePriorityOne()">
+                        {{ priority.label }}
+                      </mat-option>
+                    </mat-select>
+                    <button *ngIf="formSearch.controls.priorityId.value?.length > 0" matSuffix mat-icon-button
+                      type="button" class="btn-clear-drop"
+                      (click)="formSearch.controls.priorityId.setValue(null); $event.stopPropagation();">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.ticketSource' | translate }}</mat-label>
+                    <mat-select formControlName="sourceId" multiple>
+                      <mat-select-trigger>
+                        {{ getLabelInList(formSearch.controls.sourceId.value) }}
+                      </mat-select-trigger>
+                      <mat-option #allTicketSource *ngIf="ticketSourceList.length > 0"
+                        (click)="onChangeTicketSourceAll()" [value]="-1">
+                        {{ 'common.all' | translate }}
+                      </mat-option>
+                      <mat-option *ngFor="let ticketSource of ticketSourceList" [value]="ticketSource"
+                        (click)="onChangeTicketSourceOne()">
+                        {{ ticketSource.label }}
+                      </mat-option>
+                    </mat-select>
+                    <button *ngIf="formSearch.controls.sourceId.value?.length > 0" matSuffix mat-icon-button
+                      type="button" class="btn-clear-drop"
+                      (click)="formSearch.controls.sourceId.setValue(null); $event.stopPropagation();">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.ticketTypeLv1' | translate }}</mat-label>
+                    <mat-select formControlName="l1TicketTypeId" multiple>
+                      <mat-select-trigger>
+                        {{ getLabelInList(formSearch.controls.l1TicketTypeId.value) }}
+                      </mat-select-trigger>
+                      <mat-option #allTicketTypeLv1 *ngIf="ticketTypeLv1List.length > 0"
+                        (click)="onChangeTicketTypeLv1All()" [value]="-1">
+                        {{ 'common.all' | translate }}
+                      </mat-option>
+                      <mat-option *ngFor="let ticketTypeLv1 of ticketTypeLv1List" [value]="ticketTypeLv1"
+                        (click)="onChangeTicketTypeLv1One()">
+                        {{ ticketTypeLv1.label }}
+                      </mat-option>
+                    </mat-select>
+                    <button *ngIf="formSearch.controls.l1TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                      type="button" class="btn-clear-drop"
+                      (click)="formSearch.controls.l1TicketTypeId.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv1();">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.ticketTypeLv2' | translate }}</mat-label>
+                    <mat-select formControlName="l2TicketTypeId" multiple>
+                      <mat-select-trigger>
+                        {{ getLabelInList(formSearch.controls.l2TicketTypeId.value) }}
+                      </mat-select-trigger>
+                      <mat-option #allTicketTypeLv2 *ngIf="ticketTypeLv2List.length > 0"
+                        (click)="onChangeTicketTypeLv2All()" [value]="-1">
+                        {{ 'common.all' | translate }}
+                      </mat-option>
+                      <mat-option *ngFor="let ticketTypeLv2 of ticketTypeLv2List" [value]="ticketTypeLv2"
+                        (click)="onChangeTicketTypeLv2One()">
+                        {{ ticketTypeLv2.label }}
+                      </mat-option>
+                    </mat-select>
+                    <button *ngIf="formSearch.controls.l2TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                      type="button" class="btn-clear-drop"
+                      (click)="formSearch.controls.l2TicketTypeId.setValue(null); $event.stopPropagation(); handleChangeTicketTypeLv2();">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <!-- row 2 end -->
+                <!-- row 3 start -->
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.ticketTypeLv3' | translate }}</mat-label>
+                    <mat-select formControlName="ticketTypeLv3" multiple>
+                      <mat-select-trigger>
+                        {{ getLabelInList(formSearch.controls.l3TicketTypeId.value) }}
+                      </mat-select-trigger>
+                      <mat-option #allTicketTypeLv3 *ngIf="ticketTypeLv3List.length > 0"
+                        (click)="onChangeTicketTypeLv3All()" [value]="-1">
+                        {{ 'common.all' | translate }}
+                      </mat-option>
+                      <mat-option *ngFor="let ticketTypeLv3 of ticketTypeLv3List" [value]="ticketTypeLv3"
+                        (click)="onChangeTicketTypeLv3One()">
+                        {{ ticketTypeLv3.label }}
+                      </mat-option>
+                    </mat-select>
+                    <button *ngIf="formSearch.controls.l3TicketTypeId.value?.length > 0" matSuffix mat-icon-button
+                      type="button" class="btn-clear-drop"
+                      (click)="formSearch.controls.l3TicketTypeId.setValue(null); $event.stopPropagation();">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.ticketStatus' | translate }}</mat-label>
+                    <mat-select formControlName="status" multiple>
+                      <mat-select-trigger>
+                        {{ getLabelInList(formSearch.controls.status.value) }}
+                      </mat-select-trigger>
+                      <mat-option #allStatus *ngIf="ticketStatusList.length > 0" (click)="onChangeStatusAll()"
+                        [value]="-1">
+                        {{ 'common.all' | translate }}
+                      </mat-option>
+                      <mat-option *ngFor="let ticketStatus of ticketStatusList" [value]="ticketStatus"
+                        (click)="onChangeStatusOne()">
+                        {{ ticketStatus.label }}
+                      </mat-option>
+                    </mat-select>
+                    <button *ngIf="formSearch.controls.status.value?.length > 0" matSuffix mat-icon-button type="button"
+                      class="btn-clear-drop"
+                      (click)="formSearch.controls.status.setValue(null); $event.stopPropagation();">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline" class="common-field">
+                    <mat-label>{{ 'customer-care.search-cc.receiveUser' | translate }}
+                    </mat-label>
+                    <input matInput formControlName="createUser" autocomplete="off" />
+                    <button mat-button *ngIf="formSearch.controls.createUser.value" class="showclear" matSuffix
+                      mat-icon-button (click)="formSearch.controls.createUser.setValue(''); $event.stopPropagation()"
+                      type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline" class="common-field">
+                    <mat-label>{{ 'customer-care.search-cc.processUser' | translate }}
+                    </mat-label>
+                    <input matInput formControlName="staffName" autocomplete="off" />
+                    <button mat-button *ngIf="formSearch.controls.staffName.value" class="showclear" matSuffix
+                      mat-icon-button (click)="formSearch.controls.staffName.setValue(''); $event.stopPropagation()"
+                      type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <!-- row 3 end -->
+                <!-- row 4 start -->
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.province' | translate }}</mat-label>
+                    <mtx-select [items]="provinceList" bindLabel="label" bindValue="value" [multiple]="false"
+                      appendTo="body" formControlName="province" [notFoundText]="'common.notFound' | translate"
+                      (change)="onChangeProvince($event)" [searchable]="provinceList?.length>10">
+                    </mtx-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.district' | translate }}</mat-label>
+                    <mtx-select [items]="districtList" bindLabel="label" bindValue="value" [multiple]="false"
+                      appendTo="body" formControlName="district" [notFoundText]="'common.notFound' | translate"
+                      (change)="onChangeDistrict($event)" [searchable]="districtList?.length>10">
+                    </mtx-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'customer-care.search-cc.commune' | translate }}</mat-label>
+                    <mtx-select [items]="communeList" bindLabel="label" bindValue="value" [multiple]="false"
+                      appendTo="body" formControlName="commune" [notFoundText]="'common.notFound' | translate"
+                      [searchable]="communeList?.length>10">
+                    </mtx-select>
+                  </mat-form-field>
+                </div>
+                <div fxFlex="25" fxFlex.lt-sm="100">
+                  <mat-form-field appearance="outline" class="common-field">
+                    <mat-label>{{ 'customer-care.search-cc.phoneNumber' | translate }}
+                    </mat-label>
+                    <input matInput formControlName="phoneNumber" autocomplete="off" />
+                    <button mat-button *ngIf="formSearch.controls.phoneNumber.value" class="showclear" matSuffix
+                      mat-icon-button (click)="formSearch.controls.phoneNumber.setValue(''); $event.stopPropagation()"
+                      type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+                <!-- row 4 end -->
+                <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: right;">
+                  <button mat-raised-button color="primary" type="submit" (click)="onSearch()"
+                    [disabled]="formSearch.invalid">
+                    {{'common.button.search' | translate}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion>
+          <mat-card>
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="100" fxFlex.lt-sm="100" style="text-align: right;">
+                <button mat-raised-button color="primary" (click)="exportFile()" style="margin-right: 8px;">
+                  {{ 'common.exportExcel' | translate }}
+                </button>
+              </div>
+            </div>
+
+            <common-list [headerTable]="'customer-care.search-cc.ticketList'" [dataSource]="dataModel.dataSource"
+              [isLoading]="isLoading" [isPaging]="true" [totalRecord]="totalRecord" [columns]="columns"
+              (page)="onPageChange($event)" [pageIndex]="pageIndex"
+              [startRecord]="formSearch.controls.startrecord.value" [widthTable]="'8000px'">
+              <ng-template vtsTemplate='actionCustom' let-row>
+                <button *ngIf="row.priorityId != priority.HOT" mat-icon-button color="warn" (click)="changeHot(row)"
+                  matTooltip="{{'customer-care.ticket.changeHot'| translate}}">
+                  <mat-icon>local_fire_department</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" (click)="openReceiveTicket(row)"
+                  matTooltip="{{'customer-care.search-process.processTicket'| translate}}">
+                  <mat-icon>settings</mat-icon>
+                </button>
+                <button mat-icon-button color="primary" (click)="openExtentTicket(row)"
+                  matTooltip="{{'ticket-extend.etentTicket'| translate}}" *ngIf="row.status == 2">
+                  <mat-icon>autorenew</mat-icon>
+                </button>
+                <!-- <button mat-icon-button color="primary" (click)="openEditTicket(row)"
+                  matTooltip="{{'ticket-extend.editTicket'| translate}}">
+                  <mat-icon>edit</mat-icon>
+                </button> -->
+              </ng-template>
+              <ng-template vtsTemplate='ticketTimeCustom' let-row>
+                {{row?.ticketTimes || '1'}}
+                <button mat-icon-button color="primary" (click)="addTicketTimes(row)"
+                  matTooltip="{{'customer-care.ticket.addTicketTimes'| translate}}">
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+              </ng-template>
+            </common-list>
+          </mat-card>
+        </mat-accordion>
+      </div>
+    </div>
+  </form>
+</div>
+<div *ngIf="!hasPermission(permissionApp.CC_CUSTOMER_02)">
+  <error-code code="403" [title]="'common.invalid-permission-title'" [message]="'common.invalid-permission'">
+  </error-code>
+</div>

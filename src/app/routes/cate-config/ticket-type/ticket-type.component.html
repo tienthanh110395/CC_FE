@@ -1,0 +1,333 @@
+<div>
+  <page-header></page-header>
+  <div fxLayout="row wrap" class="  mt-15">
+    <div fxFlex="100" fxFlex.lt-sm="100">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{'common.title' | translate | uppercase}}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="form" class="form-field-full">
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cateConfig.ticketType.ticketGroup' | translate }}
+                  </mat-label>
+                  <mat-select formControlName="ticketGroup" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(form.controls.ticketGroup.value) }}
+                    </mat-select-trigger>
+                    <mat-option *ngIf="lstTicketGroup.length > 0">
+                      <ngx-mat-select-search
+                        noEntriesFoundLabel="{{'cateConfig.ticketType.noItemTicketGroup' | translate}}"
+                        formControlName="ticketGroupFilter"
+                        placeholderLabel="{{'cateConfig.ticketType.searchTicketGroup' | translate}}"
+                        [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isUncheckGroup"
+                        (toggleAll)="selectAll($event)">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of filteredTicketGroup| async" [value]="item"
+                                (click)="onChangeTicketGroup()">
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="form.controls.ticketGroup.value" matSuffix mat-icon-button type="button"
+                          class="btn-clear-drop"
+                          (click)="form.controls.ticketGroup.setValue(null); $event.stopPropagation(); btnClearGroup();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cateConfig.ticketType.ticketGenre' | translate }}
+                  </mat-label>
+                  <mat-select formControlName="ticketGenre" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(form.controls.ticketGenre.value) }}
+                    </mat-select-trigger>
+                    <mat-option *ngIf="lstTicketGenre.length > 0">
+                      <ngx-mat-select-search
+                        noEntriesFoundLabel="{{'cateConfig.ticketType.noItemTicketGenre' | translate}}"
+                        formControlName="ticketGenreFilter"
+                        placeholderLabel="{{'cateConfig.ticketType.searchTicketGenre' | translate}}"
+                        [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isUncheckGenre"
+                        (toggleAll)="selectAllTicketGenre($event)">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of filteredTicketGenre | async" [value]="item"
+                                (click)="onChangeTicketGenre()">
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="form.controls.ticketGenre.value" matSuffix mat-icon-button type="button"
+                          class="btn-clear-drop"
+                          (click)="form.controls.ticketGenre.setValue(null); $event.stopPropagation(); btnClearGenre();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cateConfig.ticketType.ticketTypeRef' | translate }}
+                  </mat-label>
+                  <mat-select formControlName="ticketType" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(form.controls.ticketType.value) }}
+                    </mat-select-trigger>
+                    <mat-option *ngIf="lstTicketType.length > 0">
+                      <ngx-mat-select-search
+                        noEntriesFoundLabel="{{'cateConfig.ticketType.noItemTicketType' | translate}}"
+                        formControlName="ticketTypeFilter"
+                        placeholderLabel="{{'cateConfig.ticketType.searchTicketType' | translate}}"
+                        [showToggleAllCheckbox]="true" [toggleAllCheckboxChecked]="isUncheckType"
+                        (toggleAll)="selectAllTicketType($event)">
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let item of filteredTicketType | async" [value]="item"
+                                (click)="onChangeTicketType()">
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf="form.controls.ticketType.value" matSuffix mat-icon-button type="button"
+                          class="btn-clear-drop"
+                          (click)="form.controls.ticketType.setValue(null); $event.stopPropagation();btnClearType();">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+            <!--                Row 2-->
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <!--              nguoi tao-->
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cateConfig.ticketType.createUser' | translate }}
+                  </mat-label>
+                  <input trim="blur" matInput placeholder="{{'cateConfig.ticketType.createUser' | translate}}"
+                         formControlName="createUser" autocomplete="off" />
+                  <button mat-button matSuffix mat-icon-button *ngIf="form.controls.createUser.value"
+                          (click)="form.controls.createUser.setValue(null); $event.stopPropagation()" class="showclear"
+                          type="button">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <!-- Trạng thái -->
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'common.status' | translate }}
+                  </mat-label>
+                  <mat-select formControlName="status" multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(form.controls.status.value) }}
+                    </mat-select-trigger>
+                    <mat-option #allStatus *ngIf='statuses.length > 0' (click)='onChangeStatusAll()'
+                                [value]='-1'>
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor="let item of statuses" [value]="item" (click)="onChangeStatusOne()">
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button matSuffix mat-icon-button type='button' class='btn-clear-drop'
+                          *ngIf='form.controls.status.value'
+                          (click)='form.controls.status.setValue(null); $event.stopPropagation();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+            </div>
+              <!--              ngay tao-->
+              <div fxFlex="33.33" fxFlex.lt-sm="100">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'cateConfig.ticketType.ticketDateTime' | translate }}</mat-label>
+                  <mat-date-range-input [rangePicker]="receiveTimePicker" (click)="receiveTimePicker.open()">
+                    <input matStartDate formControlName="formDate" #formDate maskDate
+                           placeholder="{{ 'common.fromDate' | translate }}">
+                    <input matEndDate formControlName="toDate" maskDate placeholder="{{ 'common.endDate' | translate }}"
+                           #toDate>
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix *ngIf="formDate.value || toDate.value" class="showclearDatePopup"
+                                         (click)="form.controls.formDate.setValue(null);
+                    form.controls.toDate.setValue(null); $event.stopPropagation()">
+                    <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]="receiveTimePicker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+                </mat-form-field>
+              </div>
+
+            </div>
+
+
+            <div fxLayout="row wrap" fxLayoutGap="20px grid">
+              <div fxFlex="100" fxFlex.lt-sm="100" class="mt-10">
+                <button type="submit" class="float-right ml-20" mat-button mat-raised-button color="primary"
+                        (click)="doSearch()">{{'common.button.search' | translate}}
+                </button>
+                <button type="submit" class="float-right ml-20" mat-button mat-raised-button color="primary"
+                        (click)="doCreate()">{{'common.button.insert' | translate}}
+                </button>
+                <button type="submit" class="float-right" mat-button mat-raised-button color="primary"
+                        (click)="onChangeStatusMultiple()">{{'cateConfig.change_status' | translate}}
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>
+
+<div fxLayout="row wrap" class="mt-15">
+  <div fxFlex="100" fxFlex.lt-sm="100">
+    <mat-accordion>
+      <div class="form-field-full">
+        <mat-card appearance="outline">
+          <crm-table [headerTable]="'cateConfig.ticketType.listTicketType'" [dataSource]="lstDataTicketType"
+                     [totalRecord]="countTableTicketType" [isLoading]="isLoading" [isPaging]="true"
+                     [displayedColumns]="displayedColumnsType" [pageIndex]="pageIndex" (onPage)="onPageChange($event)"
+                     [widthTable]="'2300px'" [stickyHeader]="true" [stickyHeight]="getHeightTable(lstDataTicketType)">
+            <ng-container *ngFor="let item of columns" [ngSwitch]="item.field">
+              <ng-container matColumnDef="{{ item.field }}" *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                <td mat-cell *matCellDef="let row">
+                  {{ row[item.field] }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="{{ item.field }}" *ngSwitchCase="'orderNumber'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">{{ item.i18n | translate }}</th>
+                <td mat-cell *matCellDef="let row; let i = dataIndex" [ngStyle]="{ width: item.width }" class="ui-text-center">
+                  {{ i + 1 + (form.value.startRecord * form.value.pageSize) }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="{{ item.field }}" *ngSwitchCase="'select'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  <mat-checkbox [(ngModel)]="checkAll" (change)="onCheckAll($event)"></mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row" class="ui-text-center" [ngStyle]="{ width: item.width }">
+                  <mat-checkbox [(ngModel)]="row.checked" (change)="onCheckItem($event)"></mat-checkbox>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action" *ngSwitchCase="'action'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.action' | translate}}</th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }"  class="ui-text-center"  style="padding-right: 0px;">
+                  <button mat-icon-button>
+                    <mat-icon svgIcon="ic_edit" (click)="doUpdate(row)"
+                              matTooltip="{{'cateConfig.ticketType.actionEdit' | translate}}">
+                    </mat-icon>
+                  </button>
+                  <button mat-icon-button>
+                    <mat-icon class="toggle_on toggle-size" color="warn" *ngIf="row.status === 0"
+                              matTooltip="{{'cateConfig.ticket-genre.table.icon.changestatus' | translate}}"
+                              (click)="doChangeStatus(row)">
+                      toggle_off
+                    </mat-icon>
+                    <mat-icon class="toggle-off-color toggle-size" *ngIf="row.status === 1"
+                              matTooltip="{{'cateConfig.ticket-genre.table.icon.changestatus' | translate}}"
+                              (click)="doChangeStatus(row)">
+                      toggle_on
+                    </mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ticketGroup" *ngSwitchCase="'ticketGroup'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.ticketGroup' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  <span [innerHtml]="customViewName(row.ticketGroup)" matTooltip="{{row.ticketGroup}}"></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ticketGenre" *ngSwitchCase="'ticketGenre'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+
+                  {{'cateConfig.ticketType.ticketGenre' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  <span [innerHtml]="customViewName(row.ticketGenre)" matTooltip="{{row.ticketGenre}}"></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ticketTypeCode" *ngSwitchCase="'ticketTypeCode'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.ticketTypeCode' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  {{row.ticketTypeCode}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ticketTypeName" *ngSwitchCase="'ticketTypeName'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.ticketTypeName' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  <span [innerHtml]="customViewName(row.ticketTypeName)" matTooltip="{{row.ticketTypeName}}"></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="createDate" *ngSwitchCase="'createDate'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.createDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  {{row.createDate}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="createUser" *ngSwitchCase="'createUser'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.createUser' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  {{row.createUser}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="updateDate" *ngSwitchCase="'updateDate'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.updateDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  {{row.updateDate}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="updateUser" *ngSwitchCase="'updateUser'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.updateUser' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  {{row.updateUser}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="ticketTemplate" *ngSwitchCase="'ticketTemplate'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.ticketTemplate' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  <span [innerHtml]="customViewDescription(row.ticketTemplate)" matTooltip="{{row.ticketTemplate}}"></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="status" *ngSwitchCase="'status'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{ width: item.width }">
+                  {{'cateConfig.ticketType.status' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ width: item.width }">
+                  <div *ngIf="row.status === 1">
+                    {{'cateConfig.inEffect' | translate}}
+                  </div>
+                  <div *ngIf="row.status === 0">
+                    {{'cateConfig.expire' | translate}}
+                  </div>
+                </td>
+              </ng-container>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <span class="noRecored" *ngIf="!dataSource || dataSource?.data?.length === 0 ">
+              {{'common.noRecord' | translate}}
+            </span>
+          </crm-table>
+        </mat-card>
+      </div>
+    </mat-accordion>
+  </div>
+</div>

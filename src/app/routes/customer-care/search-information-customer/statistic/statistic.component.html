@@ -1,0 +1,221 @@
+<page-header *ngIf="activeButtonPopup"></page-header>
+<br>
+<div class="form-field-full">
+  <form [formGroup]="formTicketStatistic">
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.contract-user' | translate }}
+            <span class="required" *ngIf="data[0]">*</span>
+          </mat-label>
+          <input matInput placeholder="{{ 'ticket-statistic.enter-contract-user' | translate }}"
+            formControlName="contractNoUserName" #contractNoUserName autoFocus="contractNoUserName"
+            [matAutocomplete]="auto" />
+          <button mat-button *ngIf="formTicketStatistic.controls.contractNoUserName.value" class="showclear" matSuffix
+            mat-icon-button
+            (click)="formTicketStatistic.controls.contractNoUserName.setValue(null); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formTicketStatistic.get('contractNoUserName').errors?.required">
+            {{'ticket-statistic.valid-enter-contract-user' | translate}}
+          </mat-error>
+        </mat-form-field>
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="getOptionText"
+          (optionSelected)="onSelectedContract($event)">
+          <mat-option *ngIf="isLoadingAuto">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </mat-option>
+          <ng-container *ngIf="!isLoadingAuto">
+            <mat-option *ngFor="let state of filteredStates" [value]="state">
+              <div innerHTML="{{ state?.contractNo | highlight: formTicketStatistic.controls.contractNoUserName.value }}
+                {{state.plateNumber| highlight: formTicketStatistic.controls.contractNoUserName.value }}
+                {{state.custName| highlight: formTicketStatistic.controls.contractNoUserName.value }}">
+              </div>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.plate' | translate }} </mat-label>
+          <input matInput #plateNumber placeholder="{{ 'ticket-statistic.enter-plate' | translate }}"
+            formControlName="plateNumber" [value]="formTicketStatistic.value.plateNumber | uppercase" maxlength="16" />
+          <button mat-button *ngIf="formTicketStatistic.controls.plateNumber.value" class="showclear" matSuffix
+            mat-icon-button (click)="formTicketStatistic.controls.plateNumber.setValue(null); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formTicketStatistic.get('plateNumber').errors?.pattern">
+            {{'common.format-plate-number' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formTicketStatistic.get('plateNumber').errors?.maxlength">
+            {{'common.validate.maxlength-16' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.phone-system' | translate }} <span class="required" *ngIf="data[0]">*</span>
+          </mat-label>
+          <input matInput placeholder="{{ 'ticket-statistic.enter-phone-system' | translate }}"
+            formControlName="systemPhoneNumber" />
+          <button mat-button *ngIf="formTicketStatistic.controls.systemPhoneNumber.value" class="showclear" matSuffix
+            mat-icon-button
+            (click)="formTicketStatistic.controls.systemPhoneNumber.setValue(null); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formTicketStatistic.get('systemPhoneNumber').errors?.pattern">
+            {{'common.numberPhoneRegex' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formTicketStatistic.get('systemPhoneNumber').errors?.required">
+            {{'ticket-statistic.valid-enter-phone-system' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.phone-call' | translate }} <span class="required">*</span></mat-label>
+          <input matInput placeholder="{{ 'ticket-statistic.enter-phone-call' | translate }}"
+            formControlName="callPhoneNumber" />
+          <button mat-button *ngIf="formTicketStatistic.controls.callPhoneNumber.value" class="showclear" matSuffix
+            mat-icon-button
+            (click)="formTicketStatistic.controls.callPhoneNumber.setValue(null); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formTicketStatistic.get('callPhoneNumber').errors?.required">
+            {{'ticket-statistic.enter-phone-call' | translate}}
+          </mat-error>
+          <mat-error *ngIf="formTicketStatistic.get('callPhoneNumber').errors?.pattern">
+            {{'common.numberPhoneRegex' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.receive-chanel' | translate }} <span class="required">*</span>
+          </mat-label>
+          <mtx-select [items]="ticketSourceList" bindLabel="label" bindValue="value" [multiple]="false" appendTo="body"
+            formControlName="sourceId" [notFoundText]="'common.notFound' | translate"
+            [searchable]="ticketSourceList?.length>10">
+          </mtx-select>
+          <mat-error *ngIf="formTicketStatistic.get('sourceId').errors?.required">
+            {{'ticket-statistic.valid-enter-sourceId' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.statistic-lv1' | translate }} <span class="required">*</span>
+          </mat-label>
+          <mtx-select [items]="ticketStatisticTypeLv1List" bindLabel="label" bindValue="value" [multiple]="false"
+            appendTo="body" formControlName="l1StatisticTypeId" [notFoundText]="'common.notFound' | translate"
+            [searchable]="ticketStatisticTypeLv1List?.length>10" (change)="onChangeTicketStatisticTypeLv1($event)">
+          </mtx-select>
+          <mat-error *ngIf="formTicketStatistic.get('l1StatisticTypeId').errors?.required">
+            {{'ticket-statistic.select-statistic-lv1' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.statistic-lv2' | translate }} <span class="required">*</span>
+          </mat-label>
+          <mtx-select [items]="ticketStatisticTypeLv2List" bindLabel="label" bindValue="value" [multiple]="false"
+            appendTo="body" formControlName="l2StatisticTypeId" [notFoundText]="'common.notFound' | translate"
+            [searchable]="ticketStatisticTypeLv2List?.length>10" (change)="onChangeTicketStatisticTypeLv2($event)">
+          </mtx-select>
+          <mat-error *ngIf="formTicketStatistic.get('l2StatisticTypeId').errors?.required">
+            {{'ticket-statistic.select-statistic-lv2' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.statistic-lv3' | translate }} <span class="required">*</span>
+          </mat-label>
+          <mtx-select [items]="ticketStatisticTypeLv3List" bindLabel="label" bindValue="value" [multiple]="false"
+            appendTo="body" formControlName="l3StatisticTypeId" [notFoundText]="'common.notFound' | translate"
+            [searchable]="ticketStatisticTypeLv3List?.length>10" (change)="onChangeTicketStatisticTypeLv3($event)">
+          </mtx-select>
+          <mat-error *ngIf="formTicketStatistic.get('l3StatisticTypeId').errors?.required">
+            {{'ticket-statistic.select-statistic-lv3' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid">
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.statistic-lv4' | translate }} <span class="required">*</span>
+          </mat-label>
+          <mtx-select [items]="ticketStatisticTypeLv4List" bindLabel="label" bindValue="value" [multiple]="false"
+            appendTo="body" formControlName="l4StatisticTypeId" [notFoundText]="'common.notFound' | translate"
+            [searchable]="ticketStatisticTypeLv4List?.length>10" (change)="onChangeTicketStatisticTypeLv4($event)">
+          </mtx-select>
+          <mat-error *ngIf="formTicketStatistic.get('l4StatisticTypeId').errors?.required">
+            {{'ticket-statistic.select-statistic-lv4' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.statistic-lv5' | translate }}
+          </mat-label>
+          <mtx-select [items]="ticketStatisticTypeLv5List" bindLabel="label" bindValue="value" [multiple]="false"
+            appendTo="body" formControlName="l5StatisticTypeId" [notFoundText]="'common.notFound' | translate"
+            [searchable]="ticketStatisticTypeLv5List?.length>10">
+          </mtx-select>
+          <mat-error *ngIf="formTicketStatistic.get('l5StatisticTypeId').errors?.required">
+            {{'ticket-statistic.select-statistic-lv5' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex="25" fxFlex.lt-sm="100" style="margin-bottom:20px">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>{{'ticket-statistic.react-customer' | translate}} <span class="required">*</span>
+          </mat-label>
+          <input matInput readonly formControlName="custReactionRequired" style="color: white;" />
+          <div fxLayout="row wrap" fxLayoutGap="4px grid" class="radio-stl font-register-service">
+            <mat-radio-group formControlName="custReaction" [(ngModel)]="dataModel.custReaction"
+              [ngModelOptions]="{standalone: true}">
+              <mat-radio-button class="checkbox" value="1">{{'ticket-statistic.ok' | translate}}</mat-radio-button>
+              <mat-radio-button class="checkbox ml-70" value="2">{{'ticket-statistic.nok' | translate}}
+              </mat-radio-button>
+              <mat-radio-button class="checkbox ml-70" value="3">{{'ticket-statistic.angry' | translate}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <mat-error *ngIf="formTicketStatistic.get('custReactionRequired').errors?.required">
+            {{'customer-management.valid-select-custReaction' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row wrap" fxLayoutGap="20px grid" class="readonly">
+      <div fxFlex="100" fxFlex.lt-sm="100">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'ticket-statistic.content-statistic' | translate }} <span class="required">*</span></mat-label>
+          <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="20" matInput formControlName="statisticContent"></textarea>
+          <button mat-button *ngIf="formTicketStatistic.controls.statisticContent.value" class="showclear" matSuffix
+            mat-icon-button
+            (click)="formTicketStatistic.controls.statisticContent.setValue(null); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formTicketStatistic.get('statisticContent').errors?.required">
+            {{'ticket-statistic.enter-content-statistic' | translate}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  <div div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="flex-end" fxLayoutGap="10px"
+    fxLayoutGap.xs="0" style="margin-right: 8px;">
+    <!-- <button *ngIf="activeButtonPopup" mat-raised-button type="button" class="close" color="secondary"
+      (click)="onClosePopup()">{{'common.button.cancel' |
+      translate}}</button> -->
+    <button mat-raised-button color="primary" style="margin-right: 8px;" [disabled]="formTicketStatistic.invalid"
+      (click)="addTicketStatistic()">{{'common.button.save' | translate}}</button>
+  </div>
+</div>

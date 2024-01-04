@@ -1,0 +1,16 @@
+<mat-tab-group animationDuration="0ms" class="heading left" (selectedTabChange)="onTabChange($event)"
+  [(selectedIndex)]="tabIndex">
+  <mat-tab label="{{ 'customer-care.ticket.receiveTicket' | translate }}">
+    <app-receive-tab #receiveTab [data]="data"></app-receive-tab>
+  </mat-tab>
+  <mat-tab label="{{ 'reset-agency.enter_statistic' | translate }}">
+    <app-statistic #statisticTab [data]="data"></app-statistic>
+  </mat-tab>
+  <mat-tab label="{{ 'customer-care.ticket.searchAndReportTicket' | translate }}">
+    <app-search-tab #searchTab [data]="data" (onChangeTabProcess)="handleChangeTabTicketProcess($event)">
+    </app-search-tab>
+  </mat-tab>
+  <mat-tab label="{{ 'customer-care.search-process.processTicket' | translate }}" [disabled]="disabledTab">
+    <app-process-tab #processTab [data]="data"></app-process-tab>
+  </mat-tab>
+</mat-tab-group>

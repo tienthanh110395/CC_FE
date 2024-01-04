@@ -1,0 +1,382 @@
+<div>
+  <page-header></page-header>
+  <div fxLayout="row wrap" class="  mt-15">
+    <div fxFlex="100" fxFlex.lt-sm="100" class=" ">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ dataModel.popupTitle | translate | uppercase }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-tab-group animationDuration="0ms" style="width:100%;height: 100%;" class="heading left">
+            <mat-tab label="{{ dataModel.titleTabInfo | translate }}">
+              <form [formGroup]="formCreateVehicle" class="form-field-full mt-25">
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.stationOrStage' | translate}}
+                        <span class="required">*</span>
+                      </mat-label>
+                      <mat-select formControlName="stationOrStage" [multiple]="true" *ngIf="!updateVehicle">
+                        <mat-option>
+                          <ngx-mat-select-search [showToggleAllCheckbox]="true" (toggleAll)="selectAll($event)"
+                            noEntriesFoundLabel="{{'special-vehicle.notItem' |
+                            translate}}" formControlName="stationOrStageFilter" placeholderLabel="{{'special-vehicle.placehoderStation'
+                            |
+                            translate}}"></ngx-mat-select-search>
+                        </mat-option>
+                        <ng-container *ngFor="let item of filteredStageOrStation |
+                          async">
+                          <mat-option [value]="item">{{item.name}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+
+                      <mtx-select *ngIf="updateVehicle" [items]="listStageOrStation" bindLabel="name" bindValue="name"
+                        [multiple]="false" formControlName="stationOrStage" (change)="getListOptionPromotions($event)"
+                        [notFoundText]="'common.notFound' | translate" [searchable]="true">
+                        <ng-template ng-label-tmp let-item="item">{{item.name}}</ng-template>
+                      </mtx-select>
+                      <mat-error *ngIf="formCreateVehicle.get('stationOrStage').errors?.required">
+                        {{'special-vehicle.requiredStation'
+                        |
+                        translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.exceptionType' | translate}} <span class="required">*</span>
+                      </mat-label>
+                      <mat-select formControlName="exceptionType" (selectionChange)="changeExceptionType()">
+                        <mat-option>{{ 'common.default-select' | translate }}</mat-option>
+                        <ng-container *ngFor="let item of
+                        listOptionExceptionType">
+                          <mat-option [value]="item.code">{{item.value}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <button *ngIf="formCreateVehicle.controls.exceptionType.value && canEdit" matSuffix
+                        mat-icon-button type="button" class="btn-clear-drop"
+                        (click)="formCreateVehicle.controls.exceptionType.setValue(null); $event.stopPropagation();">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('exceptionType').errors?.required">
+                        {{'special-vehicle.requiredexceptionType'
+                        |
+                        translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.exemptionType' |
+                        translate}} <span class="required">*</span></mat-label>
+                      <mat-select formControlName="exemptionType">
+                        <ng-container *ngFor="let item of
+                      listOptionPromotions">
+                          <mat-option [value]="item.id">{{item.value}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <button *ngIf="formCreateVehicle.controls.exemptionType.value && canEdit" matSuffix
+                        mat-icon-button type="button" class="btn-clear-drop"
+                        (click)="formCreateVehicle.controls.exemptionType.setValue(null); $event.stopPropagation();">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('exemptionType').errors?.required">
+                        {{'special-vehicle.requiredExemptionType'
+                        |
+                        translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100" *ngIf="formCreateVehicle.controls.exceptionType.value == 1
+                  && formCreateVehicle.controls.stationOrStage.value != 'Trạm cầu Rạch Miễu' ">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.groupVehicle' | translate}} <span class="required">*</span>
+                      </mat-label>
+                      <mat-select formControlName="groupVehicle">
+                        <ng-container *ngFor="let item of
+                        listOptionGroupVehicle">
+                          <mat-option [value]="item.code">{{item.value}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <button *ngIf="formCreateVehicle.controls.groupVehicle.value && canEdit" matSuffix mat-icon-button
+                        type="button" class="btn-clear-drop"
+                        (click)="formCreateVehicle.controls.groupVehicle.setValue(null); $event.stopPropagation();">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('groupVehicle').errors?.required">
+                        {{'special-vehicle.requiredGroupVehicle'
+                        |
+                        translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100" *ngIf="formCreateVehicle.controls.exceptionType.value == 1
+                  && formCreateVehicle.controls.stationOrStage.value == 'Trạm cầu Rạch Miễu' ">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.groupVehicle' | translate}} <span class="required">*</span>
+                      </mat-label>
+                      <mat-select formControlName="groupVehicle">
+                        <ng-container *ngFor="let item of
+                        listOptionGroupVehicleRachmieu">
+                          <mat-option [value]="item.code">{{item.value}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <button *ngIf="formCreateVehicle.controls.groupVehicle.value && canEdit" matSuffix mat-icon-button
+                        type="button" class="btn-clear-drop"
+                        (click)="formCreateVehicle.controls.groupVehicle.setValue(null); $event.stopPropagation();">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('groupVehicle').errors?.required">
+                        {{'special-vehicle.requiredGroupVehicle'
+                        |
+                        translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.plateType' | translate}}
+                        <span class="required">*</span>
+                      </mat-label>
+                      <mat-select formControlName="plateType" (selectionChange)="onSearchVehicle()">
+                        <ng-container *ngFor="let item of listOptionPlateTypes">
+                          <mat-option [value]="item.code">{{item.value}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <button *ngIf="formCreateVehicle.controls.plateType.value && canEdit && !isEdit" matSuffix
+                        mat-icon-button type="button" class="btn-clear-drop"
+                        (click)="formCreateVehicle.controls.plateType.setValue(null); $event.stopPropagation();">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('plateType').errors?.required">
+                        {{'contractAppendix.valid-loaibien' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.plateNumber' | translate}}
+                        <span class="required">*</span>
+                      </mat-label>
+                      <input matInput placeholder="{{'special-vehicle.plateNumber'
+                      |
+                      translate}}" formControlName="plateNumber" (focusout)="onSearchVehicle()"
+                        (input)="upper($event)" />
+                      <button mat-button *ngIf="formCreateVehicle.controls.plateNumber.value && canEdit && !isEdit"
+                        matSuffix mat-icon-button type="button"
+                        (click)="formCreateVehicle.controls.plateNumber.setValue(null); $event.stopPropagation()"
+                        class="showclear">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('plateNumber').errors?.required">
+                        {{'special-vehicle.requiredPlateNumber'
+                        |
+                        translate}}
+                      </mat-error>
+                      <mat-error *ngIf="formCreateVehicle.get('plateNumber').errors?.maxlength">
+                        {{'common.validate.maxlength-100' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.vehicleType' | translate}}</mat-label>
+                      <mat-select formControlName="vehicleType">
+                        <ng-container *ngFor="let item of
+                            listOptionVehicleType">
+                          <mat-option [value]="item.id">{{item.value}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                      <button *ngIf="formCreateVehicle.controls.vehicleType.value  && canEdit && !isEdit" matSuffix
+                        mat-icon-button type="button" class="btn-clear-drop"
+                        (click)="formCreateVehicle.controls.vehicleType.setValue(null); $event.stopPropagation();">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.epc' | translate}}</mat-label>
+                      <input matInput placeholder="{{'special-vehicle.epc'
+                      |
+                      translate}}" formControlName="epc" />
+                      <button mat-button *ngIf="formCreateVehicle.controls.epc.value && canEdit && !isEdit" matSuffix
+                        mat-icon-button
+                        (click)="formCreateVehicle.controls.epc.setValue(null); $event.stopPropagation()"
+                        class="showclear">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('epc').errors?.maxlength">
+                        {{'common.validate.maxlength-50' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.vehicleOwner' | translate}}</mat-label>
+                      <input matInput placeholder="{{'special-vehicle.vehicleOwner' |
+                      translate}}" formControlName="vehicleOwner" />
+                      <button mat-button *ngIf="formCreateVehicle.controls.vehicleOwner.value  && canEdit && !isEdit"
+                        matSuffix mat-icon-button
+                        (click)="formCreateVehicle.controls.vehicleOwner.setValue(null); $event.stopPropagation()"
+                        class="showclear">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('vehicleOwner').errors?.maxlength">
+                        {{'common.validate.maxlength-255' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.contractNo' | translate}}</mat-label>
+                      <input matInput placeholder="{{'special-vehicle.contractNo'
+                      |
+                      translate}}" formControlName="contractNo" />
+                      <button mat-button *ngIf="formCreateVehicle.controls.contractNo.value && canEdit && !isEdit"
+                        matSuffix mat-icon-button
+                        (click)="formCreateVehicle.controls.contractNo.setValue(null); $event.stopPropagation()"
+                        class="showclear">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.effectiveDateStart' | translate}} <span class="required">*</span>
+                      </mat-label>
+                      <input [ngxMatDatetimePicker]="pickerEffectiveDateFrom" placeholder="dd/mm/yyyy hh:ss" matInput
+                        formControlName="effectiveDateFrom" maskTime />
+                      <button mat-icon-button matSuffix type="button"
+                        (click)="pickerEffectiveDateFrom.open(); $event.stopPropagation();">
+                        <mat-icon>today</mat-icon>
+                      </button>
+                      <ngx-mat-datetime-picker #pickerEffectiveDateFrom [defaultTime]="[00,00,00]" [showSpinners]="true"
+                        [touchUi]="false" [showSeconds]="true" [enableMeridian]="false" [disableMinute]="false"
+                        [hideTime]="false">
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.effectiveDateTo' | translate}}</mat-label>
+                      <input [ngxMatDatetimePicker]="pickerEffectiveDateTo" placeholder="dd/mm/yyyy hh:ss" matInput
+                        formControlName="effectiveDateTo" maskTime />
+                      <button mat-icon-button matSuffix type="button"
+                        (click)="pickerEffectiveDateTo.open(); $event.stopPropagation();">
+                        <mat-icon>today</mat-icon>
+                      </button>
+                      <ngx-mat-datetime-picker #pickerEffectiveDateTo [showSpinners]="true" [touchUi]="false"
+                        [showSeconds]="true" [enableMeridian]="false" [disableMinute]="false" [hideTime]="false"
+                        [defaultTime]="[23,59,59]">
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="33.33" fxFlex.lt-sm="100" *ngIf="approved == 4">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.date_time_expect' | translate}} <span class="required">*</span>
+                      </mat-label>
+                      <input [ngxMatDatetimePicker]="picker" placeholder="dd/mm/yyyy hh:ss" matInput
+                        formControlName="effectiveChangeDate" maskTime (click)="picker.open()" autocomplete="off" />
+                      <button mat-icon-button matSuffix type="button"
+                        (click)="picker.open(); $event.stopPropagation();">
+                        <mat-icon>today</mat-icon>
+                      </button>
+                      <ngx-mat-datetime-picker #picker [showSpinners]="true" [touchUi]="false" [showSeconds]="true"
+                        [enableMeridian]="false" [disableMinute]="false" [hideTime]="false"
+                        [defaultTime]="[dataModel.h,dataModel.m,dataModel.s]">
+                      </ngx-mat-datetime-picker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="100" fxFlex.lt-sm="100" class="comment">
+                    <mat-form-field appearance="outline">
+                      <mat-label>{{'special-vehicle.comment'| translate}}</mat-label>
+                      <textarea matInput rows="3" style="resize: none" formControlName="comment" placeholder="{{'special-vehicle.comment' |
+                      translate}}"></textarea>
+                      <button mat-button *ngIf="formCreateVehicle.controls.comment.value && canEdit" matSuffix
+                        mat-icon-button aria-label="Clear"
+                        (click)="formCreateVehicle.controls.comment.setValue(null); $event.stopPropagation()"
+                        class="btn-clear-area">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <mat-error *ngIf="formCreateVehicle.get('comment').errors?.maxlength">
+                        {{'common.validate.maxlength-255' | translate}}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+              <div class="row styBtn">
+                <div class="col-sm-12">
+                  <button class="btnRight ml-20" mat-button mat-raised-button [disabled]="formCreateVehicle.invalid"
+                    (click)="onClickSaveVehicle()" color="primary">{{'common.button.save' | translate}}</button>
+                  <button class="btnRight ml-20" mat-button mat-raised-button (click)="onResetForm()"
+                    color="secondary">{{'common.button.reEnter' | translate}}</button>
+                  <button class="btnRight ml-20" mat-button mat-raised-button (click)="onClickBackToVehicle()"
+                    color="secondary">{{'common.button.back' | translate}}</button>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="{{ 'special-vehicle.addByFile' | translate }}">
+              <div class="form-field-full mt-25">
+                <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                  <div fxFlex="100" fxFlex.lt-sm="100">
+                    <label (click)="downloadTemplateException()" class="orange-color"
+                      style="font-style: italic; cursor: pointer;">
+                      <mat-icon svgIcon="ic_download"></mat-icon>
+                      {{'common.downloadTemplate' | translate}}
+                    </label>
+                  </div>
+                </div>
+                <form [formGroup]="formAttachByExcel">
+                  <div fxLayout="row wrap" fxLayoutGap="20px grid">
+                    <div fxFlex="33" fxFlex.lt-sm="100">
+                      <div fxFlex="67" fxFlex.lt-sm="100">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                          <input matInput readonly formControlName="fileAttachStation" style="padding-left: 80px;" />
+                          <div fxLayout="row wrap" fxLayoutGap="4px grid" style="height: 10px;">
+                            <input #chooseFileExcel hidden="true" type="file" onclick="this.value=null"
+                              (change)="chooseFileChangeExcel($event.target.files)" />
+                            <button (click)="chooseFileExcel.click()"
+                              class="btn-file">{{'customer-management.updateProfileForm.btnChooseFile'
+                              | translate}}</button>
+                          </div>
+                          <mat-error *ngIf="formAttachByExcel.get('fileAttachStation').errors?.required">
+                            {{'special-vehicle.requiredAttachFile'
+                            |
+                            translate}}
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="row styBtn">
+                  <div class="col-sm-12">
+                    <button class="btnRight ml-20" mat-button mat-raised-button [disabled]="formAttachByExcel.invalid"
+                      (click)="importVehicleException()" color="primary">{{'common.button.save' | translate}}</button>
+                    <button class="btnRight ml-20" mat-button mat-raised-button (click)="onClickBackToVehicle()"
+                      color="secondary">{{'common.button.back' | translate}}</button>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

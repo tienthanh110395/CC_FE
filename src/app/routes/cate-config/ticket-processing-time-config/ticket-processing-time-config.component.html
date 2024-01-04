@@ -1,0 +1,354 @@
+<div>
+  <page-header></page-header>
+  <div fxLayout='row wrap' class='  mt-15'>
+    <div fxFlex='100' fxFlex.lt-sm='100'>
+      <mat-accordion>
+        <mat-expansion-panel [expanded]='true'>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{'common.title' | translate | uppercase}}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]='formSearch' class='form-field-full'>
+            <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'ticketProcessConfig.search.ticketGroup' | translate }}
+                  </mat-label>
+                  <mat-select formControlName='ticketGroup' multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formSearch.controls.ticketGroup.value) }}
+                    </mat-select-trigger>
+                    <mat-option *ngIf="lstTicketGroup.length > 0">
+                      <ngx-mat-select-search
+                        noEntriesFoundLabel="{{'ticketProcessConfig.search.noItemTicketGroup' | translate}}"
+                        formControlName='ticketGroupFilter'
+                        placeholderLabel="{{'ticketProcessConfig.search.placehoderTicketGroup' | translate}}"
+                        [showToggleAllCheckbox]='true' [toggleAllCheckboxChecked]='isToggleAll1'
+                        (toggleAll)='selectAll($event)'>
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor='let item of filteredTicketGroup| async' [value]='item'
+                                (click)='onChangeTicketGroup()'>
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf='formSearch.controls.ticketGroup.value' matSuffix mat-icon-button
+                          type='button' class='btn-clear-drop'
+                          (click)='formSearch.controls.ticketGroup.setValue(null); $event.stopPropagation(); clearTicketGroup();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'ticketProcessConfig.search.ticketGenre' | translate }}
+                  </mat-label>
+                  <mat-select formControlName='ticketGenre' multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formSearch.controls.ticketGenre.value) }}
+                    </mat-select-trigger>
+                    <mat-option *ngIf="lstTicketGenre.length > 0">
+                      <ngx-mat-select-search
+                        noEntriesFoundLabel="{{'ticketProcessConfig.search.noItemTicketGenre' | translate}}"
+                        formControlName='ticketGenreFilter'
+                        placeholderLabel="{{'ticketProcessConfig.search.placehoderTicketGenre' | translate}}"
+                        [showToggleAllCheckbox]='true' [toggleAllCheckboxChecked]='isToggleAll2'
+                        (toggleAll)='selectAllTicketGenre($event)'>
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor='let item of filteredTicketGenre | async' [value]='item'
+                                (click)='onChangeTicketGenre()'>
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf='formSearch.controls.ticketGenre.value' matSuffix mat-icon-button
+                          type='button' class='btn-clear-drop'
+                          (click)='formSearch.controls.ticketGenre.setValue(null); $event.stopPropagation(); clearTicketGenre();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'ticketProcessConfig.search.ticketType' | translate }}
+                  </mat-label>
+                  <mat-select formControlName='ticketType' multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formSearch.controls.ticketType.value) }}
+                    </mat-select-trigger>
+                    <mat-option *ngIf="lstTicketType.length > 0">
+                      <ngx-mat-select-search
+                        noEntriesFoundLabel="{{'ticketProcessConfig.search.noItemTicketType' | translate}}"
+                        formControlName='ticketTypeFilter'
+                        placeholderLabel="{{'ticketProcessConfig.search.placehoderTicketType' | translate}}"
+                        [showToggleAllCheckbox]='true' [toggleAllCheckboxChecked]='isToggleAll3'
+                        (toggleAll)='selectAllTicketType($event)'>
+                      </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor='let item of filteredTicketType | async' [value]='item' (click)='onChangeTicketType()'>
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button *ngIf='formSearch.controls.ticketType.value' matSuffix mat-icon-button
+                          type='button' class='btn-clear-drop'
+                          (click)='formSearch.controls.ticketType.setValue(null); $event.stopPropagation();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+            <!--                Row 2-->
+            <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'cateConfig.ticketType.ticketDateTime' | translate }}</mat-label>
+                  <mat-date-range-input [rangePicker]='receiveTimePicker'
+                                        (click)='receiveTimePicker.open()'>
+                    <input matStartDate formControlName='formDate' #formDate maskDate
+                           placeholder="{{ 'common.fromDate' | translate }}">
+                    <input matEndDate formControlName='toDate' maskDate
+                           placeholder="{{ 'common.endDate' | translate }}" #toDate>
+                  </mat-date-range-input>
+                  <mat-datepicker-toggle matSuffix *ngIf='formDate.value || toDate.value'
+                                         class='showclearDatePopup' (click)='formSearch.controls.formDate.setValue(null);
+                                                formSearch.controls.toDate.setValue(null); $event.stopPropagation()'>
+                    <mat-icon matDatepickerToggleIcon>close</mat-icon>
+                  </mat-datepicker-toggle>
+                  <mat-datepicker-toggle matSuffix [for]='receiveTimePicker'></mat-datepicker-toggle>
+                  <mat-date-range-picker #receiveTimePicker></mat-date-range-picker>
+                </mat-form-field>
+              </div>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'ticketProcessConfig.search.ticketLevelCate' | translate }}
+                  </mat-label>
+                  <mat-select formControlName='ticketLevelCate' multiple>
+                    <mat-select-trigger>
+                      {{ getLabelInList(formSearch.controls.ticketLevelCate.value) }}
+                    </mat-select-trigger>
+                    <mat-option #ticketLevelCate *ngIf='lstTicketLevelCate.length > 0'
+                                (click)='onChangeTicketLevelCateAll()' [value]='-1'>
+                      {{ 'common.all' | translate }}
+                    </mat-option>
+                    <mat-option *ngFor='let item of lstTicketLevelCate' [value]='item'
+                                (click)='onChangeTicketLevelCate()'>
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-select>
+                  <button matSuffix mat-icon-button type='button' class='btn-clear-drop'
+                          *ngIf='formSearch.controls.ticketLevelCate.value'
+                          (click)='formSearch.controls.ticketLevelCate.setValue(null); $event.stopPropagation();'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div fxFlex='33.33' fxFlex.lt-sm='100'>
+                <mat-form-field appearance='outline'>
+                  <mat-label>{{ 'ticketProcessConfig.search.createUser' | translate }}
+                  </mat-label>
+                  <input trim='blur' matInput
+                         placeholder="{{'ticketProcessConfig.search.createUser' | translate}}"
+                         formControlName='createUser' autocomplete='off' />
+                  <button mat-button matSuffix mat-icon-button
+                          *ngIf='formSearch.controls.createUser.value'
+                          (click)='formSearch.controls.createUser.setValue(null); $event.stopPropagation()'
+                          class='showclear' type='button'>
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout='row wrap' fxLayoutGap='20px grid'>
+              <div fxFlex='100' fxFlex.lt-sm='100' class='mt-10'>
+                <!--<button type='submit' class='float-left' mat-button mat-raised-button color='primary'
+                        (click)='doRecepptionTime()'>{{'ticketProcessConfig.button.receptionTime' |
+                  translate}}
+                </button>-->
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button
+                        color='primary' (click)='doSearch()'>{{'ticketProcessConfig.button.Search' |
+                  translate}}
+                </button>
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button
+                        color='primary' (click)='doCreate()'>{{'ticketProcessConfig.button.Add' |
+                  translate}}
+                </button>
+                <!--<button type='submit' class='float-right ml-20' mat-button mat-raised-button
+                        color='primary' (click)='doImport()'>{{'ticketProcessConfig.button.Import' |
+                  translate}}
+                </button>-->
+                <button type='submit' class='float-right ml-20' mat-button mat-raised-button
+                        color='primary' (click)='exportExcel()'>{{'ticketProcessConfig.button.Export' |
+                  translate}}
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>
+
+<div fxLayout='row wrap' class='mt-15'>
+  <div fxFlex='100' fxFlex.lt-sm='100'>
+    <mat-accordion>
+      <div class='form-field-full'>
+        <mat-card appearance='outline'>
+          <crm-table [headerTable]="'ticketProcessConfig.table.Title'" [dataSource]='lstDataTicketProcessTime'
+                     [totalRecord]='countTable' [isLoading]='isLoading' [isPaging]='true' [showHeader]='true'
+                     [displayedColumns]='displayedColumns' [pageIndex]='pageIndex' (onPage)='onPageChange($event)'
+                     [widthTable]="'2000px'" [stickyHeader]="true" [stickyHeight]="getHeightTable(lstDataTicketProcessTime)">
+            <ng-container *ngFor='let item of columns' [ngSwitch]='item.field'>
+              <ng-container matColumnDef='{{ item.field }}' *ngSwitchDefault>
+                <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                <td mat-cell *matCellDef='let row'>
+                  {{ row[item.field] }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='{{ item.field }}' *ngSwitchCase="'orderNumber'">
+                <th mat-header-cell *matHeaderCellDef>{{ item.i18n | translate }}</th>
+                <td mat-cell *matCellDef='let row; let i = dataIndex' [ngStyle]='{ width: item.width }'
+                    class='ui-text-center'>
+                  {{ i + 1 + (formSearch.value.startRecord * formSearch.value.pageSize) }}
+                </td>
+              </ng-container>
+              <!--<ng-container matColumnDef='{{ item.field }}' *ngSwitchCase="'select'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'
+                    style='text-align: center !important;'>
+                  <mat-checkbox [(ngModel)]='checkAll' (change)='onCheckAll($event)'></mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef='let row' [ngStyle]='{ width: item.width }'
+                    class='ui-text-center'>
+                  <mat-checkbox [(ngModel)]='row.checked'
+                                (change)='onCheckItem($event)'></mat-checkbox>
+                </td>
+              </ng-container>-->
+              <ng-container matColumnDef='action' *ngSwitchCase="'action'">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'cateConfig.ticketType.action' | translate}}</th>
+                <td mat-cell *matCellDef='let row; let i = index' class='ui-text-center'
+                    [ngStyle]='{ width: item.width }'>
+                  <button mat-icon-button>
+                    <mat-icon svgIcon='ic_edit' (click)='doUpdate(row)'
+                              matTooltip="{{'ticketProcessConfig.actionEdit' | translate}}">
+                    </mat-icon>
+                  </button>
+                  <!--<button mat-icon-button>
+                    <mat-icon color='warn' (click)='doDelete(row)'
+                              matTooltip="{{'cateConfig.ticketType.actionDelete' | translate}}">
+                      delete
+                    </mat-icon>
+                  </button>-->
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketGroup' *ngSwitchCase="'ticketGroup'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'ticketProcessConfig.table.ticketGroup' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                                    <span [innerHtml]='customViewName(row.ticketGroupName)'
+                                          matTooltip='{{row.ticketGroupName}}'></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketGenre' *ngSwitchCase="'ticketGenre'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+
+                  {{'ticketProcessConfig.table.ticketGenre' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                                    <span [innerHtml]='customViewName(row.ticketGenreName)'
+                                          matTooltip='{{row.ticketGenreName}}'></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketType' *ngSwitchCase="'ticketType'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'ticketProcessConfig.table.ticketType' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                                    <span [innerHtml]='customViewName(row.ticketTypeName)'
+                                          matTooltip='{{row.ticketTypeName}}'></span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketLevelCate' *ngSwitchCase="'ticketLevelCate'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'ticketProcessConfig.table.ticketLevelCate' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.priorityName}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketTimeFull' *ngSwitchCase="'ticketTimeFull'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'ticketProcessConfig.table.ticketTimeFull' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.processTime}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketTimeLv1' *ngSwitchCase="'ticketTimeLv1'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'ticketProcessConfig.table.ticketTimeLv1' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.combineTimeL1}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketTimeLv2' *ngSwitchCase="'ticketTimeLv2'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'ticketProcessConfig.table.ticketTimeLv2' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.combineTimeL2}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='ticketRetime' *ngSwitchCase="'ticketRetime'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'ticketProcessConfig.table.ticketRetime' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.reTicketTime}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='createDate' *ngSwitchCase="'createDate'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketType.createDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.createDate}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='createUser' *ngSwitchCase="'createUser'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketType.createUser' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.createUser}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='updateDate' *ngSwitchCase="'updateDate'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketType.updateDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.updateDate}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef='updateUser' *ngSwitchCase="'updateUser'">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]='{ width: item.width }'>
+                  {{'cateConfig.ticketType.updateUser' | translate}}
+                </th>
+                <td mat-cell *matCellDef='let row; let i = index'>
+                  {{row.updateUser}}
+                </td>
+              </ng-container>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+            <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
+            <span class='noRecored' *ngIf='!dataSource || dataSource?.data?.length === 0 '>
+                            {{'common.noRecord' | translate}}
+                        </span>
+          </crm-table>
+        </mat-card>
+      </div>
+    </mat-accordion>
+  </div>
+</div>
